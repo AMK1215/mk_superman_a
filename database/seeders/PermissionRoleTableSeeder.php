@@ -13,53 +13,84 @@ class PermissionRoleTableSeeder extends Seeder
      */
     public function run(): void
     {
-        //Senior Permissions
-        $senior_permissions = Permission::whereIn('title', [
-            'senior_access',
-            'owner_index',
-            'owner_create',
-            'owner_edit',
-            'owner_delete',
+        $admin_permissions = Permission::whereIn('title', [
+            'admin_access',
+            'master_access',
+            //'agent_access',
+            'role_index',
+            'role_create',
+            'role_store',
+            'role_edit',
+            'role_update',
+            'role_delete',
+            'permission_index',
+            'permission_create',
+            'permission_store',
+            'permission_edit',
+            'permission_update',
+            'permission_delete',
+            'master_index',
+            'master_create',
+            'master_store',
+            'master_edit',
+            'master_show',
+            'master_delete',
+            'master_update',
             'transfer_log',
             'make_transfer',
             'game_type_access',
-        ]);
-        Role::findOrFail(1)->permissions()->sync($senior_permissions->pluck('id'));
+            'contact',
+            'agent_change_password_access',
 
-        // Owner permissions
-        $owner_permissions = Permission::whereIn('title', [
-            'owner_access',
-            'agent_access',
+        ]);
+        Role::findOrFail(1)->permissions()->sync($admin_permissions->pluck('id'));
+        // master permissions
+        $master_permissions = Permission::whereIn('title', [
+            'master_access',
+            'role_index',
+            'role_create',
+            'role_store',
+            'role_edit',
+            'role_update',
+            'role_delete',
+            'permission_index',
+            'permission_create',
+            'permission_store',
+            'permission_edit',
+            'permission_update',
+            'permission_delete',
+            'transfer_log',
             'agent_index',
             'agent_create',
+            'agent_store',
             'agent_edit',
+            'agent_show',
             'agent_delete',
-            'agent_change_password_access',
-            'transfer_log',
+            'agent_update',
             'make_transfer',
-        ]);
-        Role::findOrFail(2)->permissions()->sync($owner_permissions->pluck('id'));
+            'agent_change_password_access',
 
+        ]);
+        Role::findOrFail(2)->permissions()->sync($master_permissions->pluck('id'));
+
+        // Agent gets specific permissions
         $agent_permissions = Permission::whereIn('title', [
             'agent_access',
-            'agent_index',
-            'agent_create',
-            'agent_edit',
-            'agent_delete',
-            'agent_change_password_access',
             'player_index',
             'player_create',
+            'player_store',
             'player_edit',
+            'player_show',
+            'player_update',
             'player_delete',
             'transfer_log',
             'make_transfer',
-            'withdraw',
-            'deposit',
-            'bank',
-            'site_logo',
+            'payment_type',
+            'withdraw_requests',
+            'deposit_requests',
             'contact',
+            'agent_change_password_access',
         ])->pluck('id');
-
         Role::findOrFail(3)->permissions()->sync($agent_permissions);
 
         $systemWallet = Permission::where('title', 'system_wallet')->first();
