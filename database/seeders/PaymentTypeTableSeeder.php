@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\PaymentImage;
-use App\Models\PaymentType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -16,46 +14,45 @@ class PaymentTypeTableSeeder extends Seeder
     {
         $types = [
             [
+                'name' => 'AYA Banking',
+                'image' => 'aya_banking.png',
+            ],
+            [
+                'name' => 'AYA Pay',
+                'image' => 'aya_pay.png',
+            ],
+            [
+                'name' => 'CB Banking',
+                'image' => 'cb_banking.png',
+            ],
+            [
+                'name' => 'CB Pay',
+                'image' => 'cb_pay.png',
+            ],
+            [
+                'name' => 'KBZ Banking',
+                'image' => 'kbz_banking.png',
+            ],
+            [
                 'name' => 'KBZ Pay',
                 'image' => 'kpay.png',
+            ],
+            [
+                'name' => 'MAB Banking',
+                'image' => 'mab_banking.png',
+            ],
+            [
+                'name' => 'UAB Pay',
+                'image' => 'uab_pay.png',
             ],
             [
                 'name' => 'Wave Pay',
                 'image' => 'wave.png',
             ],
             [
-                'name' => 'AYA Pay',
-                'image' => 'ayapay.png',
+                'name' => 'Yoma Banking',
+                'image' => 'yoma_banking.png',
             ],
-            [
-                'name' => 'AYA Bank',
-                'image' => 'ayabank.png',
-            ],
-            [
-                'name' => 'CB Bank',
-                'image' => 'cbbank.png',
-            ],
-            [
-                'name' => 'CB Pay',
-                'image' => 'cbpay.png',
-            ],
-            [
-                'name' => 'MAB Bank',
-                'image' => 'mabbank.png',
-            ],
-            [
-                'name' => 'UAB Bank',
-                'image' => 'uabbank.png',
-            ],
-            [
-                'name' => 'UAB Pay',
-                'image' => 'uabpay.png',
-            ],
-            [
-                'name' => 'Yoma Bank',
-                'image' => 'yomabank.png',
-            ],
-
         ];
 
         DB::table('payment_types')->insert($types);

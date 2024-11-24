@@ -5,7 +5,6 @@ use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\V1\Bank\BankController;
 use App\Http\Controllers\Api\V1\BannerController;
 use App\Http\Controllers\Api\V1\ContactController;
-use App\Http\Controllers\Api\V1\Game\GameController;
 use App\Http\Controllers\Api\V1\Game\LaunchGameController;
 use App\Http\Controllers\Api\V1\NewVersion\PlaceBetNewVersionController;
 use App\Http\Controllers\Api\V1\PaymentType\PaymentTypeController;
@@ -16,19 +15,16 @@ use App\Http\Controllers\Api\V1\Player\UserPaymentControler;
 use App\Http\Controllers\Api\V1\Player\WagerController;
 use App\Http\Controllers\Api\V1\Player\WithDrawController;
 use App\Http\Controllers\Api\V1\PromotionController;
-use App\Http\Controllers\Api\V1\Webhook\BonusController;
-use App\Http\Controllers\Api\V1\Webhook\BuyInController;
-use App\Http\Controllers\Api\V1\Webhook\BuyOutController;
+use App\Http\Controllers\Api\V1\GetBalanceController;
+use App\Http\Controllers\Api\V1\Slot\GameController;
+
+use App\Http\Controllers\Api\V1\Webhook\AdjustmentController;
+use App\Http\Controllers\Api\V1\Webhook\BetController;
+use App\Http\Controllers\Api\V1\Webhook\BetNResultController;
+use App\Http\Controllers\Api\V1\Webhook\BetResultController;
 use App\Http\Controllers\Api\V1\Webhook\CancelBetController;
-use App\Http\Controllers\Api\V1\Webhook\GameResultController;
-use App\Http\Controllers\Api\V1\Webhook\GetBalanceController;
-use App\Http\Controllers\Api\V1\Webhook\JackPotController;
-use App\Http\Controllers\Api\V1\Webhook\MobileLoginController;
-use App\Http\Controllers\Api\V1\Webhook\NewRedisPlaceBetController;
-use App\Http\Controllers\Api\V1\Webhook\PlaceBetController;
-use App\Http\Controllers\Api\V1\Webhook\PushBetController;
-use App\Http\Controllers\Api\V1\Webhook\RollbackController;
-use App\Http\Controllers\Api\V1\Webhook\VersionNewPlaceBetController;
+use App\Http\Controllers\Api\V1\Webhook\CancelBetNResultController;
+use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
@@ -50,27 +46,18 @@ Route::get('gamelist/{product_id}/{game_type_id}', [GameController::class, 'game
 Route::get('hotgamelist', [GameController::class, 'HotgameList']);
 Route::post('Seamless/PullReport', [LaunchGameController::class, 'pullReport']);
 
-Route::group(['prefix' => 'Seamless'], function () {
-    Route::post('GetBalance', [GetBalanceController::class, 'getBalance']);
 
-    // Route::group(["middleware" => ["webhook_log"]], function(){
-    Route::post('GetGameList', [LaunchGameController::class, 'getGameList']);
-    Route::post('GameResult', [GameResultController::class, 'gameResult']);
-    Route::post('Rollback', [RollbackController::class, 'rollback']);
-    //Route::post('PlaceBet', [PlaceBetController::class, 'placeBet']);
-    //Route::post('PlaceBet', [NewRedisPlaceBetController::class, 'placeBetNew']);
-    //Route::post('PlaceBet', [VersionNewPlaceBetController::class, 'placeBetNew']);
-    Route::post('PlaceBet', [PlaceBetNewVersionController::class, 'placeBetNew']);
+// sameless route
 
-    Route::post('CancelBet', [CancelBetController::class, 'cancelBet']);
-    Route::post('BuyIn', [BuyInController::class, 'buyIn']);
-    Route::post('BuyOut', [BuyOutController::class, 'buyOut']);
-    Route::post('PushBet', [PushBetController::class, 'pushBet']);
-    Route::post('Bonus', [BonusController::class, 'bonus']);
-    Route::post('Jackpot', [JackPotController::class, 'jackPot']);
-    Route::post('MobileLogin', [MobileLoginController::class, 'MobileLogin']);
-    // });
-});
+Route::post('GetBalance', [GetBalanceController::class, 'getBalance']);
+Route::post('BetNResult', [BetNResultController::class, 'handleBetNResult']);
+Route::post('CancelBetNResult', [CancelBetNResultController::class, 'handleCancelBetNResult']);
+Route::post('Bet', [BetController::class, 'handleBet']);
+Route::post('Result', [BetResultController::class, 'handleResult']);
+Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
+Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
+Route::post('Reward', [RewardController::class, 'handleReward']);
+
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('wager-logs', [WagerController::class, 'index']);

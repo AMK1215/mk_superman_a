@@ -13,8 +13,16 @@ return new class extends Migration
     {
         Schema::create('banks', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('account_name');
+            $table->string('account_number');
+            $table->unsignedBigInteger('payment_type_id');
+            $table->unsignedBigInteger('agent_id');
+            $table->foreign('payment_type_id')->references('id')->on('payment_types');
+            $table->foreign('agent_id')->references('id')->on('users');
             $table->timestamps();
+            // $table->id();
+            // $table->string('name');
+            // $table->timestamps();
         });
     }
 

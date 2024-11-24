@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Admin\Permission;
 use App\Models\Admin\Role;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class PermissionRoleTableSeeder extends Seeder
@@ -14,85 +13,56 @@ class PermissionRoleTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Admin permissions
-        $admin_permissions = Permission::whereIn('title', [
-            'admin_access',
-            'master_access',
-            //'agent_access',
-            'role_index',
-            'role_create',
-            'role_store',
-            'role_edit',
-            'role_update',
-            'role_delete',
-            'permission_index',
-            'permission_create',
-            'permission_store',
-            'permission_edit',
-            'permission_update',
-            'permission_delete',
-            'master_index',
-            'master_create',
-            'master_store',
-            'master_edit',
-            'master_show',
-            'master_delete',
-            'master_update',
+        //Senior Permissions
+        $senior_permissions = Permission::whereIn('title', [
+            'senior_access',
+            'owner_index',
+            'owner_create',
+            'owner_edit',
+            'owner_delete',
             'transfer_log',
             'make_transfer',
             'game_type_access',
-            'contact',
-            'agent_change_password_access',
-
         ]);
-        Role::findOrFail(1)->permissions()->sync($admin_permissions->pluck('id'));
-        // master permissions
-        $master_permissions = Permission::whereIn('title', [
-            'master_access',
-            'role_index',
-            'role_create',
-            'role_store',
-            'role_edit',
-            'role_update',
-            'role_delete',
-            'permission_index',
-            'permission_create',
-            'permission_store',
-            'permission_edit',
-            'permission_update',
-            'permission_delete',
-            'transfer_log',
+        Role::findOrFail(1)->permissions()->sync($senior_permissions->pluck('id'));
+
+        // Owner permissions
+        $owner_permissions = Permission::whereIn('title', [
+            'owner_access',
+            'agent_access',
             'agent_index',
             'agent_create',
-            'agent_store',
             'agent_edit',
-            'agent_show',
             'agent_delete',
-            'agent_update',
-            'make_transfer',
             'agent_change_password_access',
-
+            'transfer_log',
+            'make_transfer',
         ]);
-        Role::findOrFail(2)->permissions()->sync($master_permissions->pluck('id'));
+        Role::findOrFail(2)->permissions()->sync($owner_permissions->pluck('id'));
 
-        // Agent gets specific permissions
         $agent_permissions = Permission::whereIn('title', [
             'agent_access',
+            'agent_index',
+            'agent_create',
+            'agent_edit',
+            'agent_delete',
+            'agent_change_password_access',
             'player_index',
             'player_create',
-            'player_store',
             'player_edit',
-            'player_show',
-            'player_update',
             'player_delete',
             'transfer_log',
             'make_transfer',
-            'payment_type',
-            'withdraw_requests',
-            'deposit_requests',
+            'withdraw',
+            'deposit',
+            'bank',
+            'site_logo',
             'contact',
-            'agent_change_password_access',
         ])->pluck('id');
+
         Role::findOrFail(3)->permissions()->sync($agent_permissions);
+
+        $systemWallet = Permission::where('title', 'system_wallet')->first();
+        Role::findOrFail(5)->permissions()->sync($systemWallet);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\TransactionName;
+use App\Enums\TransactionType;
 use App\Models\User;
 use Bavix\Wallet\External\Dto\Extra;
 use Bavix\Wallet\External\Dto\Option;
