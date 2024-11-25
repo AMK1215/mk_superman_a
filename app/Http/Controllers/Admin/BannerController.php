@@ -16,16 +16,18 @@ class BannerController extends Controller
     public function index()
     {
         $auth = Auth::user();
-        if($auth->hasPermission("master_access")){
-            $banners = Banner::master()->latest()->get();
-            return view('admin.banners.index', compact('banners'));
-        }else if($auth->hasPermission("agent_access")){
-            $banners = Banner::agent()->latest()->get();
-            return view('admin.banners.index', compact('banners'));
-        }else{
+    
+        if ($auth->hasPermission("master_access")) {
+            $banners = Banner::query()->master()->latest()->get();
+        } elseif ($auth->hasPermission("agent_access")) {
+            $banners = Banner::query()->agent()->latest()->get();
+        } else {
             return redirect()->back()->with('error', 'You are not authorized to view this page.');
         }
+    
+        return view('admin.banners.index', compact('banners'));
     }
+    
 
     /**
      * Show the form for creating a new resource.
