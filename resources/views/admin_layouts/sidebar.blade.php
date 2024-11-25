@@ -97,7 +97,7 @@
             </li>
         @endcan
         <hr class="horizontal light mt-0">
-        @can('admin_access')
+        @canany(['master_access', 'agent_access'])
             <li class="nav-item">
                 <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link text-white "
                     aria-controls="dashboardsExamples" role="button" aria-expanded="false">
@@ -163,7 +163,7 @@
                     </ul>
                 </div>
             </li>
-        @endcan
+        @endcanany
 
         <li class="nav-item">
             <a href="{{ route('logout') }}"
