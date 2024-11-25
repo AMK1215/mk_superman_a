@@ -38,10 +38,11 @@ class BannerController extends Controller
         // image
         $image = $request->file('image');
         $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('banner').'.'.$ext; // Generate a unique filename
+        $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
         $image->move(public_path('assets/img/banners/'), $filename); // Save the file
         Banner::create([
             'image' => $filename,
+            'admin_id' => auth()->user()->id,
         ]);
 
         return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
@@ -52,7 +53,15 @@ class BannerController extends Controller
      */
     public function show(Banner $banner)
     {
-        return view('admin.banners.show', compact('banner'));
+        if (!$banner) {
+            return redirect()->back()->with('error', 'Banner Not Found');
+        }
+        $checkOwnership = $banner->admin_id === auth()->user()->id;
+        if ($checkOwnership) {
+            return view('admin.banners.show', compact('banner'));
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to view this banner.');
+        }
     }
 
     /**
@@ -60,7 +69,15 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
-        return view('admin.banners.edit', compact('banner'));
+        if (!$banner) {
+            return redirect()->back()->with('error', 'Banner Not Found');
+        }
+        $checkOwnership = $banner->admin_id === auth()->user()->id;
+        if ($checkOwnership) {
+            return view('admin.banners.edit', compact('banner'));
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
+        }
     }
 
     /**
@@ -68,26 +85,30 @@ class BannerController extends Controller
      */
     public function update(Request $request, Banner $banner)
     {
-        if (! $banner) {
+        if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $request->validate([
             'image' => 'required',
         ]);
-        //remove banner from localstorage
-        File::delete(public_path('assets/img/banners/'.$banner->image));
+        $checkOwnership = $banner->admin_id === auth()->user()->id;
+        if ($checkOwnership) {
+            //remove banner from localstorage
+            File::delete(public_path('assets/img/banners/' . $banner->image));
 
-        // image
-        $image = $request->file('image');
-        $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('banner').'.'.$ext; // Generate a unique filename
-        $image->move(public_path('assets/img/banners/'), $filename); // Save the file
+            // image
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
+            $image->move(public_path('assets/img/banners/'), $filename); // Save the file
 
-        $banner->update([
-            'image' => $filename,
-        ]);
+            $banner->update([
+                'image' => $filename,
+            ]);
 
-        return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
+            return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
+        }
+
     }
 
     /**
@@ -95,13 +116,17 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner)
     {
-        if (! $banner) {
+        if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        //remove banner from localstorage
-        File::delete(public_path('assets/img/banners/'.$banner->image));
-        $banner->delete();
-
-        return redirect()->back()->with('success', 'Banner Deleted.');
+        $checkOwnership = $banner->admin_id === auth()->user()->id;
+        if ($checkOwnership) {
+            //remove banner from localstorage
+            File::delete(public_path('assets/img/banners/' . $banner->image));
+            $banner->delete();
+            return redirect()->back()->with('success', 'Banner Deleted.');
+        } else {
+            return redirect()->back()->with('error', 'You are not authorized to delete this banner.');
+        }
     }
 }

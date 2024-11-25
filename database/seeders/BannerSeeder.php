@@ -14,10 +14,24 @@ class BannerSeeder extends Seeder
     public function run(): void
     {
         $banners = [
-            ['image' => '1.png', 'created_at' => now(), 'updated_at' => now()],
-            ['image' => '2.png', 'created_at' => now(), 'updated_at' => now()],
-            ['image' => '3.png', 'created_at' => now(), 'updated_at' => now()],
-            // Add more banners here if needed
+            [
+                'image' => '1.png', 
+                'admin_id' => 1,
+                'created_at' => now(), 
+                'updated_at' => now()
+            ],
+            [
+                'image' => '2.png', 
+                'admin_id' => 1,
+                'created_at' => now(), 
+                'updated_at' => now()
+            ],
+            [
+                'image' => '3.png', 
+                'admin_id' => 1,
+                'created_at' => now(), 
+                'updated_at' => now()
+            ],
         ];
 
         DB::table('banners')->insert($banners);
