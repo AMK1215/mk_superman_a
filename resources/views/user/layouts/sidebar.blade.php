@@ -49,7 +49,7 @@
       </a>
     </li>
     <hr class="horizontal light mt-0">
-    @can('admin_access')
+    @can('master_access' || 'agent_access')
     <li class="nav-item">
       <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link text-white " aria-controls="dashboardsExamples" role="button" aria-expanded="false">
         <i class="material-icons py-2">settings</i>

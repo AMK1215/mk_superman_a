@@ -22,7 +22,9 @@ class BannerController extends Controller
         }else if($auth->hasRole("Agent")){
             $banners = Banner::agent()->latest()->get();
             return view('admin.banners.index', compact('banners'));
-        } 
+        }else{
+            return redirect()->back()->with('error', 'You are not authorized to view this page.');
+        }
     }
 
     /**
