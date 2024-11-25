@@ -256,4 +256,9 @@ class User extends Authenticatable implements Wallet
     {
         return $this->hasMany(Promotion::class, 'admin_id'); // Banners owned by this admin
     }
+
+    public function agents()
+    {
+        return $this->hasMany(User::class, 'agent_id'); // Banners owned by this admin
+    }
 }

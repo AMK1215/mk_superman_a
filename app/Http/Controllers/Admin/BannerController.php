@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Banner;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class BannerController extends Controller
@@ -14,6 +15,8 @@ class BannerController extends Controller
      */
     public function index()
     {
+        $auth = Auth::user();
+        return $auth->hasRole('admin')
         $banners = Banner::latest()->get();
 
         return view('admin.banners.index', compact('banners'));

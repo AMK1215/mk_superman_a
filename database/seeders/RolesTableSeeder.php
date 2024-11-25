@@ -15,13 +15,13 @@ class RolesTableSeeder extends Seeder
         $roles = [
             [
 
-                'title' => 'Senior',
+                'title' => 'Owner',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
 
-                'title' => 'Owner',
+                'title' => 'Master',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
