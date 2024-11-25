@@ -13,10 +13,10 @@ class PermissionRoleTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $admin_permissions = Permission::whereIn('title', [
-            'admin_access',
-            'master_access',
-            //'agent_access',
+        $owner_permissions = Permission::whereIn('title', [
+            'owner_access',
+            // 'master_access',
+            // 'agent_access',
             'role_index',
             'role_create',
             'role_store',
@@ -43,10 +43,11 @@ class PermissionRoleTableSeeder extends Seeder
             'agent_change_password_access',
 
         ]);
-        Role::findOrFail(1)->permissions()->sync($admin_permissions->pluck('id'));
+        Role::findOrFail(1)->permissions()->sync($owner_permissions->pluck('id'));
         // master permissions
         $master_permissions = Permission::whereIn('title', [
             'master_access',
+            'agent_access',
             'role_index',
             'role_create',
             'role_store',
