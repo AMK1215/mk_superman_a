@@ -16,7 +16,7 @@ class BannerController extends Controller
     public function index()
     {
         $auth = Auth::user();
-        return $auth->hasRole('admin')
+        return $auth->hasRole('admin');
         $banners = Banner::latest()->get();
 
         return view('admin.banners.index', compact('banners'));
