@@ -49,7 +49,7 @@
       </a>
     </li>
     <hr class="horizontal light mt-0">
-    @canany(['master_access', 'agent_access'])
+    @if(Auth::user()->hasRole('Master') || Auth::user()->hasRole('Agent'))
     <li class="nav-item">
       <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link text-white " aria-controls="dashboardsExamples" role="button" aria-expanded="false">
         <i class="material-icons py-2">settings</i>
@@ -57,8 +57,6 @@
       </a>
       <div class="collapse " id="dashboardsExamples">
         <ul class="nav ">
-
-
           <li class="nav-item ">
             <a class="nav-link text-white " href="{{ route('admin.banners.index') }}">
               <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>
@@ -92,7 +90,7 @@
         </ul>
       </div>
     </li>
-    @endcanany
+    @endif
     <!-- @can('admin_access')
     <li class="nav-item">
       <a data-bs-toggle="collapse" href="#profileExample" class="nav-link text-white" aria-controls="pagesExamples" role="button" aria-expanded="false">
