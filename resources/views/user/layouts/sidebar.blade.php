@@ -49,7 +49,7 @@
       </a>
     </li>
     <hr class="horizontal light mt-0">
-    @if(Auth::user()->hasRole('Master') || Auth::user()->hasRole('Agent'))
+    {{-- @if(Auth::user()->hasRole('Master') || Auth::user()->hasRole('Agent')) --}}
     <li class="nav-item">
       <a data-bs-toggle="collapse" href="#dashboardsExamples" class="nav-link text-white " aria-controls="dashboardsExamples" role="button" aria-expanded="false">
         <i class="material-icons py-2">settings</i>
@@ -90,7 +90,7 @@
         </ul>
       </div>
     </li>
-    @endif
+    {{-- @endif --}}
     <!-- @can('admin_access')
     <li class="nav-item">
       <a data-bs-toggle="collapse" href="#profileExample" class="nav-link text-white" aria-controls="pagesExamples" role="button" aria-expanded="false">
