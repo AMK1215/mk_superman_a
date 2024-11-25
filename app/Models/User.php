@@ -239,22 +239,22 @@ class User extends Authenticatable implements Wallet
 
     public function banners()
     {
-        return $this->hasMany(Banner::class, 'admin_id'); // Banners owned by this admin
+        return $this->hasMany(Banner::class, 'agent_id'); // Banners owned by this admin
     }
 
     public function bannertexts()
     {
-        return $this->hasMany(BannerText::class, 'admin_id'); // Banners owned by this admin
+        return $this->hasMany(BannerText::class, 'agent_id'); // Banners owned by this admin
     }
 
     public function bannerads()
     {
-        return $this->hasMany(BannerAds::class, 'admin_id'); // Banners owned by this admin
+        return $this->hasMany(BannerAds::class, 'agent_id'); // Banners owned by this admin
     }
 
     public function promotions()
     {
-        return $this->hasMany(Promotion::class, 'admin_id'); // Banners owned by this admin
+        return $this->hasMany(Promotion::class, 'agent_id'); // Banners owned by this admin
     }
 
     public function agents()

@@ -16,10 +16,10 @@ class BannerController extends Controller
     public function index()
     {
         $auth = Auth::user();
-        if($auth->hasRole("Master")){
+        if($auth->hasPermission("master_access")){
             $banners = Banner::master()->latest()->get();
             return view('admin.banners.index', compact('banners'));
-        }else if($auth->hasRole("Agent")){
+        }else if($auth->hasPermission("agent_access")){
             $banners = Banner::agent()->latest()->get();
             return view('admin.banners.index', compact('banners'));
         }else{
