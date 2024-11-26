@@ -124,28 +124,12 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
-            'agent_id' => [
-                'required',
-                Rule::exists('users', 'id')
-                    ->where(function ($query) use ($user) {
-                        if ($user->hasRole('Master')) {
-                            // If Master, ensure agent_id is within their permissions
-                            $query->whereIn('id', $user->agents()->pluck('id')->toArray());
-                        } else {
-                            // If Agent, ensure agent_id matches their own ID
-                            $query->where('id', $user->id);
-                        }
-                    }),
-            ],
         ]);
-
         $isAuthorized = $user->hasRole('Master') 
             ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
             : $banner->agent_id === $user->id;
-
         if (!$isAuthorized) {
             return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
         }else{
@@ -158,7 +142,6 @@ class BannerController extends Controller
     
             $banner->update([
                 'image' => $filename,
-                'agent_id' => $agentId,
             ]);
             return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
         }

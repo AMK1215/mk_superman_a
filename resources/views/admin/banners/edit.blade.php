@@ -84,21 +84,6 @@
                   <input type="file" class="form-control" id="inputEmail3" name="image">
                   <img src="{{ $banner->img_url }}" width="150px" class="img-thumbnail" alt="">
                 </div>
-                @if(Auth::user()->hasRole('Master'))
-                <div class="custom-form-group">
-                  <label for="title">Select Agent</label>
-                  <select name="agent_id" class="form-control form-select" id="">
-                    <option value="">Select Agent</option>
-                    @foreach (Auth::user()->agents as $agent)
-                      <option value="{{ $agent->id }}" {{ $agent->id == $banner->agent_id ? 'selected' : ''}}>{{ $agent->name }}</option>
-                    @endforeach
-                  </select>
-                  @error('agent_id')
-                    <span class="text-danger">*{{ $message }}</span>
-                  @enderror
-                  {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
-                </div>
-                @endif
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Edit</button>
                 </div>
