@@ -67,7 +67,7 @@
           <div class="d-flex justify-content-between align-items-center">
             <h5>Banner's Detail</h5>
             <div>
-              <a class="btn btn-icon btn-primary" href="{{ route('admin.banners.index') }}">
+              <a class="btn btn-sm btn-primary" href="{{ route('admin.banners.index') }}">
                 <i class="material-icons">arrow_back</i>Back
               </a>
             </div>
