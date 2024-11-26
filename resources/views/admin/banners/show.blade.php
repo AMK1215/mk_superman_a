@@ -63,7 +63,7 @@
   <div class="col-10">
     <div class="container mt-0">
       <div class="row">
-        <div class="col-md-4 offset-md-4">
+        <div class="col-md-6 offset-md-3">
           <div>
             <h4>Banner's Detail</h4>
             <a class="btn btn-icon btn-2 btn-primary" href="{{ route('admin.banners.index') }}">
