@@ -54,10 +54,7 @@ class BannerController extends Controller
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
             'agent_id' => $masterCheck ? 'required|exists:users.id' : 'nullable',
         ]);
-        $permissionCheck = $this->BannerPermission($request->agent_id);
-        if(!$permissionCheck){
-            return redirect()->back()->with('error', 'You are not authorized to access this feature.');
-        }
+        $this->BannerPermission($request->agent_id);
         $filename = $this->handleImageUpload($request->image, "banners");
         Banner::create([
             'image' => $filename,
@@ -75,10 +72,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $permissionCheck = $this->BannerPermission($banner->agent_id);
-        if(!$permissionCheck){
-            return redirect()->back()->with('error', 'You are not authorized to access this feature.');
-        }
+        $this->BannerPermission($banner->agent_id);
         return view('admin.banners.show', compact('banner'));
     }
 
@@ -90,10 +84,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $permissionCheck = $this->BannerPermission($banner->agent_id);
-        if(!$permissionCheck){
-            return redirect()->back()->with('error', 'You are not authorized to access this feature.');
-        }
+        $this->BannerPermission($banner->agent_id);
         return view('admin.banners.edit', compact('banner'));
     }
 
@@ -106,10 +97,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $permissionCheck = $this->BannerPermission($banner->agent_id);
-        if(!$permissionCheck){
-            return redirect()->back()->with('error', 'You are not authorized to access this feature.');
-        }
+        $this->BannerPermission($banner->agent_id);
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
         ]);
@@ -127,10 +115,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $permissionCheck = $this->BannerPermission($banner->agent_id);
-        if(!$permissionCheck){
-            return redirect()->back()->with('error', 'You are not authorized to access this feature.');
-        }
+        $this->BannerPermission($banner->agent_id);
         $this->handleImageDelete($banner->image, "banners");
         $banner->delete();
         return redirect()->back()->with('success', 'Banner Deleted.');
