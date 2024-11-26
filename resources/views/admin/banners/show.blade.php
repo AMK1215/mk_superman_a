@@ -69,26 +69,17 @@
         </a>
       </div>
       <div class="card">
-        <div class="table-responsive">
-          <table class="table align-items-center mb-0">
-            <tbody>
-              <tr>
-                <td>ID</td>
-                <td>{!! $banner->id !!}</td>
-              </tr>
-              <tr>
-                <td class="text-right">Image</td>
-                <td>
-                  <img src="{{ $banner->img_url }}" class="w-50 img-thumbnail" alt="">
-                </td>
-              </tr>
-              <tr>
-                <td>Agent</td>
-                <td>{{ $banner->agent->name }}</td>
-              </tr>
-              
-            </tbody>
-          </table>
+        <div>
+          <label for="" class="form-label">Image</label>
+          <div>
+            <img src="{{ $banner->img_url }}" class="w-50 img-thumbnail" alt="">
+          </div>
+        </div>
+        <div>
+          <label for="" class="form-label">Agent</label>
+          <div>
+            <p>{{ $banner->agent->name }}</p>
+          </div>
         </div>
       </div>
     </div>
