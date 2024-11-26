@@ -38,8 +38,8 @@
             <tr>
               <th>#</th>
               <th>Ads Image</th>
-              <th>Created At</th>
-              <th>Updated At</th>
+              <th>Agent</th>
+              {{-- <th>Updated At</th> --}}
               <th>Action</th>
             </tr>
           </thead>
@@ -50,8 +50,7 @@
               <td>
                 <img width="100px" class="img-thumbnail" src="{{ $banner->img_url }}" alt="">
               </td>
-              <td class="text-sm font-weight-normal">{{ $banner->created_at->format('F j, Y') }}</td>
-              <td class="text-sm font-weight-normal">{{ $banner->updated_at->format('F j, Y') }}</td>
+              <td class="text-sm font-weight-normal">{{ $banner->agent->name }}</td>
               <td>
                 <a href="{{ route('admin.adsbanners.edit', $banner->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Banner"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
                 <a href="{{ route('admin.adsbanners.show', $banner->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Preview Banner Detail">
