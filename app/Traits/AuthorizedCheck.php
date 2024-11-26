@@ -10,7 +10,7 @@ trait AuthorizedCheck
     {
         $user = Auth::user();
         $master = $user->hasRole('Master');
-        $isAuthorized = $master ? in_array($agentId, $user->agents()->pluck('id')->toArray()) : $user->id;
+        $isAuthorized = $master ? in_array($agentId, $user->agents()->pluck('id')->toArray()) : $user->id === $agentId;
         if ($isAuthorized) {
             return true;
         }else{
