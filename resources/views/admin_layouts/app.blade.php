@@ -52,22 +52,16 @@
 
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script>
-        @if (Session::has('success'))
-        Swal.fire({
-            title: 'Success',
-            text: {{ Session::get('success') }},
-            icon: 'success',
-            confirmButtonText: 'Okay'
-        });
-        @elseif (Session::has('error'))
-        Swal.fire({
-            title: 'Error',
-            text: {{ Session::get('error') }},
-            icon: 'error',
-            confirmButtonText: 'Okay'
-        });
+        @if (Session::has('success') || Session::has('error'))
+            Swal.fire({
+                title: '{{ Session::has('success') ? 'Success' : 'Error' }}',
+                text: '{{ Session::has('success') ? Session::get('success') : Session::get('error') }}',
+                icon: '{{ Session::has('success') ? 'success' : 'error' }}',
+                confirmButtonText: 'Okay'
+            });
         @endif
     </script>
+    
     @yield('scripts')
 
 </body>
