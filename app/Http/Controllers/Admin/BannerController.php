@@ -51,18 +51,25 @@ class BannerController extends Controller
                 ? ['required', Rule::exists('users', 'id')->whereIn('id', $user->agents()->pluck('id')->toArray())] 
                 : null,
         ]);
-        $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
-        if ($user->hasRole('Master') && $agentId != $user->agents()->first()->id) {
-            return redirect()->back()->with('error', 'You are not authorized to add a banner for this agent.');
+        $isAuthorized = $user->hasRole('Master') 
+        ? in_array($request->agent_id, $user->agents()->pluck('id')->toArray()) 
+        : $user->id;
+        if (!$isAuthorized) {
+            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
+        }else{
+            $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
+            if ($user->hasRole('Master') && $agentId != $user->agents()->first()->id) {
+                return redirect()->back()->with('error', 'You are not authorized to add a banner for this agent.');
+            }
+            $image = $request->file('image');
+            $filename = uniqid('banner_') . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('assets/img/banners/'), $filename);
+            Banner::create([
+                'image' => $filename,
+                'agent_id' => $agentId,
+            ]);
+            return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
         }
-        $image = $request->file('image');
-        $filename = uniqid('banner_') . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('assets/img/banners/'), $filename);
-        Banner::create([
-            'image' => $filename,
-            'agent_id' => $agentId,
-        ]);
-        return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
     
 
