@@ -14,7 +14,7 @@ trait AuthorizedCheck
         if ($isAuthorized) {
             return true;
         }else{
-            return redirect()->back()->with('error', 'You are not authorized to access this feature.');
+            abort(403, 'Unauthorized');
         }
     }
 }
