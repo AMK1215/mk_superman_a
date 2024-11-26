@@ -88,16 +88,12 @@ class BannerController extends Controller
     public function edit(Banner $banner)
     {
         $user = Auth::user();
-    
-        // Check if the user is authorized to edit this banner
         $isAuthorized = $user->hasRole('Master') 
             ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
             : $banner->agent_id === $user->id;
-    
         if (!$isAuthorized) {
             return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
         }
-    
         return view('admin.banners.edit', compact('banner'));
     }
     
@@ -112,25 +108,34 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
+        
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
             'agent_id' => $user->hasRole('Master') 
                 ? ['required', Rule::exists('users', 'id')->whereIn('id', $user->agents()->pluck('id')->toArray())] 
                 : null,
         ]);
-        $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
-        File::delete(public_path('assets/img/banners/' . $banner->image));
-        $image = $request->file('image');
-        $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
-        $image->move(public_path('assets/img/banners/'), $filename); // Save the file
 
-        $banner->update([
-            'image' => $filename,
-            'agent_id' => $agentId,
-        ]);
+        $isAuthorized = $user->hasRole('Master') 
+            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
+            : $banner->agent_id === $user->id;
 
-        return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
+        if (!$isAuthorized) {
+            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
+        }else{
+            $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
+            File::delete(public_path('assets/img/banners/' . $banner->image));
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
+            $image->move(public_path('assets/img/banners/'), $filename); // Save the file
+    
+            $banner->update([
+                'image' => $filename,
+                'agent_id' => $agentId,
+            ]);
+            return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
+        }
     }
 
     /**
