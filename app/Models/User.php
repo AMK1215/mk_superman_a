@@ -266,6 +266,6 @@ class User extends Authenticatable implements Wallet
     {
         return $query->whereHas('roles', function ($query) {
             $query->where('title', 'Agent'); // Assuming you have roles for users
-        });
+        })->where('agent_id', Auth::user()->id);
     }
 }
