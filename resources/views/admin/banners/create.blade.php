@@ -89,8 +89,8 @@
                   <label for="title">Select Agent</label>
                   <select name="agent_id" class="form-control form-select" id="">
                     <option value="">Select Agent</option>
-                    @foreach (Auth::user()->roles as $role)
-                      <option value="{{ $role->id }}">{{ $role->title }}</option>
+                    @foreach (Auth::user()->agents as $agent)
+                      <option value="{{ $agent->id }}">{{ $agent->name }}</option>
                     @endforeach
                   </select>
                   <input type="file" class="form-control" id="inputEmail3" name="image">
