@@ -5,21 +5,21 @@
   <div class=" container-fluid" id="main">
     <div class="login-card pt-5">
       <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-4 offset-md-4">
           <div class="p-3 shadow bg-transparent border border-1 border-light rounded-4">
             <div class="text-center mt-3">
               <img src="{{ asset('/assets/img/logo.png') }}" alt="" style="width: 120px; height: auto" />
             </div>
-            <h4 class="text-center mt-3 text-white">SUPERMAN</h4>
-            <h5 class="text-center mt-3 text-white">ADMIN LOGIN</h5>
+            <h4 class="text-center mt-3 text-white">Superman</h4>
+            <h5 class="text-center mt-3 text-white">Admin Login</h5>
             {{-- <p class="text-center text-white ">Enter your userId   and password to sign in</p> --}}
-            <form action="{{ route('login') }}" method="post" class="px-5 pb-5 pt-3">
+            <form action="{{ route('login') }}" method="post" class="px-5 pb-4 pt-3">
               @csrf
               <div class="mb-3">
                 <label for="login" class="form-label text-white">User ID</label>
                 <input type="text" name="user_name" id="login" class="form-control" placeholder="Enter your user name ">
-                @error('phone')
-                <div class="alert alert-danger">{{ "The phone field is required." }}</div>
+                @error('user_name')
+                <div class="text-danger">*{{ $message }}</div>
                 @enderror
               </div>
       
@@ -30,12 +30,12 @@
                   <span class="input-group-text bg-white border border-0"><i class="fas fa-eye text-purple" id="eye" onclick="PwdView()" style="cursor: pointer;"></i></span>
                 </div>
                 @error('password')
-                <div class="alert alert-danger">{{ $message }}</div>
+                <div class="text-danger">*{{ $message }}</div>
                 @enderror
               </div>
       
               <div class="mb-3">
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+                <button type="submit" class="btn btn-secondary w-100">Login</button>
               </div>
       
               {{-- <hr /> --}}
