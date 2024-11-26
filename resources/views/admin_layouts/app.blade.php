@@ -54,7 +54,7 @@
     <script>
         @if (Session::has('success') || Session::has('error'))
             Swal.fire({
-                title: '{{ Session::has('success') ? 'Success' : 'Test' }}',
+                title: '{{ Session::has('success') ? 'Success' : 'Error' }}',
                 text: '{{ Session::has('success') ? Session::get('success') : Session::get('error') }}',
                 icon: '{{ Session::has('success') ? 'success' : 'error' }}',
                 confirmButtonText: 'Okay'

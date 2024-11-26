@@ -22,24 +22,17 @@ class BannerController extends Controller
     public function index()
     {
         $auth = Auth::user();
-
-        if ($auth->hasPermission("master_access")) {
-            $banners = Banner::query()->master()->latest()->get();
-        } elseif ($auth->hasPermission("agent_access")) {
-            $banners = Banner::query()->agent()->latest()->get();
-        } else {
-            return redirect()->back()->with('error', 'You are not authorized to view this page.');
-        }
-
+        $this->MasterAgentRoleCheck();
+        $banners = $auth->hasPermission("master_access") ? Banner::query()->master()->latest()->get() : Banner::query()->agent()->latest()->get();
         return view('admin.banners.index', compact('banners'));
     }
-
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
+        $this->MasterAgentRoleCheck();
         return view('admin.banners.create');
     }
 
@@ -48,6 +41,7 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
+        $this->MasterAgentRoleCheck();
         $user = Auth::user();
         $masterCheck = $user->hasRole('Master');
         $request->validate([
