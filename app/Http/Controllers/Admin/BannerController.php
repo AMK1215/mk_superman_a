@@ -87,7 +87,7 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
-        $user = Auth::user();anner
+        $user = Auth::user();
         $isAuthorized = $user->hasRole('Master') 
             ? $banner->agent_id === $user->agents()->first()->id 
             : $banner->agent_id === $user->id;
