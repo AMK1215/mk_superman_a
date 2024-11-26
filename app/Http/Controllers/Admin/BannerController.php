@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Banner;
+use App\Traits\AuthorizedCheck;
 use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,10 +18,11 @@ class BannerController extends Controller
      * Display a listing of the resource.
      */
     use ImageUpload;
+    use AuthorizedCheck;
     public function index()
     {
         $auth = Auth::user();
-    
+
         if ($auth->hasPermission("master_access")) {
             $banners = Banner::query()->master()->latest()->get();
         } elseif ($auth->hasPermission("agent_access")) {
@@ -28,10 +30,10 @@ class BannerController extends Controller
         } else {
             return redirect()->back()->with('error', 'You are not authorized to view this page.');
         }
-    
+
         return view('admin.banners.index', compact('banners'));
     }
-    
+
 
     /**
      * Show the form for creating a new resource.
@@ -47,34 +49,20 @@ class BannerController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if($user->hasRole('Master')){
-            $request->validate([
-                'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
-                'agent_id' => 'required|exists:users,id',
-            ]);
-        }else if($user->hasRole('Agent')){
-            $request->validate([
-                'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
-            ]);
-        }
-
-        $isAuthorized = $user->hasRole('Master') 
-        ? in_array($request->agent_id, $user->agents()->pluck('id')->toArray()) 
-        : $user->id;
-        if (!$isAuthorized) {
-            return redirect()->back()->with('error', 'You are not authorized to create this banner.');
-        }else{
-            $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
-            $filename = $this->handleImageUpload($request->image, "banners");
-
-            Banner::create([
-                'image' => $filename,
-                'agent_id' => $agentId,
-            ]);
-            return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
-        }
+        $masterCheck = $user->hasRole('Master');
+        $request->validate([
+            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'agent_id' => $masterCheck ? 'required|exists:users.id' : 'nullable',
+        ]);
+        $this->BannerPermission($request->agent_id);
+        $filename = $this->handleImageUpload($request->image, "banners");
+        Banner::create([
+            'image' => $filename,
+            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
+        ]);
+        return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
-    
+
 
     /**
      * Display the specified resource.
@@ -85,8 +73,8 @@ class BannerController extends Controller
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $user = Auth::user();
-        $isAuthorized = $user->hasRole('Master') 
-            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
+        $isAuthorized = $user->hasRole('Master')
+            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray())
             : $banner->agent_id === $user->id;
         if (!$isAuthorized) {
             return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
@@ -99,17 +87,9 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
-        $user = Auth::user();
-        $isAuthorized = $user->hasRole('Master') 
-            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
-            : $banner->agent_id === $user->id;
-        if (!$isAuthorized) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
-        }
+        $this->BannerPermission($banner->agent_id);
         return view('admin.banners.edit', compact('banner'));
     }
-    
-    
 
     /**
      * Update the specified resource in storage.
@@ -120,22 +100,14 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
+        $this->BannerPermission($banner->agent_id);
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
         ]);
-        $isAuthorized = $user->hasRole('Master') 
-            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
-            : $banner->agent_id === $user->id;
-        if (!$isAuthorized) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
-        }else{
-            $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
-            File::delete(public_path('assets/img/banners/' . $banner->image));
-            $filename = $this->handleImageUpload($request->image, "banners");
-
-            $banner->update([ 'image' => $filename ]);
-            return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
-        }
+        $this->handleImageDelete($banner->image, "banners");
+        $filename = $this->handleImageUpload($request->image, "banners");
+        $banner->update(['image' => $filename]);
+        return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
     }
 
     /**
@@ -146,14 +118,8 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $user = Auth::user();
-        $isAuthorized = $user->hasRole('Master') 
-            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
-            : $banner->agent_id === $user->id;
-        if (!$isAuthorized) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
-        }
-        File::delete(public_path('assets/img/banners/' . $banner->image));
+        $this->BannerPermission($banner->agent_id);
+        $this->handleImageDelete($banner->image, "banners");
         $banner->delete();
         return redirect()->back()->with('success', 'Banner Deleted.');
     }
