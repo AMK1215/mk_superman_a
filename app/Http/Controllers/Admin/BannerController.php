@@ -7,6 +7,8 @@ use App\Models\Admin\Banner;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rule;
+
 
 class BannerController extends Controller
 {
@@ -42,40 +44,38 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        if(Auth::user()->hasRole('Master')){
-            $request->validate([
-                'image' => 'required',
-                'agent_id' => 'required'
-            ]);
-            if($request->agent_id === Auth::user()->agents()->first()->id){
-                $image = $request->file('image');
-                $ext = $image->getClientOriginalExtension();
-                $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
-                $image->move(public_path('assets/img/banners/'), $filename); // Save the file
-                Banner::create([
-                    'image' => $filename,
-                    'agent_id' => $request->agent_id,
-                ]);
-                return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
-            }else{
-                return redirect()->back()->with('error', 'You are not authorized to add banner for this agent.');
-            }
-        }else if(Auth::user()->hasRole('Agent')){
-            $request->validate([
-                'image' => 'required',
-            ]);
-            // image
-            $image = $request->file('image');
-            $ext = $image->getClientOriginalExtension();
-            $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
-            $image->move(public_path('assets/img/banners/'), $filename); // Save the file
-            Banner::create([
-                'image' => $filename,
-                'agent_id' => auth()->user()->id,
-            ]);
-            return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
+        $user = Auth::user();
+    
+        // Validate common fields
+        $request->validate([
+            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'agent_id' => $user->hasRole('Master') 
+                ? ['required', Rule::exists('users', 'id')->whereIn('id', $user->agents()->pluck('id')->toArray())] 
+                : null,
+        ]);
+        
+    
+        // Check agent permission for Master users
+        $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
+    
+        if ($user->hasRole('Master') && $agentId != $user->agents()->first()->id) {
+            return redirect()->back()->with('error', 'You are not authorized to add a banner for this agent.');
         }
+    
+        // Handle image upload
+        $image = $request->file('image');
+        $filename = uniqid('banner_') . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('assets/img/banners/'), $filename);
+    
+        // Create banner record
+        Banner::create([
+            'image' => $filename,
+            'agent_id' => $agentId,
+        ]);
+    
+        return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
+    
 
     /**
      * Display the specified resource.
