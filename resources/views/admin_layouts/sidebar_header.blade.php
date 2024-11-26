@@ -3,7 +3,7 @@
       <a class="navbar-brand m-0" href="{{ url('/') }}" >
         <img src="{{ asset('assets/img/logo.png')}}" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold text-white">
-          MK7 Slot 
+          SUPERMAN 
           {{-- <br> --}}
           <span class="badge badge-success ms-2">
             {{ Auth::user()->roles->pluck('title')->implode(', ') }}

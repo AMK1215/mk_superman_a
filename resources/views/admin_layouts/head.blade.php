@@ -7,7 +7,7 @@
     <link rel="apple-touch-icon" sizes="76x76" href="{{ 'admin_app/assets/img/apple-icon.png' }}">
     <link rel="icon" href="{{ asset('/assets/img/logo.png') }}">
     <title>
-        MK7 Slot
+        SUPERMAN
     </title>
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css"
