@@ -42,20 +42,39 @@ class BannerController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'image' => 'required',
-        ]);
-        // image
-        $image = $request->file('image');
-        $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
-        $image->move(public_path('assets/img/banners/'), $filename); // Save the file
-        Banner::create([
-            'image' => $filename,
-            'admin_id' => auth()->user()->id,
-        ]);
-
-        return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
+        if(Auth::user()->hasRole('Master')){
+            $request->validate([
+                'image' => 'required',
+                'agent_id' => 'required'
+            ]);
+            if($request->agent_id === Auth::user()->roles()->first()->id){
+                $image = $request->file('image');
+                $ext = $image->getClientOriginalExtension();
+                $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
+                $image->move(public_path('assets/img/banners/'), $filename); // Save the file
+                Banner::create([
+                    'image' => $filename,
+                    'agent_id' => $request->agent_id,
+                ]);
+                return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
+            }else{
+                return redirect()->back()->with('error', 'You are not authorized to add banner for this agent.');
+            }
+        }else if(Auth::user()->hasRole('Agent')){
+            $request->validate([
+                'image' => 'required',
+            ]);
+            // image
+            $image = $request->file('image');
+            $ext = $image->getClientOriginalExtension();
+            $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
+            $image->move(public_path('assets/img/banners/'), $filename); // Save the file
+            Banner::create([
+                'image' => $filename,
+                'agent_id' => auth()->user()->id,
+            ]);
+            return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
+        }
     }
 
     /**

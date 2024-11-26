@@ -58,6 +58,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
 @endsection
+
+
 @section('content')
 <div class="row">
   <div class="col-12">
@@ -82,6 +84,18 @@
                   <label for="title">Banner Image</label>
                   <input type="file" class="form-control" id="inputEmail3" name="image">
                 </div>
+                @if(Auth::user()->hasRole('Master'))
+                <div class="custom-form-group">
+                  <label for="title">Select Agent</label>
+                  <select name="agent_id" class="form-control form-select" id="">
+                    <option value="">Select Agent</option>
+                    @foreach (Auth::user()->roles as $role)
+                      <option value="{{ $role->id }}">{{ $role->title }}</option>
+                    @endforeach
+                  </select>
+                  <input type="file" class="form-control" id="inputEmail3" name="image">
+                </div>
+                @endif
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Create</button>
                 </div>
