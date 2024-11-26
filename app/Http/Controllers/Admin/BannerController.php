@@ -54,7 +54,8 @@ class BannerController extends Controller
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
             'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
         ]);
-        $this->BannerPermission($request->agent_id);
+        $agentId = $masterCheck ? $request->agent_id : $user->id;
+        $this->BannerPermission($agentId);
         $filename = $this->handleImageUpload($request->image, "banners");
         Banner::create([
             'image' => $filename,
