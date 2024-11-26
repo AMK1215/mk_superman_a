@@ -74,12 +74,14 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $checkOwnership = $banner->admin_id === auth()->user()->id;
-        if ($checkOwnership) {
-            return view('admin.banners.show', compact('banner'));
-        } else {
-            return redirect()->back()->with('error', 'You are not authorized to view this banner.');
+        $user = Auth::user();
+        $isAuthorized = $user->hasRole('Master') 
+            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
+            : $banner->agent_id === $user->id;
+        if (!$isAuthorized) {
+            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
         }
+        return view('admin.banners.show', compact('banner'));
     }
 
     /**
@@ -108,7 +110,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        
+
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
             'agent_id' => $user->hasRole('Master') 
@@ -146,14 +148,15 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $checkOwnership = $banner->admin_id === auth()->user()->id;
-        if ($checkOwnership) {
-            //remove banner from localstorage
-            File::delete(public_path('assets/img/banners/' . $banner->image));
-            $banner->delete();
-            return redirect()->back()->with('success', 'Banner Deleted.');
-        } else {
-            return redirect()->back()->with('error', 'You are not authorized to delete this banner.');
+        $user = Auth::user();
+        $isAuthorized = $user->hasRole('Master') 
+            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
+            : $banner->agent_id === $user->id;
+        if (!$isAuthorized) {
+            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
         }
+        File::delete(public_path('assets/img/banners/' . $banner->image));
+        $banner->delete();
+        return redirect()->back()->with('success', 'Banner Deleted.');
     }
 }

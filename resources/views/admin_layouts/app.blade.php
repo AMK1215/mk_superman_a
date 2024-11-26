@@ -24,6 +24,8 @@
     </main>
     @include('admin_layouts.setting')
     <!--   Core JS Files   -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://kit.fontawesome.com/b829c5162c.js" crossorigin="anonymous"></script>
     <script src="{{ asset('admin_app/assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('admin_app/assets/js/core/bootstrap.min.js') }}"></script>
@@ -49,7 +51,25 @@
     <script src="{{ asset('admin_app/assets/js/material-dashboard.min.js?v=3.0.6') }}"></script>
 
     <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+    <script>
+        @if (Session::has('success'))
+        Swal.fire({
+            title: 'Success',
+            text: {{ Session::get('success') }},
+            icon: 'success',
+            confirmButtonText: 'Okay'
+        });
+        @elseif (Session::has('error'))
+        Swal.fire({
+            title: 'Error',
+            text: {{ Session::get('error') }},
+            icon: 'error',
+            confirmButtonText: 'Okay'
+        });
+        @endif
+    </script>
     @yield('scripts')
+
 </body>
 
 </html>
