@@ -47,7 +47,7 @@ class BannerController extends Controller
                 'image' => 'required',
                 'agent_id' => 'required'
             ]);
-            if($request->agent_id === Auth::user()->roles()->first()->id){
+            if($request->agent_id === Auth::user()->agents()->first()->id){
                 $image = $request->file('image');
                 $ext = $image->getClientOriginalExtension();
                 $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
