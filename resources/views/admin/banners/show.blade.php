@@ -79,17 +79,14 @@
               <tr>
                 <td class="text-right">Image</td>
                 <td>
-                  <img src="{{ $banner->img_url }}" class="w-25 img-thumbnail" alt="">
+                  <img src="{{ $banner->img_url }}" class="w-50 img-thumbnail" alt="">
                 </td>
               </tr>
               <tr>
-                <td>Create Date</td>
-                <td>{!! $banner->created_at->format('F j, Y') !!}</td>
+                <td>Agent</td>
+                <td>{{ $banner->agent->name }}</td>
               </tr>
-              <tr>
-                <td>Update Date</td>
-                <td>{!! $banner->updated_at->format('F j, Y') !!}</td>
-              </tr>
+              
             </tbody>
           </table>
         </div>
