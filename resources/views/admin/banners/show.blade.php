@@ -62,23 +62,21 @@
 <div class="row justify-content-center">
   <div class="col-10">
     <div class="container mt-0">
-      <div class="d-flex justify-content-between">
-        <h4>Banner's Detail</h4>
-        <a class="btn btn-icon btn-2 btn-primary" href="{{ route('admin.banners.index') }}">
-          <span class="btn-inner--icon mt-1"><i class="material-icons">arrow_back</i>Back</span>
-        </a>
-      </div>
-      <div class="card p-3">
-        <div>
-          <label for="" class="form-label">Image</label>
+      <div class="row">
+        <div class="col-md-4 offset-md-4">
           <div>
-            <img src="{{ $banner->img_url }}" class="w-50 img-thumbnail" alt="">
+            <h4>Banner's Detail</h4>
+            <a class="btn btn-icon btn-2 btn-primary" href="{{ route('admin.banners.index') }}">
+              <span class="btn-inner--icon mt-1"><i class="material-icons">arrow_back</i>Back</span>
+            </a>
           </div>
-        </div>
-        <div>
-          <label for="" class="form-label">Agent</label>
-          <div>
-            <p>{{ $banner->agent->name }}</p>
+          <div class="card">
+            <div>
+              <img src="{{ $banner->img_url }}" class="card-img-top" alt="">
+            </div>
+            <div>
+                <p>{{ $banner->agent->name }}</p>
+            </div>
           </div>
         </div>
       </div>
