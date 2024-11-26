@@ -4,7 +4,7 @@
         <img src="{{ asset('assets/img/logo.png')}}" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold text-white">
           MK7 Slot 
-          <br>
+          {{-- <br> --}}
           <span class="badge badge-success">
             {{ Auth::user()->roles->pluck('title')->implode(', ') }}
           </span>
