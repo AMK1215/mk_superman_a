@@ -58,9 +58,9 @@ class BannerController extends Controller
 
         $isAuthorized = $user->hasRole('Master') 
         ? in_array($request->agent_id, $user->agents()->pluck('id')->toArray()) 
-        : null;
+        : $user->id;
         if (!$isAuthorized) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
+            return redirect()->back()->with('error', 'You are not authorized to create this banner.');
         }else{
             $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
             $image = $request->file('image');
