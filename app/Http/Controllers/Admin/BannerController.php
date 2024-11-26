@@ -58,9 +58,6 @@ class BannerController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
         }else{
             $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
-            if ($user->hasRole('Master') && $agentId != $user->agents()->first()->id) {
-                return redirect()->back()->with('error', 'You are not authorized to add a banner for this agent.');
-            }
             $image = $request->file('image');
             $filename = uniqid('banner_') . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('assets/img/banners/'), $filename);
