@@ -34,6 +34,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     }
     .login-card{
         box-shadow: 1px 2px 3px rgb(255, 0, 0);
+        background-color: rgba(119, 0, 0, 0.5);
     }
  </style>
 </head>

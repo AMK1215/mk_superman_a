@@ -6,7 +6,7 @@
     <div class="pt-5">
       <div class="row">
         <div class="col-md-4 offset-md-4">
-          <div class="p-3 shadow bg-transparent border border-1 border-danger rounded-4 login-card">
+          <div class="p-3 shadow border border-1 border-danger rounded-4 login-card">
             <div class="text-center mt-3">
               <img src="{{ asset('/assets/img/logo.png') }}" alt="" style="width: 120px; height: auto" />
             </div>
