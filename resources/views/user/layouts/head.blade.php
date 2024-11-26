@@ -32,9 +32,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
         background-size: cover; /* Ensure the image covers the entire container */
         background-position: center; /* Center the image within the container */
     }
-    .login-card{
+    /* .login-card{
         display: grid;
         align-items: center;
-    }
+    } */
  </style>
 </head>
