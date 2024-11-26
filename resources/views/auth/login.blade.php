@@ -24,8 +24,8 @@
               </div>
       
               <div class="mb-3">
+                <label for="password" class="form-label text-white">Password</label>
                 <div class="input-group border border-0 rounded-4">
-                  <label for="password" class="form-label text-white">Password</label>
                   <span class="input-group-text bg-white border border-0"><i class="fas fa-key text-purple"></i></span>
                   <input type="password" name="password" id="password" class="form-control border border-0" placeholder="Enter password">
                   <span class="input-group-text bg-white border border-0"><i class="fas fa-eye text-purple" id="eye" onclick="PwdView()" style="cursor: pointer;"></i></span>
