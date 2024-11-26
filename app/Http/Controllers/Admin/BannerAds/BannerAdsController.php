@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin\BannerAds;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\BannerAds;
+use App\Traits\AuthorizedCheck;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class BannerAdsController extends Controller
@@ -12,10 +15,13 @@ class BannerAdsController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use ImageUpload;
+    use AuthorizedCheck;
     public function index()
     {
-        $banners = BannerAds::latest()->get();
-
+        $auth = Auth::user();
+        $this->MasterAgentRoleCheck();
+        $banners = $auth->hasPermission("master_access") ? BannerAds::query()->master()->latest()->get() : BannerAds::query()->agent()->latest()->get();
         return view('admin.banner_ads.index', compact('banners'));
     }
 
@@ -24,6 +30,7 @@ class BannerAdsController extends Controller
      */
     public function create()
     {
+        $this->MasterAgentRoleCheck();
         return view('admin.banner_ads.create');
     }
 
@@ -32,18 +39,20 @@ class BannerAdsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->MasterAgentRoleCheck();
+        $user = Auth::user();
+        $masterCheck = $user->hasRole('Master');
         $request->validate([
-            'image' => 'required',
+            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
         ]);
-        // image
-        $image = $request->file('image');
-        $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('banner').'.'.$ext; // Generate a unique filename
-        $image->move(public_path('assets/img/banners_ads/'), $filename); // Save the file
+        $agentId = $masterCheck ? $request->agent_id : $user->id;
+        $this->FeaturePermission($agentId);
+        $filename = $this->handleImageUpload($request->image, "banners_ads");
         BannerAds::create([
             'image' => $filename,
+            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
         ]);
-
         return redirect(route('admin.adsbanners.index'))->with('success', 'New Ads Banner Image Added.');
     }
 
@@ -52,10 +61,11 @@ class BannerAdsController extends Controller
      */
     public function show(BannerAds $adsbanner)
     {
-        if (! $adsbanner->exists) {
-            return redirect()->route('admin.adsbanners.index')->with('error', 'Banner not found');
+        $this->MasterAgentRoleCheck();
+        if (!$adsbanner) {
+            return redirect()->back()->with('error', 'Ads Banner Not Found');
         }
-
+        $this->FeaturePermission($adsbanner->agent_id);
         return view('admin.banner_ads.show', compact('adsbanner'));
     }
 
@@ -64,31 +74,27 @@ class BannerAdsController extends Controller
      */
     public function edit(BannerAds $adsbanner)
     {
+        $this->MasterAgentRoleCheck();
+        if (!$adsbanner) {
+            return redirect()->back()->with('error', 'Ads Banner Not Found');
+        }
+        $this->FeaturePermission($adsbanner->agent_id);
         return view('admin.banner_ads.edit', compact('adsbanner'));
     }
 
     public function update(Request $request, BannerAds $adsbanner)
     {
-        if (! $adsbanner) {
-            return redirect()->back()->with('error', 'Ads Banner Not Found');
+        $this->MasterAgentRoleCheck();
+        if (!$adsbanner) {
+            return redirect()->back()->with('error', 'Banner Not Found');
         }
+        $this->FeaturePermission($adsbanner->agent_id);
         $request->validate([
-            'image' => 'required',
+            'image' => 'required|image|max:2048',
         ]);
-
-        // Remove banner from local storage
-        File::delete(public_path('assets/img/banners_ads/'.$adsbanner->image));
-
-        // image
-        $image = $request->file('image');
-        $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('banner').'.'.$ext; // Generate a unique filename
-        $image->move(public_path('assets/img/banners_ads/'), $filename); // Save the file
-
-        $adsbanner->update([
-            'image' => $filename,
-        ]);
-
+        $this->handleImageDelete($adsbanner->image, "banners");
+        $filename = $this->handleImageUpload($request->image, "banners_ads");
+        $adsbanner->update(['image' => $filename]);
         return redirect(route('admin.adsbanners.index'))->with('success', 'Ads Banner Image Updated.');
     }
 
@@ -97,13 +103,13 @@ class BannerAdsController extends Controller
      */
     public function destroy(BannerAds $adsbanner)
     {
-        if (! $adsbanner) {
-            return redirect()->back()->with('error', 'Banner Not Found');
+        $this->MasterAgentRoleCheck();
+        if (!$adsbanner) {
+            return redirect()->back()->with('error', 'Ads Banner Not Found');
         }
-        //remove banner from localstorage
-        File::delete(public_path('assets/img/banners_ads/'.$adsbanner->image));
+        $this->FeaturePermission($adsbanner->agent_id);
+        $this->handleImageDelete($adsbanner->image, "banners_ads");
         $adsbanner->delete();
-
         return redirect()->back()->with('success', 'Ads Banner Deleted.');
     }
 }

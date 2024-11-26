@@ -24,6 +24,7 @@ class BannerText extends Model
     public function scopeAgent($query){
         return $query->where('agent_id', Auth::user()->id);
     }
+    
 
     public function scopeMaster($query)
     {

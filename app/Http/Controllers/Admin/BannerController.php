@@ -91,7 +91,6 @@ class BannerController extends Controller
     public function update(Request $request, Banner $banner)
     {
         $this->MasterAgentRoleCheck();
-        $user = Auth::user();
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }

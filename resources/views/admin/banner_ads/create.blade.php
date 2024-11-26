@@ -81,7 +81,25 @@
                 <div class="custom-form-group">
                   <label for="title">Ads Banner Image</label>
                   <input type="file" class="form-control" id="inputEmail3" name="image">
+                  @error('image')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
                 </div>
+                @if(Auth::user()->hasRole('Master'))
+                <div class="custom-form-group">
+                  <label for="title">Select Agent</label>
+                  <select name="agent_id" class="form-control form-select" id="">
+                    <option value="">Select Agent</option>
+                    @foreach (Auth::user()->agents as $agent)
+                      <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                    @endforeach
+                  </select>
+                  @error('agent_id')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                  {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
+                </div>
+                @endif
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Create</button>
                 </div>
