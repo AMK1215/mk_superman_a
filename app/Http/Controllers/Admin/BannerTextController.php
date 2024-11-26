@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\BannerText;
+use App\Traits\AuthorizedCheck;
 use Illuminate\Http\Request;
 
 class BannerTextController extends Controller
@@ -11,6 +12,7 @@ class BannerTextController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizedCheck;
     public function index()
     {
         $auth = auth()->user();
@@ -29,6 +31,7 @@ class BannerTextController extends Controller
      */
     public function create()
     {
+        $this->MasterAgentRoleCheck();
         return view('admin.banner_text.create');
     }
 

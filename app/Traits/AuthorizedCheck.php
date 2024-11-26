@@ -17,4 +17,16 @@ trait AuthorizedCheck
             abort(403, 'Unauthorized');
         }
     }
+
+    protected function MasterAgentRoleCheck()
+    {
+        $user = Auth::user();
+        $master_access = $user->hasPermission('master_access');
+        $agent_access = $user->hasPermission('agent_access');
+        if ($master_access || $agent_access) {
+            return true;
+        }else{
+            abort(403, 'Unauthorized');
+        }
+    }
 }
