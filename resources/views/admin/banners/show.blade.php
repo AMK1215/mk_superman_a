@@ -64,11 +64,13 @@
     <div class="container mt-0">
       <div class="row">
         <div class="col-md-6 offset-md-3">
-          <div>
-            <h4>Banner's Detail</h4>
-            <a class="btn btn-icon btn-primary" href="{{ route('admin.banners.index') }}">
-              <i class="material-icons">arrow_back</i>Back
-            </a>
+          <div class="d-flex justify-content-between align-items-center">
+            <h5>Banner's Detail</h5>
+            <div>
+              <a class="btn btn-icon btn-primary" href="{{ route('admin.banners.index') }}">
+                <i class="material-icons">arrow_back</i>Back
+              </a>
+            </div>
           </div>
           <div class="card">
             <div>
