@@ -74,7 +74,7 @@
             <div>
               <img src="{{ $banner->img_url }}" class="card-img-top" alt="">
             </div>
-            <div>
+            <div class="px-3">
                 <p>{{ $banner->agent->name }}</p>
             </div>
           </div>
