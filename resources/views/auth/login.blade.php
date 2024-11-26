@@ -10,9 +10,10 @@
             <div class="text-center mt-3">
               <img src="{{ asset('/assets/img/logo.png') }}" alt="" style="width: 120px; height: auto" />
             </div>
-            <h5 class="text-center mt-3 text-white">Login</h5>
-            <p class="text-center text-white ">Enter your userId   and password to sign in</p>
-            <form action="{{ route('login') }}" method="post" class="p-5">
+            <h4 class="text-center mt-3 text-white">SUPERMAN</h4>
+            <h5 class="text-center mt-3 text-white">ADMIN LOGIN</h5>
+            {{-- <p class="text-center text-white ">Enter your userId   and password to sign in</p> --}}
+            <form action="{{ route('login') }}" method="post" class="px-5 pb-5 pt-3">
               @csrf
               <div class="mb-3">
                 <label for="login" class="form-label text-white">User ID</label>
