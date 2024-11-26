@@ -5,7 +5,7 @@
         <span class="ms-1 font-weight-bold text-white">
           MK7 Slot 
           <span class="badge badge-success">
-            {{ Auth::user()->role->title }}
+            {{ Auth::user()->role()->title }}
           </span>
         </span>
       </a>
