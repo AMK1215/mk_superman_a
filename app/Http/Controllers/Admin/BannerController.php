@@ -45,7 +45,7 @@ class BannerController extends Controller
     public function store(Request $request)
     {
         $user = Auth::user();
-        if(user->hasRole('Master')){
+        if($user->hasRole('Master')){
             $request->validate([
                 'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
                 'agent_id' => 'required|exists:users,id',
