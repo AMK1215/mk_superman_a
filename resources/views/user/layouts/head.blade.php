@@ -23,13 +23,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 
  @yield('style')
  <style>
-    #main{
-        background-image: url("{{ asset('assets/img/backgroud.jpg') }}");
+    #main {
+        background-image: url("{{ asset('assets/img/background.jpg') }}"); /* Dynamically set background image */
+        /* fallback background color, uncomment if needed */
         /* background: #000; */
-        min-height: 100vh;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center;
+        min-height: 100vh; /* Ensure the container takes up the full viewport height */
+        background-repeat: no-repeat; /* Prevent the image from repeating */
+        background-size: cover; /* Ensure the image covers the entire container */
+        background-position: center; /* Center the image within the container */
     }
     .login-card{
         display: grid;
