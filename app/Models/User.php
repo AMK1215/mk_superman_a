@@ -103,6 +103,11 @@ class User extends Authenticatable implements Wallet
         return $this->belongsToMany(Role::class);
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);
