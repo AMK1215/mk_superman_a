@@ -19,7 +19,7 @@
                 <label for="login" class="form-label text-white">Username</label>
                 <input type="text" name="user_name" id="login" class="form-control" placeholder="Enter username ">
                 @error('user_name')
-                <div class="text-danger">*{{ $message }}</div>
+                <div class="text-light">*{{ $message }}</div>
                 @enderror
               </div>
       
@@ -31,7 +31,7 @@
                   <span class="input-group-text bg-white border border-0"><i class="fas fa-eye text-purple" id="eye" onclick="PwdView()" style="cursor: pointer;"></i></span>
                 </div>
                 @error('password')
-                <div class="text-danger">*{{ $message }}</div>
+                <div class="text-light">*{{ $message }}</div>
                 @enderror
               </div>
       
