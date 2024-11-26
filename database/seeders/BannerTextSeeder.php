@@ -15,6 +15,9 @@ class BannerTextSeeder extends Seeder
     {
         $bannerTexts = [
             ['text' => 'မြန်မာနိုင်ငံရဲ့ အယုံကြည်ရဆုံး 2D - 3D Website - ကြီး', 'agent_id' => 4, 'created_at' => now(), 'updated_at' => now()],
+            ['text' => 'မြန်မာနိုင်ငံရဲ့ အယုံကြည်ရဆုံး 2D - 3D Website - ကြီး', 'agent_id' => 5, 'created_at' => now(), 'updated_at' => now()],
+            ['text' => 'မြန်မာနိုင်ငံရဲ့ အယုံကြည်ရဆုံး 2D - 3D Website - ကြီး', 'agent_id' => 6, 'created_at' => now(), 'updated_at' => now()],
+            ['text' => 'မြန်မာနိုင်ငံရဲ့ အယုံကြည်ရဆုံး 2D - 3D Website - ကြီး', 'agent_id' => 7, 'created_at' => now(), 'updated_at' => now()],
             // Add more banner texts here if needed
         ];
 
