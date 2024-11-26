@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Auth;
 
 trait AuthorizedCheck
 {
-    protected function BannerPermission($agentId)
+    protected function FeaturePermission($agentId)
     {
         $user = Auth::user();
         $master = $user->hasRole('Master');

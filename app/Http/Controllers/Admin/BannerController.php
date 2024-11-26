@@ -49,7 +49,7 @@ class BannerController extends Controller
             'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
         ]);
         $agentId = $masterCheck ? $request->agent_id : $user->id;
-        $this->BannerPermission($agentId);
+        $this->FeaturePermission($agentId);
         $filename = $this->handleImageUpload($request->image, "banners");
         Banner::create([
             'image' => $filename,
@@ -68,7 +68,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $this->BannerPermission($banner->agent_id);
+        $this->FeaturePermission($banner->agent_id);
         return view('admin.banners.show', compact('banner'));
     }
 
@@ -81,7 +81,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $this->BannerPermission($banner->agent_id);
+        $this->FeaturePermission($banner->agent_id);
         return view('admin.banners.edit', compact('banner'));
     }
 
@@ -90,11 +90,12 @@ class BannerController extends Controller
      */
     public function update(Request $request, Banner $banner)
     {
+        $this->MasterAgentRoleCheck();
         $user = Auth::user();
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $this->BannerPermission($banner->agent_id);
+        $this->FeaturePermission($banner->agent_id);
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
         ]);
@@ -113,7 +114,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $this->BannerPermission($banner->agent_id);
+        $this->FeaturePermission($banner->agent_id);
         $this->handleImageDelete($banner->image, "banners");
         $banner->delete();
         return redirect()->back()->with('success', 'Banner Deleted.');
