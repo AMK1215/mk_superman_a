@@ -83,6 +83,9 @@
                 <div class="custom-form-group">
                   <label for="title">Banner Image</label>
                   <input type="file" class="form-control" id="inputEmail3" name="image">
+                  @error('image')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
                 </div>
                 @if(Auth::user()->hasRole('Master'))
                 <div class="custom-form-group">
@@ -93,6 +96,9 @@
                       <option value="{{ $agent->id }}">{{ $agent->name }}</option>
                     @endforeach
                   </select>
+                  @error('agent_id')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
                   {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
                 </div>
                 @endif
