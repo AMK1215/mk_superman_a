@@ -68,7 +68,7 @@
           <span class="btn-inner--icon mt-1"><i class="material-icons">arrow_back</i>Back</span>
         </a>
       </div>
-      <div class="card">
+      <div class="card p-3">
         <div>
           <label for="" class="form-label">Image</label>
           <div>
