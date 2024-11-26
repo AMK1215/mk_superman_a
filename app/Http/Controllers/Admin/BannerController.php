@@ -88,14 +88,19 @@ class BannerController extends Controller
     public function edit(Banner $banner)
     {
         $user = Auth::user();
+    
+        // Check if the user is authorized to edit this banner
         $isAuthorized = $user->hasRole('Master') 
-            ? $banner->agent_id === $user->agents()->first()->id 
+            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray()) 
             : $banner->agent_id === $user->id;
+    
         if (!$isAuthorized) {
             return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
         }
+    
         return view('admin.banners.edit', compact('banner'));
     }
+    
     
 
     /**
