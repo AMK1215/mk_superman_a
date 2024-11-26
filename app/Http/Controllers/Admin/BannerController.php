@@ -72,13 +72,7 @@ class BannerController extends Controller
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
-        $user = Auth::user();
-        $isAuthorized = $user->hasRole('Master')
-            ? in_array($banner->agent_id, $user->agents()->pluck('id')->toArray())
-            : $banner->agent_id === $user->id;
-        if (!$isAuthorized) {
-            return redirect()->back()->with('error', 'You are not authorized to edit this banner.');
-        }
+        $this->BannerPermission($banner->agent_id);
         return view('admin.banners.show', compact('banner'));
     }
 
@@ -87,6 +81,9 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
+        if (!$banner) {
+            return redirect()->back()->with('error', 'Banner Not Found');
+        }
         $this->BannerPermission($banner->agent_id);
         return view('admin.banners.edit', compact('banner'));
     }
