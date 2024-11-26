@@ -93,7 +93,7 @@
                       <option value="{{ $agent->id }}">{{ $agent->name }}</option>
                     @endforeach
                   </select>
-                  <input type="file" class="form-control" id="inputEmail3" name="image">
+                  {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
                 </div>
                 @endif
                 <div class="custom-form-group">
