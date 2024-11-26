@@ -13,7 +13,7 @@
             <h4 class="text-center mt-3 text-white">Superman</h4>
             <h5 class="text-center mt-3 text-white">Admin Login</h5>
             {{-- <p class="text-center text-white ">Enter your userId   and password to sign in</p> --}}
-            <form action="{{ route('login') }}" method="post" class="px-5 pb-4 pt-3">
+            <form action="{{ route('login') }}" method="post" class="px-3 pb-4 pt-3">
               @csrf
               <div class="mb-3">
                 <label for="login" class="form-label text-white">Username</label>
