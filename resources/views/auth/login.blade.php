@@ -35,8 +35,8 @@
                 @enderror
               </div>
       
-              <div class="mb-3">
-                <button type="submit" class="btn btn-secondary w-100">Login</button>
+              <div class="mb-3 mt-2">
+                <button type="submit" class="btn btn-danger w-100">LOGIN</button>
               </div>
       
               {{-- <hr /> --}}
