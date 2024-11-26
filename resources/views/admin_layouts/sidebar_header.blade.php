@@ -5,7 +5,7 @@
         <span class="ms-1 font-weight-bold text-white">
           MK7 Slot 
           <span class="badge badge-success">
-            {{ Auth::user()->roles->pluck('name')->implode(', ') }}
+            {{ Auth::user()->roles->pluck('title')->implode(', ') }}
           </span>
         </span>
       </a>
