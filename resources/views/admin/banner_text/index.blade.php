@@ -22,7 +22,7 @@
       <div class="card-header pb-0">
         <div class="d-lg-flex">
           <div>
-            <h5 class="mb-0">Banner Text Dashboards</h5>
+            <h5 class="mb-0">Banner Texts</h5>
 
           </div>
           <div class="ms-auto my-auto mt-lg-0 mt-4">
@@ -38,6 +38,7 @@
             <tr>
               <th>#</th>
               <th>Text</th>
+              <th>Agent</th>
               <th>Created At</th>
               <th>Actions</th>
             </tr>
@@ -47,6 +48,7 @@
             <tr>
               <td class="text-sm font-weight-normal">{{ ++$key }}</td>
               <td>{{ $text->text }}</td>
+              <td>{{ $text->agent->name }}</td>
               <td class="text-sm font-weight-normal">{{ $text->created_at->format('M j, Y') }}</td>
               <td>
                 <a href="{{ route('admin.text.edit', $text->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Banner"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>

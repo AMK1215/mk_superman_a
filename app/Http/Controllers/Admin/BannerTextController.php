@@ -13,8 +13,14 @@ class BannerTextController extends Controller
      */
     public function index()
     {
-        $texts = BannerText::latest()->get();
-
+        $auth = auth()->user();
+        if($auth->hasPermission('master_access')){
+            $texts = BannerText::query()->master()->latest()->get();
+        }else if($auth->hasPermission('agent_access')){
+            $texts = BannerText::query()->agent()->latest()->get();
+        }else{
+            return redirect()->back()->with('error', 'You do not have permission to access this page.');
+        }
         return view('admin.banner_text.index', compact('texts'));
     }
 

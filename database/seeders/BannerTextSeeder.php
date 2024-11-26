@@ -14,7 +14,7 @@ class BannerTextSeeder extends Seeder
     public function run(): void
     {
         $bannerTexts = [
-            ['text' => 'မြန်မာနိုင်ငံရဲ့ အယုံကြည်ရဆုံး 2D - 3D Website - ကြီး', 'admin_id' => 2, 'created_at' => now(), 'updated_at' => now()],
+            ['text' => 'မြန်မာနိုင်ငံရဲ့ အယုံကြည်ရဆုံး 2D - 3D Website - ကြီး', 'agent_id' => 4, 'created_at' => now(), 'updated_at' => now()],
             // Add more banner texts here if needed
         ];
 

@@ -5,6 +5,7 @@ namespace App\Models\Admin;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class BannerText extends Model
 {
@@ -12,11 +13,21 @@ class BannerText extends Model
 
     protected $fillable = [
         'text',
-        'admin_id',
+        'agent_id',
     ];
 
-    public function admin()
+    public function agent()
     {
         return $this->belongsTo(User::class, 'agent_id'); // The admin that owns the banner text
+    }
+
+    public function scopeAgent($query){
+        return $query->where('agent_id', Auth::user()->id);
+    }
+
+    public function scopeMaster($query)
+    {
+        $agents = User::find(auth()->user()->id)->agents()->pluck('id')->toArray();
+        return $query->whereIn('agent_id', $agents);
     }
 }
