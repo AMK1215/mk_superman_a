@@ -67,7 +67,7 @@
           <div>
             <h4>Banner's Detail</h4>
             <a class="btn btn-icon btn-2 btn-primary" href="{{ route('admin.banners.index') }}">
-              <span class="btn-inner--icon mt-1"><i class="material-icons">arrow_back</i>Back</span>
+              <span class="btn btn-sm btn-danger"><i class="material-icons">arrow_back</i>Back</span>
             </a>
           </div>
           <div class="card">
