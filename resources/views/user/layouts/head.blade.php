@@ -24,7 +24,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
  @yield('style')
  <style>
     #main{
-        background-image: url('https://paradoxcat.com/wp-content/uploads/2021/06/img_pdx_header_ai.jpg');
+        background-image: url("{{ asset('assets/img/backgroud.jpg') }}");
         /* background: #000; */
         min-height: 100vh;
         background-repeat: no-repeat;
