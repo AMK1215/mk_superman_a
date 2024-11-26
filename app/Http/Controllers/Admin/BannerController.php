@@ -64,6 +64,7 @@ class BannerController extends Controller
      */
     public function show(Banner $banner)
     {
+        $this->MasterAgentRoleCheck();
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
@@ -76,6 +77,7 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
+        $this->MasterAgentRoleCheck();
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
@@ -107,6 +109,7 @@ class BannerController extends Controller
      */
     public function destroy(Banner $banner)
     {
+        $this->MasterAgentRoleCheck();
         if (!$banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
