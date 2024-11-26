@@ -34,15 +34,16 @@ class AgentController extends Controller
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
         //kzt
-        $users = User::with('roles')
-            ->whereHas('roles', function ($query) {
-                $query->where('role_id', self::AGENT_ROLE);
-            })
-            ->where('agent_id', auth()->id())
-            ->orderBy('id', 'desc')
-            ->get();
-
+        // $users = User::with('roles')
+        //     ->whereHas('roles', function ($query) {
+        //         $query->where('role_id', self::AGENT_ROLE);
+        //     })
+        //     ->where('agent_id', auth()->id())
+        //     ->orderBy('id', 'desc')
+        //     ->get();
         //kzt
+        // wlk
+        $users = User::agents()->get();
         return view('admin.agent.index', compact('users'));
     }
 

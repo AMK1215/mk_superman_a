@@ -261,4 +261,11 @@ class User extends Authenticatable implements Wallet
     {
         return $this->hasMany(User::class, 'agent_id'); // Banners owned by this admin
     }
+
+    public function scopeAgents($query)
+    {
+        return $query->whereHas('roles', function ($query) {
+            $query->where('title', 'Agent'); // Assuming you have roles for users
+        });
+    }
 }
