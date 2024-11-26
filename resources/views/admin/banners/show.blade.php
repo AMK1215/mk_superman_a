@@ -66,8 +66,8 @@
         <div class="col-md-6 offset-md-3">
           <div>
             <h4>Banner's Detail</h4>
-            <a class="btn btn-icon btn-2 btn-primary" href="{{ route('admin.banners.index') }}">
-              <span class="btn btn-sm btn-danger"><i class="material-icons">arrow_back</i>Back</span>
+            <a class="btn btn-icon btn-primary" href="{{ route('admin.banners.index') }}">
+              <i class="material-icons">arrow_back</i>Back
             </a>
           </div>
           <div class="card">
