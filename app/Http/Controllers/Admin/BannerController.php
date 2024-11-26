@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Banner;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -15,6 +16,7 @@ class BannerController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use ImageUpload;
     public function index()
     {
         $auth = Auth::user();
@@ -63,9 +65,8 @@ class BannerController extends Controller
             return redirect()->back()->with('error', 'You are not authorized to create this banner.');
         }else{
             $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
-            $image = $request->file('image');
-            $filename = uniqid('banner_') . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('assets/img/banners/'), $filename);
+            $filename = $this->handleImageUpload($request->image, "banners");
+
             Banner::create([
                 'image' => $filename,
                 'agent_id' => $agentId,
@@ -130,14 +131,9 @@ class BannerController extends Controller
         }else{
             $agentId = $user->hasRole('Master') ? $request->agent_id : $user->id;
             File::delete(public_path('assets/img/banners/' . $banner->image));
-            $image = $request->file('image');
-            $ext = $image->getClientOriginalExtension();
-            $filename = uniqid('banner') . '.' . $ext; // Generate a unique filename
-            $image->move(public_path('assets/img/banners/'), $filename); // Save the file
-    
-            $banner->update([
-                'image' => $filename,
-            ]);
+            $filename = $this->handleImageUpload($request->image, "banners");
+
+            $banner->update([ 'image' => $filename ]);
             return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
         }
     }
