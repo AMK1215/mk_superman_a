@@ -22,15 +22,7 @@
         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
       </ol>
       <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-      <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
-        <a href="javascript:;" class="nav-link text-body p-0">
-          <div class="sidenav-toggler-inner">
-            <i class="sidenav-toggler-line"></i>
-            <i class="sidenav-toggler-line"></i>
-            <i class="sidenav-toggler-line"></i>
-          </div>
-        </a>
-      </div>
+      
     </nav>
     
     {{-- <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
@@ -61,15 +53,26 @@
   
       </ul>
     </div> --}}
-    <div class="d-flex justify-content-end align-items-center">
-      <div class="me-2">
-        <span class="badge badge-success">
-          {{ Auth::user()->roles->pluck('title')->implode(', ') }}
-        </span>
+    <div>
+      <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
+        <a href="javascript:;" class="nav-link text-body p-0">
+          <div class="sidenav-toggler-inner">
+            <i class="sidenav-toggler-line"></i>
+            <i class="sidenav-toggler-line"></i>
+            <i class="sidenav-toggler-line"></i>
+          </div>
+        </a>
       </div>
-      <div class="{{ Auth::user()->balance < 0 ? 'text-danger' : 'text-success'}}">
-        <i class="fas fa-wallet me-1"></i>
-        <span>{{ number_format(Auth::user()->balance) }} MMK</span>
+      <div class="d-flex justify-content-end align-items-center">
+        <div class="me-2">
+          <span class="badge badge-success">
+            {{ Auth::user()->roles->pluck('title')->implode(', ') }}
+          </span>
+        </div>
+        <div class="{{ Auth::user()->balance < 0 ? 'text-danger' : 'text-success'}}">
+          <i class="fas fa-wallet me-1"></i>
+          <span>{{ number_format(Auth::user()->balance) }} MMK</span>
+        </div>
       </div>
     </div>
   </div>
