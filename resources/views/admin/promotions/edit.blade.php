@@ -85,20 +85,7 @@
                   <input type="file" class="form-control border border-1 border-secondary ps-2" id="image" name="image">
                   <img src="{{ $promotion->img_url }}" width="150px" class="img-thumbnail" alt="">
                 </div>
-                <div class="mb-3">
-                    <label for="title" class="form-control">Title</label>
-                    <input type="text" value="{{ $promotion->title }}" name="title" placeholder="Enter Title" class="form-control border border-1 border-secondary ps-2">
-                    @error('title')
-                        <span class="text-danger d-block">*{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="mb-3">
-                    <label for="desc" class="form-label text-dark">Description</label>
-                    <textarea name="description" class="form-control border border-1 border-secondary ps-2" id="desc" cols="30" rows="10" placeholder="Enter Descriptiton">{{ $promotion->description }}</textarea>
-                    @error('description')
-                    <span class="text-danger d-block">*{{ $message }}</span>
-                    @enderror
-                </div>
+                
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Edit</button>
                 </div>

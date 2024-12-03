@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Promotion;
+use App\Traits\AuthorizedCheck;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class PromotionController extends Controller
@@ -12,10 +15,13 @@ class PromotionController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use ImageUpload;
+    use AuthorizedCheck;
     public function index()
     {
-        $promotions = Promotion::latest()->get();
-
+        $auth = Auth::user();
+        $this->MasterAgentRoleCheck();
+        $promotions = $auth->hasPermission("master_access") ? Promotion::query()->master()->latest()->get() : Promotion::query()->agent()->latest()->get();
         return view('admin.promotions.index', compact('promotions'));
     }
 
@@ -24,6 +30,7 @@ class PromotionController extends Controller
      */
     public function create()
     {
+        $this->MasterAgentRoleCheck();
         return view('admin.promotions.create');
     }
 
@@ -32,23 +39,20 @@ class PromotionController extends Controller
      */
     public function store(Request $request)
     {
+        $this->MasterAgentRoleCheck();
+        $user = Auth::user();
+        $masterCheck = $user->hasRole('Master');
         $request->validate([
-            'image' => 'required',
-            'title' => 'required',
-            'description' => 'required',
+            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
         ]);
-        // image
-        $image = $request->file('image');
-        $ext = $image->getClientOriginalExtension();
-        $filename = uniqid('promotion').'.'.$ext; // Generate a unique filename
-        $image->move(public_path('assets/img/promotions/'), $filename); // Save the file
-
-        $promotion = Promotion::create([
+        $agentId = $masterCheck ? $request->agent_id : $user->id;
+        $this->FeaturePermission($agentId);
+        $filename = $this->handleImageUpload($request->image, "promotions");
+        Promotion::create([
             'image' => $filename,
-            'title' => $request->title,
-            'description' => $request->description,
+            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
         ]);
-
         return redirect()->route('admin.promotions.index')->with('success', 'New Promotion Created Successfully.');
     }
 
@@ -57,6 +61,11 @@ class PromotionController extends Controller
      */
     public function show(Promotion $promotion)
     {
+        $this->MasterAgentRoleCheck();
+        if (!$promotion) {
+            return redirect()->back()->with('error', 'Promotion Not Found');
+        }
+        $this->FeaturePermission($promotion->agent_id);
         return view('admin.promotions.show', compact('promotion'));
     }
 
@@ -65,6 +74,11 @@ class PromotionController extends Controller
      */
     public function edit(Promotion $promotion)
     {
+        $this->MasterAgentRoleCheck();
+        if (!$promotion) {
+            return redirect()->back()->with('error', 'Promotion Not Found');
+        }
+        $this->FeaturePermission($promotion->agent_id);
         return view('admin.promotions.edit', compact('promotion'));
     }
 
@@ -73,30 +87,18 @@ class PromotionController extends Controller
      */
     public function update(Request $request, Promotion $promotion)
     {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $ext = $image->getClientOriginalExtension();
-            $filename = uniqid('promotion').'.'.$ext;
-            $image->move(public_path('assets/img/promotions/'), $filename);
-            $promotion->update([
-                'image' => $filename,
-                'title' => $request->title,
-                'description' => $request->description,
-            ]);
-
-            return redirect()->route('admin.promotions.index')->with('success', 'Promotion Updated');
-        } else {
-            $promotion->update([
-                'title' => $request->title,
-                'description' => $request->description,
-            ]);
-
-            return redirect()->route('admin.promotions.index')->with('success', 'Promotion Updated');
+        $this->MasterAgentRoleCheck();
+        if (!$promotion) {
+            return redirect()->back()->with('error', 'Promotion Not Found');
         }
+        $this->FeaturePermission($promotion->agent_id);
+        $request->validate([
+            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+        ]);
+        $this->handleImageDelete($promotion->image, "promotions");
+        $filename = $this->handleImageUpload($request->image, "promotions");
+        $promotion->update(['image' => $filename]);
+        return redirect(route('admin.promotions.index'))->with('success', 'Promotion Image Updated.');
     }
 
     /**
@@ -104,9 +106,13 @@ class PromotionController extends Controller
      */
     public function destroy(Promotion $promotion)
     {
-        File::delete(public_path('assets/img/promotions/'.$promotion->image));
+        $this->MasterAgentRoleCheck();
+        if (!$promotion) {
+            return redirect()->back()->with('error', 'Promotion Not Found');
+        }
+        $this->FeaturePermission($promotion->agent_id);
+        $this->handleImageDelete($promotion->image, "promotions");
         $promotion->delete();
-
-        return redirect()->route('admin.promotions.index')->with('success', 'Promotion Deleted.');
+        return redirect()->back()->with('success', 'Promotion Deleted.');
     }
 }

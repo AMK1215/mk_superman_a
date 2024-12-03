@@ -73,7 +73,7 @@
           <div class="card z-index-0 fadeIn3 fadeInBottom">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg py-2 pe-1">
-                <h4 class="text-white font-weight-bolder text-center mb-2">New Promotion Create</h4>
+                <h4 class="text-white font-weight-bolder text-center mb-2">Promotion Create</h4>
               </div>
             </div>
             <div class="card-body">
@@ -86,20 +86,21 @@
                   <span class="text-danger d-block">*{{ $message }}</span>
                   @enderror
                 </div>
-                <div class="mb-3">
-                    <label for="title" class="form-label text-dark">Title</label>
-                    <input type="text" class="form-control border border-1 border-secondary ps-2" id="title" name="title" placeholder="Enter Title">
-                    @error('title')
-                    <span class="text-danger d-block">*{{ $message }}</span>
-                    @enderror
+                @if(Auth::user()->hasRole('Master'))
+                <div class="custom-form-group">
+                  <label for="title">Select Agent</label>
+                  <select name="agent_id" class="form-control form-select" id="">
+                    <option value="">Select Agent</option>
+                    @foreach (Auth::user()->agents as $agent)
+                      <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                    @endforeach
+                  </select>
+                  @error('agent_id')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                  {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
                 </div>
-                <div class="mb-3">
-                    <label for="desc" class="form-label text-dark">Description</label>
-                    <textarea name="description" class="form-control border border-1 border-secondary ps-2" id="desc" cols="30" rows="10" placeholder="Enter Descriptiton"></textarea>
-                    @error('description')
-                    <span class="text-danger d-block">*{{ $message }}</span>
-                    @enderror
-                </div>
+                @endif
                 <div class="mb-3">
                   <button class="btn btn-primary" type="submit">Create</button>
                 </div>
