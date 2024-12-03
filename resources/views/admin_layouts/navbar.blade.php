@@ -55,7 +55,7 @@
     </div> --}}
     <div>
       <div class="d-flex justify-content-end align-items-center">
-        <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
+        <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none me-2">
           <a href="javascript:;" class="nav-link text-body p-0">
             <div class="sidenav-toggler-inner">
               <i class="sidenav-toggler-line"></i>
