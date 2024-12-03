@@ -37,6 +37,7 @@
           <thead class="thead-light">
             <tr>
               <th>Link</th>
+              <th>Icon</th>
               <th>Contact Type</th>
               <th>Agent</th>
             </tr>
@@ -45,6 +46,9 @@
             @foreach($contacts as $key => $contact)
             <tr>
               <td class="text-sm font-weight-normal">{{ $contact->link }}</td>
+              <td class="text-sm font-weight-normal">
+                <img src="{{ $contact->contact_type->img_url }}" width="50px" alt="">
+              </td>
               <td class="text-sm font-weight-normal">{{ $contact->contact_type->name }}</td>
               <td class="text-sm font-weight-normal">{{ $contact->agent->name }}</td>
               <td>
