@@ -83,17 +83,17 @@
                 </td>
               </tr>
               <tr>
-                <td class="text-right">Title</td>
+                <td class="text-right">Agent</td>
                 <td>
-                  {{ $promotion->title }}
+                  {{ $promotion->agent->name }}
                 </td>
               </tr>
-              <tr>
+              {{-- <tr>
                 <td class="text-right">Description</td>
                 <td>
                   {!! $promotion->description !!}
                 </td>
-              </tr>
+              </tr> --}}
               <tr>
                 <td>Create Date</td>
                 <td>{!! $promotion->created_at->format('F j, Y') !!}</td>
