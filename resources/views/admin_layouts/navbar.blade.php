@@ -60,5 +60,16 @@
   
       </ul>
     </div> --}}
+    <div class="d-flex justify-content-end align-items-center">
+      <div>
+        <span class="badge badge-success">
+          {{ Auth::user()->roles->pluck('title')->implode(', ') }}
+        </span>
+      </div>
+      <div>
+        <i class="fas fa-wallet mr-2"></i>
+        {{ number_format(Auth::user()->balance) }} MMK
+      </div>
+    </div>
   </div>
 </nav>
