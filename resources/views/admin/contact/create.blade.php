@@ -79,21 +79,34 @@
               <form role="form" class="text-start" action="{{ route('admin.contact.store') }}" method="post">
                 @csrf
                 <div class="custom-form-group">
-                  <label for="title">Phone</label>
-                  <input type="text" class="form-control" id="=" name="phone">
+                  <label for="title">Link</label>
+                  <input type="text" class="form-control" id="=" name="link">
                 </div>
                 <div class="custom-form-group">
-                  <label for="title">Facebook</label>
+                  <label for="title">Choose Contact Type</label>
+                  <select name="contact_type_id" id="" class="form-select form-control">
+                    <option value="">Select Contact Type</option>
+                    @foreach ($contact_types as $contact_type)
+                      <option value="{{ $contact_type->id }}">{{ $contact_type->name }}</option>
+                    @endforeach
+                  </select>
                   <input type="text" class="form-control" id="" name="facebook">
                 </div>
+                @if(Auth::user()->hasRole('Master'))
                 <div class="custom-form-group">
-                  <label for="title">Telegram</label>
-                  <input type="text" class="form-control" id="" name="telegram">
+                  <label for="title">Select Agent</label>
+                  <select name="agent_id" class="form-control form-select" id="">
+                    <option value="">Select Agent</option>
+                    @foreach (Auth::user()->agents as $agent)
+                      <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                    @endforeach
+                  </select>
+                  @error('agent_id')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                  {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
                 </div>
-                <div class="custom-form-group">
-                  <label for="title">Viber</label>
-                  <input type="text" class="form-control" id="inputEmail3" name="viber">
-                </div>
+                @endif
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Create</button>
                 </div>

@@ -13,14 +13,13 @@ return new class extends Migration
     {
         Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->string('facebook')->nullable();
-            $table->string('telegram')->nullable();
-            $table->string('viber')->nullable();
-            $table->string('phone')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            $table->string('link');
+            $table->unsignedBigInteger('contact_type_id');
+            $table->unsignedBigInteger('agent_id')->nullable();
             $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('agent_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('contact_type_id')->references('id')->on('contact_types')->onDelete('cascade');
         });
     }
 

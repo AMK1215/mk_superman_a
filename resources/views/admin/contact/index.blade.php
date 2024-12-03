@@ -36,20 +36,17 @@
         <table class="table table-flush" id="contact-search">
           <thead class="thead-light">
             <tr>
-              <th>Phone</th>
-              <th>Facebook</th>
-              <th>Telegram</th>
-              <th>Viber</th>
+              <th>Link</th>
+              <th>Contact Type</th>
+              <th>Agent</th>
             </tr>
           </thead>
           <tbody>
             @foreach($contacts as $key => $contact)
             <tr>
-              <td class="text-sm font-weight-normal">{{ $contact->phone }}</td>
-              <td class="text-sm font-weight-normal">{{ $contact->facebook }}</td>
-              <td class="text-sm font-weight-normal">{{ $contact->telegram }}</td>
-              <td class="text-sm font-weight-normal">{{ $contact->viber }}</td>
-
+              <td class="text-sm font-weight-normal">{{ $contact->link }}</td>
+              <td class="text-sm font-weight-normal">{{ $contact->contact_type->name }}</td>
+              <td class="text-sm font-weight-normal">{{ $contact->agent->name }}</td>
               <td>
                 <a href="{{ route('admin.contact.edit', $contact->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Contact"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
                 <form class="d-inline" action="{{ route('admin.contact.destroy', $contact->id) }}" method="POST">

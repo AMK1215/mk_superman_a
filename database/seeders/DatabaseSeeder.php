@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             BannerSeeder::class,
             BannerTextSeeder::class,
             BannerAdsSeeder::class,
+            ContactTypeSeeder::class,
             BankTableSeeder::class,
             GameTypeTableSeeder::class,
             GameProductSeeder::class,

@@ -22,8 +22,7 @@
       <div class="card-header pb-0">
         <div class="d-lg-flex">
           <div>
-            <h5 class="mb-0">PaymentType Listing</h5>
-
+            <h5 class="mb-0">Bank Lists</h5>
           </div>
           <div class="ms-auto my-auto mt-lg-0 mt-4">
           </div>
@@ -36,7 +35,7 @@
               <th>ID</th>
               <th>Name</th>
               <th>Image</th>
-              <th>Banner</th>
+              {{-- <th>Banner</th> --}}
               <th>Action</th>
             </tr>
           </thead>
@@ -49,11 +48,11 @@
                 <td>
                     <img src="{{ asset('assets/img/paymentType/' . ($type->paymentType->image ?? 'default.png')) }}" alt="" width="100px">
                 </td>
-                <td>
+                {{-- <td>
                     @foreach ($type->paymentImages ?? [] as $payment)
                         <img src="{{ asset('assets/img/paymentType/banners/' . ($payment->image ?? 'default.png')) }}" alt="" width="100px">
                     @endforeach
-                </td>
+                </td> --}}
                 <td>
                     <a href="{{ route('admin.paymentType.edit', $type->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Bank">
                         <i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i>

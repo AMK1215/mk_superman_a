@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use App\Models\ContactType;
+use App\Traits\AuthorizedCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,10 +14,12 @@ class ContactController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizedCheck;
     public function index()
     {
-        $contacts = Contact::where('user_id', Auth::id())->get();
-
+        $auth = auth()->user();
+        $this->MasterAgentRoleCheck();
+        $contacts = $auth->hasPermission("master_access") ? Contact::query()->master()->latest()->get() : Contact::query()->agent()->latest()->get();
         return view('admin.contact.index', compact('contacts'));
     }
 
@@ -24,7 +28,9 @@ class ContactController extends Controller
      */
     public function create()
     {
-        return view('admin.contact.create');
+        $this->MasterAgentRoleCheck();
+        $contact_types = ContactType::all();
+        return view('admin.contact.create', compact('contact_types'));
     }
 
     /**
@@ -32,15 +38,23 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
+        $this->MasterAgentRoleCheck();
+        $user = Auth::user();
+        $masterCheck = $user->hasRole('Master');
+        $request->validate([
+            'link' => 'required',
+            'contact_type_id' => 'required|exists:contact_types,id',
+            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
+        ]);
+        $agentId = $masterCheck ? $request->agent_id : $user->id;
+        $this->FeaturePermission($agentId);
         Contact::create([
-            'phone' => $request->phone,
-            'facebook' => $request->facebook,
-            'telegram' => $request->telegram,
-            'viber' => $request->viber,
-            'user_id' => Auth::id(),
+            'link' => $request->link,
+            'contact_type_id' => $request->contact_type_id,
+            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
         ]);
 
-        return redirect()->route('admin.contact.index');
+        return redirect()->route('admin.contact.index')->with('success', 'Contact created successfully');
     }
 
     /**
