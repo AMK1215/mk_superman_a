@@ -61,13 +61,13 @@
       </ul>
     </div> --}}
     <div class="d-flex justify-content-end align-items-center">
-      <div>
+      <div class="me-2">
         <span class="badge badge-success">
           {{ Auth::user()->roles->pluck('title')->implode(', ') }}
         </span>
       </div>
       <div>
-        <i class="fas fa-wallet mr-2"></i>
+        <i class="fas fa-wallet me-1"></i>
         {{ number_format(Auth::user()->balance) }} MMK
       </div>
     </div>
