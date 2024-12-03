@@ -66,9 +66,9 @@
           {{ Auth::user()->roles->pluck('title')->implode(', ') }}
         </span>
       </div>
-      <div>
+      <div class="{{ Auth::user()->balance < 0 ? 'text-danger' : 'text-success'}}">
         <i class="fas fa-wallet me-1"></i>
-        {{ number_format(Auth::user()->balance) }} MMK
+        <span>{{ number_format(Auth::user()->balance) }} MMK</span>
       </div>
     </div>
   </div>
