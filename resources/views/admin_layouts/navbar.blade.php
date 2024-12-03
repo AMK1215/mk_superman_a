@@ -54,16 +54,16 @@
       </ul>
     </div> --}}
     <div>
-      <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
-        <a href="javascript:;" class="nav-link text-body p-0">
-          <div class="sidenav-toggler-inner">
-            <i class="sidenav-toggler-line"></i>
-            <i class="sidenav-toggler-line"></i>
-            <i class="sidenav-toggler-line"></i>
-          </div>
-        </a>
-      </div>
       <div class="d-flex justify-content-end align-items-center">
+        <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
+          <a href="javascript:;" class="nav-link text-body p-0">
+            <div class="sidenav-toggler-inner">
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+              <i class="sidenav-toggler-line"></i>
+            </div>
+          </a>
+        </div>
         <div class="me-2">
           <span class="badge badge-success">
             {{ Auth::user()->roles->pluck('title')->implode(', ') }}
