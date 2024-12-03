@@ -37,7 +37,7 @@
             <tr>
               <th>#</th>
               <th>Image</th>
-              <th>Title</th>
+              {{-- <th>Title</th> --}}
               {{-- <th>Description</th> --}}
               <th>Created At</th>
               {{-- <th>Updated At</th> --}}
@@ -51,7 +51,7 @@
               <td>
                 <img width="150px" class="img-thumbnail" src="{{ $promotion->img_url }}" alt="">
               </td>
-              <td>{{ $promotion->title }}</td>
+              {{-- <td>{{ $promotion->title }}</td> --}}
               {{-- <td>{!! $promotion->description !!}</td> --}}
               <td class="text-sm font-weight-normal">{{ $promotion->created_at->format('F j, Y') }}</td>
               {{-- <td class="text-sm font-weight-normal">{{ $promotion->updated_at->format('F j, Y') }}</td> --}}
