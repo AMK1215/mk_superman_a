@@ -90,7 +90,6 @@
                       <option value="{{ $contact_type->id }}">{{ $contact_type->name }}</option>
                     @endforeach
                   </select>
-                  <input type="text" class="form-control" id="" name="facebook">
                 </div>
                 @if(Auth::user()->hasRole('Master'))
                 <div class="custom-form-group">

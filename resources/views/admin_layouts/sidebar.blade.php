@@ -88,14 +88,14 @@
                 <span class="sidenav-normal  ms-2  ps-1">Transfer Log</span>
             </a>
         </li>
-        @can('contact')
+        @canany(['master_access', 'agent_access'])
             <li class="nav-item ">
                 <a class="nav-link text-white " href="{{ route('admin.contact.index') }}">
                     <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>
                     <span class="sidenav-normal  ms-2  ps-1"> Contact </span>
                 </a>
             </li>
-        @endcan
+        @endcanany
         <hr class="horizontal light mt-0">
         @canany(['master_access', 'agent_access'])
             <li class="nav-item">
