@@ -80,20 +80,17 @@
                 @csrf
                 @method('PATCH')
                 <div class="custom-form-group">
-                  <label for="title">Phone</label>
-                  <input type="text" class="form-control" id="=" name="phone" value="{{ $contact->phone}}">
+                  <label for="title">Link</label>
+                  <input type="text" class="form-control" id="" name="link" value="{{ $contact->link}}">
                 </div>
                 <div class="custom-form-group">
-                  <label for="title">Facebook</label>
-                  <input type="text" class="form-control" id="" name="facebook" value="{{ $contact->facebook}}">
-                </div>
-                <div class="custom-form-group">
-                  <label for="title">Telegram</label>
-                  <input type="text" class="form-control" id="" name="telegram" value="{{ $contact->telegram}}">
-                </div>
-                <div class="custom-form-group">
-                  <label for="title">Viber</label>
-                  <input type="text" class="form-control" id="inputEmail3" name="viber" value="{{ $contact->viber}}">
+                  <label for="title">Choose Contact Type</label>
+                  <select name="contact_type_id" id="" class="form-select form-control">
+                    <option value="">Select Contact Type</option>
+                    @foreach ($contact_types as $contact_type)
+                      <option value="{{ $contact_type->id }}" {{ $contact->contact_type_id == $contact_type->id ? 'selected' : ''}}>{{ $contact_type->name }}</option>
+                    @endforeach
+                  </select>
                 </div>
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Update</button>

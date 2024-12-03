@@ -70,7 +70,12 @@ class ContactController extends Controller
      */
     public function edit(Contact $contact)
     {
-        return view('admin.contact.edit', compact('contact'));
+        $this->MasterAgentRoleCheck();
+        $contact_types = ContactType::all();
+        if (!$contact) {
+            return redirect()->back()->with('error', 'Contact Not Found');
+        }
+        return view('admin.contact.edit', compact('contact', 'contact_types'));
     }
 
     /**
@@ -78,9 +83,17 @@ class ContactController extends Controller
      */
     public function update(Request $request, Contact $contact)
     {
-        $contact->update($request->all());
-
-        return redirect()->route('admin.contact.index');
+        $this->MasterAgentRoleCheck();
+        if (!$contact) {
+            return redirect()->back()->with('error', 'Banner Text Not Found');
+        }
+        $this->FeaturePermission($contact->agent_id);
+        $data = $request->validate([
+            'link' => 'required',
+            'contact_type_id' => 'required|exists:contact_types,id',
+        ]);
+        $contact->update($data);
+        return redirect()->route('admin.contact.index')->with('success', 'Contact updated successfully');
 
     }
 
@@ -89,8 +102,12 @@ class ContactController extends Controller
      */
     public function destroy(Contact $contact)
     {
+        $this->MasterAgentRoleCheck();
+        if (!$contact) {
+            return redirect()->back()->with('error', 'Contact Not Found');
+        }
+        $this->FeaturePermission($contact->agent_id);
         $contact->delete();
-
-        return redirect()->route('admin.contact.index');
+        return redirect()->back()->with('success', 'Contact Deleted Successfully.');
     }
 }
