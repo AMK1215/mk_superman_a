@@ -27,7 +27,7 @@
           </div>
           <div class="ms-auto my-auto mt-lg-0 mt-4">
             <div class="ms-auto my-auto">
-              <a href="{{ route('admin.userPayment.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Bank</a>
+              <a href="{{ route('admin.banks.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Bank</a>
             </div>
           </div>
         </div>
@@ -57,9 +57,9 @@
               <td class="text-sm font-weight-normal">{{ $bank->account_no }}</td>
               <td class="text-sm font-weight-normal">{{ $bank->agent->name }}</td>
               <td>
-                <a href="{{ route('admin.userPayment.edit', $bank->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Bank"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
+                <a href="{{ route('admin.banks.edit', $bank->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Bank"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
 
-                <form class="d-inline" action="{{ route('admin.userPayment.destroy', $bank->id) }}" method="POST">
+                <form class="d-inline" action="{{ route('admin.banks.destroy', $bank->id) }}" method="POST">
                   @csrf
                   @method('DELETE')
                   <button type="submit" class="transparent-btn" data-bs-toggle="tooltip" data-bs-original-title="Delete Banner">
