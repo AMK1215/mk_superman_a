@@ -95,19 +95,19 @@
                 <div class="custom-form-group">
                   <label for="title">Account Name</label>
                   <input type="text" class="form-control" name="account_name">
-                  @error('bank_account_name')
+                  @error('account_name')
                   <span class="text-danger d-block">*{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="custom-form-group">
                   <label for="title">Account No</label>
-                  <input type="text" class="form-control" name="account_no">
-                  @error('bank_account_no')
+                  <input type="text" class="form-control" name="account_number">
+                  @error('account_number')
                   <span class="text-danger d-block">*{{ $message }}</span>
                   @enderror
                 </div>
                 
-                <div class="custom-form-group">
+                <div class="custom-form-group" type="submit">
                   <button class="btn btn-primary" type="submit">Create</button>
                 </div>
               </form>
