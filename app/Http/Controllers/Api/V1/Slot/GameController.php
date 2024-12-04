@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\GameProviderResource;
 use App\Http\Resources\Api\V1\GameTypeResource;
 use App\Http\Resources\GameListResource;
-use App\Http\Resources\Slot\GameDetailResource;
+use App\Http\Resources\GameDetailResource;
 use App\Http\Resources\Slot\HotGameListResource;
 use App\Models\Admin\GameList;
 use App\Models\Admin\GameType;
