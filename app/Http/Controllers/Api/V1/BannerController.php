@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\BannerResource;
 use App\Models\Admin\Banner;
 use App\Models\Admin\BannerAds;
 use App\Models\Admin\BannerText;
@@ -14,9 +15,9 @@ class BannerController extends Controller
 
     public function index()
     {
-        $data = Banner::all();
-
-        return $this->success($data);
+        $data = Banner::agentPlayer();
+        // return $this->success($data);
+        return $this->success(BannerResource::collection($data));
     }
 
     public function bannerText()

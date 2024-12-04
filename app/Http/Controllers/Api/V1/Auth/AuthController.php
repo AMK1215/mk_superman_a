@@ -71,7 +71,6 @@ class AuthController extends Controller
             $player->update([
                 'password' => $request->password,
                 'status' => 1,
-
             ]);
         } else {
             return $this->error('', ["current_password" => 'Old Passowrd is incorrect'], 422);

@@ -65,15 +65,11 @@ Route::post('Reward', [RewardController::class, 'handleReward']);
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    //logout 
-    Route::post('/logout', [AuthController::class, 'logout']);
-
-
     Route::post('launch_game', [LaunchGameController::class, 'LaunchGame']);
     Route::get('wager-logs', [WagerController::class, 'index']);
     Route::get('transactions', [TransactionController::class, 'index']);
 
-    //logout
+    //auth api
     Route::get('user', [AuthController::class, 'getUser']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
