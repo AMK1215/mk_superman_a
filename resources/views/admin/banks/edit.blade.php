@@ -76,7 +76,7 @@
               </div>
             </div>
             <div class="card-body">
-              <form role="form" class="text-start" action="{{ route('admin.banks.update', $userPayment->id) }}" method="post" enctype="multipart/form-data">
+              <form role="form" class="text-start" action="{{ route('admin.banks.update', $bank->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="custom-form-group">
@@ -93,10 +93,16 @@
                 <div class="custom-form-group">
                   <label for="title">Account Name</label>
                   <input type="text" class="form-control" id="" name="account_name" value="{{$bank->account_name}}">
+                  @error('account_name')
+                  <span class="text-danger d-block">*{{ $message }}</span>
+                  @enderror
                 </div>
                 <div class="custom-form-group">
                   <label for="title">Account No</label>
-                  <input type="text" class="form-control" id="" name="account_number" value="{{$bank->account_no}}">
+                  <input type="text" class="form-control" id="" name="account_number" value="{{$bank->account_number}}">
+                  @error('account_number')
+                  <span class="text-danger d-block">*{{ $message }}</span>
+                  @enderror
                 </div>
                 
                 <div class="custom-form-group">
