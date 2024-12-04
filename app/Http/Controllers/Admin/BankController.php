@@ -23,7 +23,6 @@ class BankController extends Controller
         $auth = auth()->user();
         $this->MasterAgentRoleCheck();
         $banks = $auth->hasPermission('master_access') ? Bank::query()->master()->latest()->get() : Bank::query()->agent()->latest()->get();
-        return $banks[0]->paymentType->img_url;
         return view('admin.banks.index', compact('banks'));
     }
 
