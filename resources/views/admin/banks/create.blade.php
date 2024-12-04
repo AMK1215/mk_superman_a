@@ -82,8 +82,8 @@
                   <label for="title">Bank Type <span class="text-danger">*</span></label>
                   <div class="custom-select-wrapper">
                     <select name="payment_type_id" class="form-control custom-select">
-                      @foreach ($payment_types as $type)
                       <option value="">Choose Bank Type</option>
+                      @foreach ($payment_types as $type)
                       <option value="{{ $type->id}}">{{$type->name}}</option>
                       @endforeach
                     </select>
