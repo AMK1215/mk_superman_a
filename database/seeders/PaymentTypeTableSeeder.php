@@ -15,23 +15,23 @@ class PaymentTypeTableSeeder extends Seeder
         $types = [
             [
                 'name' => 'AYA Bank',
-                'image' => 'aya_banking.png',
+                'image' => 'ayabank.png',
             ],
             [
                 'name' => 'AYA Pay',
-                'image' => 'aya_pay.png',
+                'image' => 'ayapay.png',
             ],
             [
                 'name' => 'CB Bank',
-                'image' => 'cb_banking.png',
+                'image' => 'cbbank.png',
             ],
             [
                 'name' => 'CB Pay',
-                'image' => 'cb_pay.png',
+                'image' => 'cbpay.png',
             ],
             [
                 'name' => 'KBZ Bank',
-                'image' => 'kbz_banking.png',
+                'image' => 'kbzbank.png',
             ],
             [
                 'name' => 'KBZ Pay',
@@ -39,11 +39,11 @@ class PaymentTypeTableSeeder extends Seeder
             ],
             [
                 'name' => 'MAB Bank',
-                'image' => 'mab_banking.png',
+                'image' => 'mabbank.png',
             ],
             [
                 'name' => 'UAB Pay',
-                'image' => 'uab_pay.png',
+                'image' => 'uabpay.png',
             ],
             [
                 'name' => 'WAVE Pay',
@@ -51,7 +51,7 @@ class PaymentTypeTableSeeder extends Seeder
             ],
             [
                 'name' => 'YOMA Bank',
-                'image' => 'yoma_banking.png',
+                'image' => 'yomabank.png',
             ],
         ];
 
