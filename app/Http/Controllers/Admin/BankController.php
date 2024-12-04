@@ -11,7 +11,7 @@ use App\Traits\AuthorizedCheck;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
-class UserPaymentController extends Controller
+class BankController extends Controller
 {
     /**
      * Display a listing of the resource.

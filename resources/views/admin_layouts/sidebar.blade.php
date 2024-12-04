@@ -83,7 +83,7 @@
         </li>
         @canany(['master_access', 'agent_access'])
             <li class="nav-item ">
-                <a class="nav-link text-white " href="{{ route('admin.userPayment.index') }}">
+                <a class="nav-link text-white " href="{{ route('admin.banks.index') }}">
                     <span class="sidenav-mini-icon"> <i class="fa-solid fa-bank"></i> </span>
                     <span class="sidenav-normal  ms-2  ps-1">Banks</span>
                 </a>

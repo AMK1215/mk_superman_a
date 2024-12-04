@@ -21,7 +21,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\TransferLog\TransferLogController;
-use App\Http\Controllers\Admin\UserPaymentController;
+use App\Http\Controllers\Admin\BankController;
 use App\Http\Controllers\Admin\WithDraw\WithDrawRequestController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportController;
@@ -46,7 +46,7 @@ Route::group([
     Route::resource('roles', RolesController::class);
     // Players
     Route::delete('user/destroy', [PlayerController::class, 'massDestroy'])->name('user.massDestroy');
-    Route::resource('userPayment', UserPaymentController::class);
+    Route::resource('banks', BankController::class);
     Route::resource('paymentType', PaymentTypeController::class);
 
     Route::put('player/{id}/ban', [PlayerController::class, 'banUser'])->name('player.ban');
