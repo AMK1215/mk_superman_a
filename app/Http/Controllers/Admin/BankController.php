@@ -70,39 +70,45 @@ class BankController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Bank $bank)
     {
-        $userPayment = UserPayment::where('id', $id)->where('user_id', Auth::id())->first();
-
-        $paymentType = PaymentType::all();
-
-        return view('admin.banks.edit', compact('userPayment', 'paymentType'));
+        $this->MasterAgentRoleCheck();
+        if (!$bank) {
+            return redirect()->back()->with('error', 'Bank Not Found');
+        }
+        return view('admin.banks.edit', compact('bank'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UserPaymentRequest $request, $id)
+    public function update(Request $request, Bank $bank)
     {
-
-        $param = array_merge($request->validated());
-
-        $userPayment = UserPayment::where('id', $id)->where('user_id', Auth::id())->first();
-
-        $userPayment->update($param);
-
-        return redirect(route('admin.banks.index'))->with('success', 'Bank Image Updated.');
-
+        $this->MasterAgentRoleCheck();
+        if (!$bank) {
+            return redirect()->back()->with('error', 'Bank Not Found');
+        }
+        $this->FeaturePermission($bank->agent_id);
+        $data = $request->validate([
+            'account_name' => 'required',
+            'account_number' => 'required|numeric',
+            'payment_type_id' => 'required|exists:payment_types,id',
+        ]);
+        $bank->update($data);
+        return redirect(route('admin.banks.index'))->with('success', 'Bank Updated Successfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Bank $bank)
     {
-        $userPayment = UserPayment::where('id', $id)->where('user_id', Auth::id())->first();
-        $userPayment->delete();
-
-        return redirect()->back()->with('success', 'Payment Type Deleted.');
+        $this->MasterAgentRoleCheck();
+        if (!$bank) {
+            return redirect()->back()->with('error', 'Bank Not Found');
+        }
+        $this->FeaturePermission($bank->agent_id);
+        $bank->delete();
+        return redirect()->back()->with('success', 'Bank Deleted Successfully.');
     }
 }
