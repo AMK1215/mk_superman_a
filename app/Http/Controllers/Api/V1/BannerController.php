@@ -15,7 +15,7 @@ class BannerController extends Controller
 
     public function index()
     {
-        $data = Banner::agentPlayer();
+        $data = Banner::agentPlayer()->get();
         // return $this->success($data);
         return $this->success(BannerResource::collection($data));
     }
