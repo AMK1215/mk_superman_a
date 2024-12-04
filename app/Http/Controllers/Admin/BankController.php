@@ -76,7 +76,8 @@ class BankController extends Controller
         if (!$bank) {
             return redirect()->back()->with('error', 'Bank Not Found');
         }
-        return view('admin.banks.edit', compact('bank'));
+        $payment_types = PaymentType::all();
+        return view('admin.banks.edit', compact('bank', 'payment_types'));
     }
 
     /**

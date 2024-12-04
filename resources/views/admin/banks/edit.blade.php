@@ -62,7 +62,7 @@
 <div class="row">
   <div class="col-12">
     <div class="container mb-3">
-      <a class="btn btn-icon btn-2 btn-primary float-end me-5" href="{{ route('admin.userPayment.index') }}">
+      <a class="btn btn-icon btn-2 btn-primary float-end me-5" href="{{ route('admin.banks.index') }}">
         <span class="btn-inner--icon mt-1"><i class="material-icons">arrow_back</i>Back</span>
       </a>
     </div>
@@ -76,25 +76,27 @@
               </div>
             </div>
             <div class="card-body">
-              <form role="form" class="text-start" action="{{ route('admin.userPayment.update', $userPayment->id) }}" method="post" enctype="multipart/form-data">
+              <form role="form" class="text-start" action="{{ route('admin.banks.update', $userPayment->id) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="custom-form-group">
-                <label for="title">Payment Type <span class="text-danger">*</span></label>
+                <label for="title">Bank Type <span class="text-danger">*</span></label>
                 <div class="custom-select-wrapper">
                 <select name="payment_type_id" class="form-control custom-select">
-                  @foreach ($paymentType as $type)
-                  <option value="{{ $type->id}}" >{{$type->name}}</option>
+                  @foreach ($payment_type as $type)
+                  <option value="{{ $type->id}}"
+                    {{ $bank->payment_type_id == $type->id ? 'selected' : ''}}
+                    >{{$type->name}}</option>
                   @endforeach
                 </select>
                </div>
                 <div class="custom-form-group">
                   <label for="title">Account Name</label>
-                  <input type="text" class="form-control" id="" name="account_name" value="{{$userPayment->account_name}}">
+                  <input type="text" class="form-control" id="" name="account_name" value="{{$bank->account_name}}">
                 </div>
                 <div class="custom-form-group">
                   <label for="title">Account No</label>
-                  <input type="text" class="form-control" id="" name="account_no" value="{{$userPayment->account_no}}">
+                  <input type="text" class="form-control" id="" name="account_number" value="{{$bank->account_no}}">
                 </div>
                 
                 <div class="custom-form-group">
