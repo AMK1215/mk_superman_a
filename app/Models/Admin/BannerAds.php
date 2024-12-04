@@ -34,6 +34,11 @@ class BannerAds extends Model
         return $query->where('agent_id', auth()->user()->id);
     }
 
+    public function scopeAgentPlayer($query)
+    {
+        return $query->where('agent_id', auth()->user()->agent_id);
+    }
+
     public function scopeMaster($query)
     {
         $agents = User::find(auth()->user()->id)->agents()->pluck('id')->toArray();
