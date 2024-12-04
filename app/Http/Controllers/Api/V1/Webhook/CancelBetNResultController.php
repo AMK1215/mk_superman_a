@@ -23,7 +23,7 @@ class CancelBetNResultController extends Controller
 
         DB::beginTransaction();
         try {
-            Log::info('Starting handleCancelBetNResult method for multiple transactions');
+            // Log::info('Starting handleCancelBetNResult method for multiple transactions');
 
             foreach ($transactions as $transaction) {
                 $player = User::where('user_name', $transaction['PlayerId'])->first();
@@ -40,7 +40,7 @@ class CancelBetNResultController extends Controller
                 }
 
                 $signature = $this->generateSignature($transaction);
-                Log::info('CancelBetNResult Signature', ['GeneratedCancelBetNResultSignature' => $signature]);
+                // Log::info('CancelBetNResult Signature', ['GeneratedCancelBetNResultSignature' => $signature]);
                 // if ($signature !== $transaction['Signature']) {
                 //     Log::warning('Signature validation failed', [
                 //         'transaction' => $transaction,
@@ -119,6 +119,7 @@ class CancelBetNResultController extends Controller
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
             'ResponseDateTime' => now()->format('Y-m-d H:i:s'),
+
         ]);
     }
 

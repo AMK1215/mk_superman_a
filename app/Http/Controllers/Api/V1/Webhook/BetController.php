@@ -147,6 +147,7 @@ class BetController extends Controller
         return response()->json([
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
+            'ResponseDateTime' => now()->format('Y-m-d H:i:s'),
             'Balance' => round($balance, 4),
         ]);
     }

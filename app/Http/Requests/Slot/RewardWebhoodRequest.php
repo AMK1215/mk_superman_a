@@ -4,6 +4,7 @@ namespace App\Http\Requests\Slot;
 
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 
 class RewardWebhoodRequest extends FormRequest
 {
@@ -84,6 +85,10 @@ class RewardWebhoodRequest extends FormRequest
                 ],
             ];
         }
+
+        Log::info('Retrieved Reward Transactions', [
+            'transactions' => $transactions,
+        ]);
 
         return $transactions;
     }

@@ -26,6 +26,7 @@ use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Slot\GetDaySummaryController;
 
 //login route post
 Route::post('/login', [AuthController::class, 'login']);
@@ -55,6 +56,10 @@ Route::post('Result', [BetResultController::class, 'handleResult']);
 Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
+
+
+// for slot
+Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {

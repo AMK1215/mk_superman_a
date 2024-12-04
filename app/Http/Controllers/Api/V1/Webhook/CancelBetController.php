@@ -138,9 +138,12 @@ class CancelBetController extends Controller
 
     private function buildErrorResponse(StatusCode $statusCode, float $balance = 0): JsonResponse
     {
+        $responseDateTime = now()->format('Y-m-d H:i:s');
+
         return response()->json([
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
+            'ResponseDateTime' => $responseDateTime,
             'Balance' => round($balance, 4),
         ]);
     }

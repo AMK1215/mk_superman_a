@@ -23,7 +23,7 @@ class RewardController extends Controller
 
         DB::beginTransaction();
         try {
-            Log::info('Starting handleReward method for multiple transactions');
+            // Log::info('Starting handleReward method for multiple transactions');
 
             foreach ($transactions as $transaction) {
                 // Retrieve player by PlayerId
@@ -39,10 +39,10 @@ class RewardController extends Controller
                 // Validate signature
                 $signature = $this->generateSignature($transaction);
                 if ($signature !== $transaction['Signature']) {
-                    Log::warning('Signature validation failed', [
-                        'transaction' => $transaction,
-                        'generated_signature' => $signature,
-                    ]);
+                    // Log::warning('Signature validation failed', [
+                    //     'transaction' => $transaction,
+                    //     'generated_signature' => $signature,
+                    // ]);
 
                     return $this->buildErrorResponse(StatusCode::InvalidSignature);
                 }
@@ -66,13 +66,10 @@ class RewardController extends Controller
                     $transaction['Amount']
                 );
 
-                //$newBalance = $player->wallet->refreshBalance()->balanceFloat;
-                $request->getMember()->wallet->refreshBalance();
-
-                $newBalance = $request->getMember()->balanceFloat;
+                $newBalance = $player->wallet->refreshBalance()->balanceFloat;
 
                 // Create the reward record
-                Reward::create([
+                $reward = Reward::create([
                     'user_id' => $player->id,
                     'operator_id' => $transaction['OperatorId'],
                     'request_date_time' => $transaction['RequestDateTime'],
@@ -88,10 +85,14 @@ class RewardController extends Controller
                 ]);
 
                 Log::info('Reward transaction processed successfully', ['TranId' => $transaction['TranId']]);
+                if (! $reward) {
+                    throw new \Exception('Failed to create reward record');
+                }
+
             }
 
             DB::commit();
-            Log::info('All reward transactions committed successfully');
+            // Log::info('All reward transactions committed successfully');
 
             return $this->buildSuccessResponse($newBalance);
         } catch (\Exception $e) {
@@ -131,3 +132,8 @@ class RewardController extends Controller
                    $transaction['OperatorId'].config('game.api.secret_key').$transaction['PlayerId']);
     }
 }
+
+//$newBalance = $player->wallet->refreshBalance()->balanceFloat;
+//$request->getMember()->wallet->refreshBalance();
+
+//$newBalance = $request->getMember()->balanceFloat;

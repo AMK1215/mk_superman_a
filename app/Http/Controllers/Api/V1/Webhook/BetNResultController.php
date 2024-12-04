@@ -25,7 +25,7 @@ class BetNResultController extends Controller
 
         DB::beginTransaction();
         try {
-            Log::info('Starting handleBetNResult method for multiple transactions');
+            // Log::info('Starting handleBetNResult method for multiple transactions');
 
             foreach ($transactions as $transaction) {
                 // Get the player
@@ -76,17 +76,7 @@ class BetNResultController extends Controller
                     return $this->buildErrorResponse(StatusCode::InsufficientBalance, $PlayerBalance);
                 }
 
-                // Process the bet
-                // $this->processTransfer(
-                //     $player,
-                //     User::adminUser(), // Assuming admin user as the receiving party
-                //     TransactionName::Stake,
-                //     $transaction['BetAmount']
-                // );
 
-                // $request->getMember()->wallet->refreshBalance();
-
-                // $NewBalance = $request->getMember()->balanceFloat;
                 // Calculate NetWin based on the WinAmount and BetAmount
                 $netWin = $transaction['WinAmount'] - $transaction['BetAmount'];
 
@@ -126,7 +116,7 @@ class BetNResultController extends Controller
             }
 
             DB::commit();
-            Log::info('All transactions committed successfully');
+            // Log::info('All transactions committed successfully');
 
             // Build a successful response with the final balance of the last player
             return $this->buildSuccessResponse($newBalance);
@@ -154,9 +144,12 @@ class BetNResultController extends Controller
 
     private function buildErrorResponse(StatusCode $statusCode, float $balance = 0): JsonResponse
     {
+        $responseDateTime = now()->format('Y-m-d H:i:s');
+
         return response()->json([
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
+            'ResponseDateTime' => $responseDateTime,
             'Balance' => round($balance, 4),
         ]);
     }
