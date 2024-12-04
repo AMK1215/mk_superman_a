@@ -17,7 +17,7 @@ class GameDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'code' => $this->game_code,
-            'name' => $this->name,
+            'name' => $this->game_name,
             // 'click_count' => $this->click_count,
             'game_type_id' => $this->game_type_id,
             'provider_id' => $this->product->id,
