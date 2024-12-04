@@ -15,6 +15,7 @@ class BankResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'bank' => $this->paymentType->name,
             'logo' => $this->paymentType->img_url,
             'account_name' => $this->account_name,
