@@ -19,9 +19,7 @@ class GameController extends Controller
     public function gameType()
     {
         $gameTypes = GameType::where('status', 1)->get();
-
-        // return $this->success($gameType);
-        return response()->json(GameTypeResource::collection($gameTypes));
+        return $this->success(GameTypeResource::collection($gameTypes));
     }
 
     public function gameTypeProducts($gameTypeID)
