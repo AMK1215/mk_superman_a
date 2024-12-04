@@ -53,9 +53,9 @@ class GameController extends Controller
             ->where('game_type_id', $game_type_id)
             ->where('status', 1)
             ->where('game_name', 'like', '%'.$request->name.'%')
-            ->get();
+            ->paginate(9);
 
-        return $this->success(GameDetailResource::collection($gameLists), 'Game Detail Successfully');
+        return GameDetailResource::collection($gameLists);
     }
 
     public function getGameDetail($provider_id, $game_type_id)
