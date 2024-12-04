@@ -49,7 +49,7 @@ Route::post('Seamless/PullReport', [LaunchGameController::class, 'pullReport']);
 Route::get('game_types', [GameController::class, 'gameType']);
 Route::get('providers/{id}', [GameController::class, 'gameTypeProducts']);
 Route::get('game_lists/{product_id}/{game_type_id}', [GameController::class, 'gameList']);
-Route::get('hotgames', [GameController::class, 'HotgameList']);
+Route::get('hot_games', [GameController::class, 'HotgameList']);
 
 
 // sameless route
