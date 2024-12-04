@@ -25,8 +25,11 @@ class AuthController extends Controller
 
         $user = User::where('user_name', $request->user_name)->first();
 
-        if (! Auth::attempt($credentials)) {
-            return $this->error('', 'Credentials do not match!', 401);
+        if (!Auth::attempt($credentials)) {
+            return $this->error("", [
+                "user_name" => "Credentials do not match!",
+            ], 422);
+            // return $this->error('', 'Credentials do not match!', 401);
         }
         if (Auth::user()->status == 0) {
 

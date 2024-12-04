@@ -36,12 +36,11 @@ trait HttpResponses
         return Response::json($data, $code, []);
     }
 
-    protected function error($data, $message, $code)
+    protected function error($message, $errors = [], $code)
     {
         return response()->json([
-            'status' => 'Error has occured...',
             'message' => $message,
-            'data' => $data,
+            'errors' => $errors
         ], $code);
     }
 }
