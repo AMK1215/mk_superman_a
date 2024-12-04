@@ -74,7 +74,7 @@ class AuthController extends Controller
 
             ]);
         } else {
-            return $this->error('', 'Old Passowrd is incorrect', 401);
+            return $this->error('', ["current_password" => 'Old Passowrd is incorrect'], 422);
         }
 
         return $this->success($player, 'Password has been changed successfully.');
