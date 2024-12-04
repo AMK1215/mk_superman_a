@@ -8,6 +8,7 @@ use App\Models\Admin\Bank;
 use App\Models\PaymentType;
 use App\Models\UserPayment;
 use App\Traits\AuthorizedCheck;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
@@ -38,12 +39,25 @@ class BankController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(UserPaymentRequest $request)
+    public function store(Request $request)
     {
-        $param = array_merge($request->validated(), ['user_id' => Auth::id()]);
-
-        UserPayment::create($param);
-
+        $this->MasterAgentRoleCheck();
+        $user = Auth::user();
+        $masterCheck = $user->hasRole('Master');
+        $request->validate([
+            'account_name' => 'required',
+            'account_number' => 'required|numeric',
+            'payment_type_id' => 'required|exists:payment_types,id',
+            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
+        ]);
+        $agentId = $masterCheck ? $request->agent_id : $user->id;
+        $this->FeaturePermission($agentId);
+        Bank::create([
+            'account_name' => $request->account_name,
+            'account_number' => $request->account_number,
+            'payment_type_id' => $request->payment_type_id,
+            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
+        ]);
         return redirect(route('admin.banks.index'))->with('success', 'New userPayment Added.');
 
     }

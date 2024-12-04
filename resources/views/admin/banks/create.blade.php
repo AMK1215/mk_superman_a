@@ -72,7 +72,7 @@
           <div class="card z-index-0 fadeIn3 fadeInBottom">
             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-primary shadow-primary border-radius-lg py-2 pe-1">
-                <h4 class="text-white font-weight-bolder text-center mb-2">New Create</h4>
+                <h4 class="text-white font-weight-bolder text-center mb-2">Bank Create</h4>
               </div>
             </div>
             <div class="card-body">
