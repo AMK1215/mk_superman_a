@@ -17,12 +17,14 @@ class GameController extends Controller
 {
     use HttpResponses;
 
+    //game_types
     public function gameType()
     {
         $gameTypes = GameType::where('status', 1)->get();
         return $this->success(GameTypeResource::collection($gameTypes));
     }
 
+    //providers
     public function gameTypeProducts($gameTypeID)
     {
         $gameType = GameType::with(['products' => function ($query) {
@@ -35,17 +37,7 @@ class GameController extends Controller
         // return $this->success($gameTypes);
     }
 
-    public function allGameProducts()
-    {
-        $gameTypes = GameType::with(['products' => function ($query) {
-            $query->where('status', 1);
-            $query->orderBy('order', 'asc');
-        }])->where('status', 1)
-            ->get();
-
-        return $this->success($gameTypes);
-    }
-
+    //game_lists
     public function gameList($product_id, $game_type_id, Request $request)
     {
         $gameLists = GameList::with('product')
@@ -58,19 +50,33 @@ class GameController extends Controller
         return GameDetailResource::collection($gameLists);
     }
 
-    public function getGameDetail($provider_id, $game_type_id)
-    {
-        $gameLists = GameList::where('provider_id', $provider_id)
-            ->where('game_type_id', $game_type_id)->get();
-
-        return $this->success(GameDetailResource::collection($gameLists), 'Game Detail Successfully');
-    }
-
+    //hot_games
     public function HotgameList()
     {
         $gameLists = GameList::where('hot_status', 1)
             ->get();
 
         return $this->success(GameDetailResource::collection($gameLists), 'Hot Game Detail Successfully');
+    }
+
+
+
+    public function allGameProducts()
+    {
+        $gameTypes = GameType::with(['products' => function ($query) {
+            $query->where('status', 1);
+            $query->orderBy('order', 'asc');
+        }])->where('status', 1)
+            ->get();
+
+        return $this->success($gameTypes);
+    }
+
+    public function getGameDetail($provider_id, $game_type_id)
+    {
+        $gameLists = GameList::where('provider_id', $provider_id)
+            ->where('game_type_id', $game_type_id)->get();
+
+        return $this->success(GameDetailResource::collection($gameLists), 'Game Detail Successfully');
     }
 }

@@ -74,11 +74,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('banner_text', [BannerController::class, 'bannerText']);
     Route::get('ads_banner', [BannerController::class, 'AdsBannerIndex']);
     Route::get('promotions', [PromotionController::class, 'index']);
+    Route::get('contacts', [ContactController::class, 'index']);
 
-    
+
     Route::get('agent-payment-type', [UserPaymentControler::class, 'agentPayment']);
     Route::get('payment-type', [UserPaymentControler::class, 'paymentType']);
-    Route::get('contact', [ContactController::class, 'index']);
+    
 
     Route::group(['prefix' => 'transaction'], function () {
         Route::post('withdraw', [WithDrawController::class, 'withdraw']);
