@@ -28,22 +28,14 @@ use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
 
-//login route post
+//auth api
 Route::post('/login', [AuthController::class, 'login']);
 
-// logout
-Route::post('/logout', [AuthController::class, 'logout']);
-Route::get('promotion', [PromotionController::class, 'index']);
-Route::get('banner', [BannerController::class, 'index']);
-Route::get('popup-ads-banner', [BannerController::class, 'AdsBannerIndex']);
-Route::get('bannerText', [BannerController::class, 'bannerText']);
-Route::get('v1/validate', [AuthController::class, 'callback']);
-Route::get('gameTypeProducts/{id}', [GameController::class, 'gameTypeProducts']);
-Route::get('allGameProducts', [GameController::class, 'allGameProducts']);
-
-
-
-Route::post('Seamless/PullReport', [LaunchGameController::class, 'pullReport']);
+//common api
+Route::get('banners', [BannerController::class, 'index']);
+Route::get('banner_text', [BannerController::class, 'bannerText']);
+Route::get('ads_banner', [BannerController::class, 'AdsBannerIndex']);
+Route::get('promotions', [PromotionController::class, 'index']);
 
 //games api
 Route::get('game_types', [GameController::class, 'gameType']);
@@ -51,6 +43,13 @@ Route::get('providers/{id}', [GameController::class, 'gameTypeProducts']);
 Route::get('game_lists/{product_id}/{game_type_id}', [GameController::class, 'gameList']);
 Route::get('hot_games', [GameController::class, 'HotgameList']);
 
+
+
+
+Route::get('v1/validate', [AuthController::class, 'callback']);
+Route::get('gameTypeProducts/{id}', [GameController::class, 'gameTypeProducts']);
+Route::get('allGameProducts', [GameController::class, 'allGameProducts']);
+Route::post('Seamless/PullReport', [LaunchGameController::class, 'pullReport']);
 
 // sameless route
 Route::post('GetBalance', [GetBalanceController::class, 'getBalance']);
@@ -66,6 +65,10 @@ Route::post('Reward', [RewardController::class, 'handleReward']);
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    //logout 
+    Route::post('/logout', [AuthController::class, 'logout']);
+
+
     Route::post('launch_game', [LaunchGameController::class, 'LaunchGame']);
     Route::get('wager-logs', [WagerController::class, 'index']);
     Route::get('transactions', [TransactionController::class, 'index']);
