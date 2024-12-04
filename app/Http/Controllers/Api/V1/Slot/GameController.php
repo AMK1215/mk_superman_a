@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Slot;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\GameTypeResource;
 use App\Http\Resources\GameListResource;
 use App\Http\Resources\Slot\GameDetailResource;
 use App\Http\Resources\Slot\HotGameListResource;
@@ -17,9 +18,10 @@ class GameController extends Controller
 
     public function gameType()
     {
-        $gameType = GameType::where('status', 1)->get();
+        $gameTypes = GameType::where('status', 1)->get();
 
-        return $this->success($gameType);
+        // return $this->success($gameType);
+        return response()->json(GameTypeResource::collection($gameTypes));
     }
 
     public function gameTypeProducts($gameTypeID)
