@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Slot;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\GameProviderResource;
 use App\Http\Resources\Api\V1\GameTypeResource;
 use App\Http\Resources\GameListResource;
 use App\Http\Resources\Slot\GameDetailResource;
@@ -24,13 +25,14 @@ class GameController extends Controller
 
     public function gameTypeProducts($gameTypeID)
     {
-        $gameTypes = GameType::with(['products' => function ($query) {
+        $gameType = GameType::with(['products' => function ($query) {
             $query->where('status', 1);
             $query->orderBy('order', 'asc');
         }])->where('id', $gameTypeID)->where('status', 1)
             ->first();
 
-        return $this->success($gameTypes);
+        return $this->success(GameProviderResource::collection($gameType->products), 'Game Detail Successfully');
+        // return $this->success($gameTypes);
     }
 
     public function allGameProducts()
