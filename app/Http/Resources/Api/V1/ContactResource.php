@@ -17,7 +17,7 @@ class ContactResource extends JsonResource
         return [
             'link' => $this->link,
             'type' => $this->contact_type->name,
-            'icon' => $this->contact_type->image,
+            'icon' => $this->contact_type->img_url,
         ];
     }
 }
