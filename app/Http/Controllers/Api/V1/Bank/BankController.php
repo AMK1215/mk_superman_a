@@ -14,10 +14,9 @@ class BankController extends Controller
 {
     use HttpResponses;
 
-    public function all()
+    public function banks()
     {
-        $data = Bank::all();
-
-        return $this->success($data);
+        $banks = Bank::agentPlayer()->get();
+        return $this->success($banks);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1\Player;
 
 use App\Http\Controllers\Controller;
+use App\Models\Admin\Bank;
 use App\Models\PaymentType;
 use App\Models\UserPayment;
 use App\Traits\HttpResponses;

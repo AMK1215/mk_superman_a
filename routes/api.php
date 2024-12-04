@@ -75,6 +75,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('ads_banner', [BannerController::class, 'AdsBannerIndex']);
     Route::get('promotions', [PromotionController::class, 'index']);
     Route::get('contacts', [ContactController::class, 'contact']);
+    Route::get('/banks', [BankController::class, 'banks']);
 
 
     Route::get('agent-payment-type', [UserPaymentControler::class, 'agentPayment']);
@@ -89,9 +90,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('withdraw-requestlog', [TransactionController::class, 'withDrawRequestLog']);
     });
 
-    Route::group(['prefix' => 'bank'], function () {
-        Route::get('all', [BankController::class, 'all']);
-    });
+    // Route::group(['prefix' => 'bank'], function () {
+    //     Route::get('all', [BankController::class, 'all']);
+    // });
     Route::group(['prefix' => 'game'], function () {
         Route::post('Seamless/LaunchGame', [LaunchGameController::class, 'launchGame']);
     });
