@@ -54,7 +54,7 @@
                 <img src="{{$bank->paymentType->img_url}}" class="rounded" width="30px" alt="">
               </td>
               <td class="text-sm font-weight-normal">{{ $bank->account_name }}</td>
-              <td class="text-sm font-weight-normal">{{ $bank->account_no }}</td>
+              <td class="text-sm font-weight-normal">{{ $bank->account_number }}</td>
               <td class="text-sm font-weight-normal">{{ $bank->agent->name }}</td>
               <td>
                 <a href="{{ route('admin.banks.edit', $bank->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Bank"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
