@@ -7,6 +7,7 @@ use App\Http\Requests\UserPaymentRequest;
 use App\Models\Admin\Bank;
 use App\Models\PaymentType;
 use App\Models\UserPayment;
+use App\Traits\AuthorizedCheck;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
@@ -15,11 +16,13 @@ class UserPaymentController extends Controller
     /**
      * Display a listing of the resource.
      */
+    use AuthorizedCheck;
     public function index()
     {
-        $paymentTypes = UserPayment::with('paymentType')->where('user_id', Auth::id())->get();
-
-        return view('admin.userPayment.index', compact('paymentTypes'));
+        $auth = auth()->user();
+        $this->MasterAgentRoleCheck();
+        $banks = $auth->hasPermission('master_access') ? Bank::query()->master()->latest()->get() : Bank::query()->agent()->latest()->get();
+        return view('admin.userPayment.index', compact('banks'));
     }
 
     /**
