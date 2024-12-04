@@ -22,7 +22,7 @@ class BankController extends Controller
         $auth = auth()->user();
         $this->MasterAgentRoleCheck();
         $banks = $auth->hasPermission('master_access') ? Bank::query()->master()->latest()->get() : Bank::query()->agent()->latest()->get();
-        return view('admin.userPayment.index', compact('banks'));
+        return view('admin.banks.index', compact('banks'));
     }
 
     /**
@@ -30,9 +30,9 @@ class BankController extends Controller
      */
     public function create()
     {
-        $paymentType = PaymentType::all();
-
-        return view('admin.userPayment.create', compact('paymentType'));
+        $this->MasterAgentRoleCheck();
+        $payment_types = PaymentType::all();
+        return view('admin.banks.create', compact('payment_types'));
     }
 
     /**
@@ -44,7 +44,7 @@ class BankController extends Controller
 
         UserPayment::create($param);
 
-        return redirect(route('admin.userPayment.index'))->with('success', 'New userPayment Added.');
+        return redirect(route('admin.banks.index'))->with('success', 'New userPayment Added.');
 
     }
 
@@ -62,7 +62,7 @@ class BankController extends Controller
 
         $paymentType = PaymentType::all();
 
-        return view('admin.userPayment.edit', compact('userPayment', 'paymentType'));
+        return view('admin.banks.edit', compact('userPayment', 'paymentType'));
     }
 
     /**
@@ -77,7 +77,7 @@ class BankController extends Controller
 
         $userPayment->update($param);
 
-        return redirect(route('admin.userPayment.index'))->with('success', 'Bank Image Updated.');
+        return redirect(route('admin.banks.index'))->with('success', 'Bank Image Updated.');
 
     }
 

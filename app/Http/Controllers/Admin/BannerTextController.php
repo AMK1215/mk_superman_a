@@ -30,7 +30,6 @@ class BannerTextController extends Controller
     public function create()
     {
         $this->MasterAgentRoleCheck();
-
         return view('admin.banner_text.create');
     }
 

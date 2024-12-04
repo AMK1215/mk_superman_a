@@ -62,7 +62,7 @@
 <div class="row">
   <div class="col-12">
     <div class="container mb-3">
-      <a class="btn btn-icon btn-2 btn-primary float-end me-5" href="{{ route('admin.userPayment.index') }}">
+      <a class="btn btn-icon btn-2 btn-primary float-end me-5" href="{{ route('admin.banks.index') }}">
         <span class="btn-inner--icon mt-1"><i class="material-icons">arrow_back</i>Back</span>
       </a>
     </div>
@@ -76,21 +76,21 @@
               </div>
             </div>
             <div class="card-body">
-              <form role="form" class="text-start" action="{{ route('admin.userPayment.store') }}" method="post" enctype="multipart/form-data">
+              <form role="form" class="text-start" action="{{ route('admin.banks.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="custom-form-group">
-                <label for="title">Payment Type <span class="text-danger">*</span></label>
-                <div class="custom-select-wrapper">
-                <select name="payment_type_id" class="form-control custom-select">
-                  @foreach ($paymentType as $type)
-                  <option value="{{ $type->id}}">{{$type->name}}</option>
-
-                  @endforeach
-                </select>
-              </div>
-                  @error('name')
-                  <span class="text-danger d-block">*{{ $message }}</span>
-                  @enderror
+                  <label for="title">Bank Type <span class="text-danger">*</span></label>
+                  <div class="custom-select-wrapper">
+                    <select name="payment_type_id" class="form-control custom-select">
+                      @foreach ($payment_types as $type)
+                      <option value="">Choose Bank Type</option>
+                      <option value="{{ $type->id}}">{{$type->name}}</option>
+                      @endforeach
+                    </select>
+                    @error('payment_type_id')
+                      <span class="text-danger d-block">*{{ $message }}</span>
+                    @enderror
+                  </div>
                 </div>
                 <div class="custom-form-group">
                   <label for="title">Account Name</label>
