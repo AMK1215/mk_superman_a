@@ -12,16 +12,19 @@ use Illuminate\Support\Facades\File;
 
 class PromotionController extends Controller
 {
+    use AuthorizedCheck;
+
     /**
      * Display a listing of the resource.
      */
     use ImageUpload;
-    use AuthorizedCheck;
+
     public function index()
     {
         $auth = Auth::user();
         $this->MasterAgentRoleCheck();
-        $promotions = $auth->hasPermission("master_access") ? Promotion::query()->master()->latest()->get() : Promotion::query()->agent()->latest()->get();
+        $promotions = $auth->hasPermission('master_access') ? Promotion::query()->master()->latest()->get() : Promotion::query()->agent()->latest()->get();
+
         return view('admin.promotions.index', compact('promotions'));
     }
 
@@ -31,6 +34,7 @@ class PromotionController extends Controller
     public function create()
     {
         $this->MasterAgentRoleCheck();
+
         return view('admin.promotions.create');
     }
 
@@ -48,11 +52,12 @@ class PromotionController extends Controller
         ]);
         $agentId = $masterCheck ? $request->agent_id : $user->id;
         $this->FeaturePermission($agentId);
-        $filename = $this->handleImageUpload($request->image, "promotions");
+        $filename = $this->handleImageUpload($request->image, 'promotions');
         Promotion::create([
             'image' => $filename,
             'agent_id' => $masterCheck ? $request->agent_id : $user->id,
         ]);
+
         return redirect()->route('admin.promotions.index')->with('success', 'New Promotion Created Successfully.');
     }
 
@@ -62,10 +67,11 @@ class PromotionController extends Controller
     public function show(Promotion $promotion)
     {
         $this->MasterAgentRoleCheck();
-        if (!$promotion) {
+        if (! $promotion) {
             return redirect()->back()->with('error', 'Promotion Not Found');
         }
         $this->FeaturePermission($promotion->agent_id);
+
         return view('admin.promotions.show', compact('promotion'));
     }
 
@@ -75,10 +81,11 @@ class PromotionController extends Controller
     public function edit(Promotion $promotion)
     {
         $this->MasterAgentRoleCheck();
-        if (!$promotion) {
+        if (! $promotion) {
             return redirect()->back()->with('error', 'Promotion Not Found');
         }
         $this->FeaturePermission($promotion->agent_id);
+
         return view('admin.promotions.edit', compact('promotion'));
     }
 
@@ -88,16 +95,17 @@ class PromotionController extends Controller
     public function update(Request $request, Promotion $promotion)
     {
         $this->MasterAgentRoleCheck();
-        if (!$promotion) {
+        if (! $promotion) {
             return redirect()->back()->with('error', 'Promotion Not Found');
         }
         $this->FeaturePermission($promotion->agent_id);
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
         ]);
-        $this->handleImageDelete($promotion->image, "promotions");
-        $filename = $this->handleImageUpload($request->image, "promotions");
+        $this->handleImageDelete($promotion->image, 'promotions');
+        $filename = $this->handleImageUpload($request->image, 'promotions');
         $promotion->update(['image' => $filename]);
+
         return redirect(route('admin.promotions.index'))->with('success', 'Promotion Image Updated.');
     }
 
@@ -107,12 +115,13 @@ class PromotionController extends Controller
     public function destroy(Promotion $promotion)
     {
         $this->MasterAgentRoleCheck();
-        if (!$promotion) {
+        if (! $promotion) {
             return redirect()->back()->with('error', 'Promotion Not Found');
         }
         $this->FeaturePermission($promotion->agent_id);
-        $this->handleImageDelete($promotion->image, "promotions");
+        $this->handleImageDelete($promotion->image, 'promotions');
         $promotion->delete();
+
         return redirect()->back()->with('success', 'Promotion Deleted.');
     }
 }

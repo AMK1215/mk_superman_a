@@ -76,7 +76,6 @@ class BetNResultController extends Controller
                     return $this->buildErrorResponse(StatusCode::InsufficientBalance, $PlayerBalance);
                 }
 
-
                 // Calculate NetWin based on the WinAmount and BetAmount
                 $netWin = $transaction['WinAmount'] - $transaction['BetAmount'];
 

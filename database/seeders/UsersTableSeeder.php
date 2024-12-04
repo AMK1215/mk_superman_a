@@ -41,14 +41,14 @@ class UsersTableSeeder extends Seeder
         $player_1 = $this->createUser(UserType::Player, 'Player 1', 'MKP111111', '09111111111', $agent_1->id);
         (new WalletService)->transfer($agent_1, $player_1, 30000, TransactionName::CreditTransfer);
 
-         $player2 = $this->createUser(UserType::Player, 'Player3', 'Player003', '09111111113', $agent_1->id);
+        $player2 = $this->createUser(UserType::Player, 'Player3', 'Player003', '09111111113', $agent_1->id);
         (new WalletService)->transfer($agent_1, $player2, 0.00, TransactionName::CreditTransfer);
         $player3 = $this->createUser(UserType::Player, 'Player4', 'Player004', '09111111114', $agent_1->id);
         (new WalletService)->transfer($agent_1, $player3, 0.00, TransactionName::CreditTransfer);
         $player4 = $this->createUser(UserType::Player, 'Player5', 'Player005', '09111111115', $agent_1->id);
         (new WalletService)->transfer($agent_1, $player4, 0.00, TransactionName::CreditTransfer);
 
-         $systemWallet = $this->createUser(UserType::SystemWallet, 'SystemWallet', 'systemWallet', '09222222222');
+        $systemWallet = $this->createUser(UserType::SystemWallet, 'SystemWallet', 'systemWallet', '09222222222');
         (new WalletService)->deposit($systemWallet, 50 * 100_0000, TransactionName::CapitalDeposit);
 
     }

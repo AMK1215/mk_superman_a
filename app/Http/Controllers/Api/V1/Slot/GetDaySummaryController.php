@@ -5,11 +5,10 @@ namespace App\Http\Controllers\Api\V1\Slot;
 use App\Enums\StatusCode;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Slot\GetDaySummaryRequest;
+use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
-
 
 class GetDaySummaryController extends Controller
 {

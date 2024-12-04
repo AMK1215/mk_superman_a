@@ -37,6 +37,7 @@ class BannerAds extends Model
     public function scopeMaster($query)
     {
         $agents = User::find(auth()->user()->id)->agents()->pluck('id')->toArray();
+
         return $query->whereIn('agent_id', $agents);
     }
 }

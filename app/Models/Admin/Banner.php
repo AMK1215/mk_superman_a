@@ -27,7 +27,6 @@ class Banner extends Model
         return asset('assets/img/banners/'.$this->image);
     }
 
-
     public function scopeAgent($query)
     {
         return $query->where('agent_id', auth()->user()->id);
@@ -36,6 +35,7 @@ class Banner extends Model
     public function scopeMaster($query)
     {
         $agents = User::find(auth()->user()->id)->agents()->pluck('id')->toArray();
+
         return $query->whereIn('agent_id', $agents);
     }
 }

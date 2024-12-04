@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\Bank\BankController;
 use App\Http\Controllers\Api\V1\BannerController;
 use App\Http\Controllers\Api\V1\ContactController;
 //use App\Http\Controllers\Api\V1\Game\LaunchGameController;
+use App\Http\Controllers\Api\V1\GetBalanceController;
 use App\Http\Controllers\Api\V1\Player\DepositController;
 use App\Http\Controllers\Api\V1\Player\PlayerTransactionLogController;
 use App\Http\Controllers\Api\V1\Player\TransactionController;
@@ -13,8 +14,8 @@ use App\Http\Controllers\Api\V1\Player\UserPaymentControler;
 use App\Http\Controllers\Api\V1\Player\WagerController;
 use App\Http\Controllers\Api\V1\Player\WithDrawController;
 use App\Http\Controllers\Api\V1\PromotionController;
-use App\Http\Controllers\Api\V1\GetBalanceController;
 use App\Http\Controllers\Api\V1\Slot\GameController;
+use App\Http\Controllers\Api\V1\Slot\GetDaySummaryController;
 use App\Http\Controllers\Api\V1\Slot\LaunchGameController;
 use App\Http\Controllers\Api\V1\Webhook\AdjustmentController;
 use App\Http\Controllers\Api\V1\Webhook\BetController;
@@ -26,7 +27,6 @@ use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Slot\GetDaySummaryController;
 
 //login route post
 Route::post('/login', [AuthController::class, 'login']);
@@ -45,7 +45,6 @@ Route::get('gamelist/{product_id}/{game_type_id}', [GameController::class, 'game
 Route::get('hotgamelist', [GameController::class, 'HotgameList']);
 Route::post('Seamless/PullReport', [LaunchGameController::class, 'pullReport']);
 
-
 // sameless route
 
 Route::post('GetBalance', [GetBalanceController::class, 'getBalance']);
@@ -57,10 +56,8 @@ Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
 
-
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
-
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('GameLogin', [LaunchGameController::class, 'LaunchGame']);

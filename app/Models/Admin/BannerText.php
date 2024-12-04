@@ -21,14 +21,15 @@ class BannerText extends Model
         return $this->belongsTo(User::class, 'agent_id'); // The admin that owns the banner text
     }
 
-    public function scopeAgent($query){
+    public function scopeAgent($query)
+    {
         return $query->where('agent_id', Auth::user()->id);
     }
-    
 
     public function scopeMaster($query)
     {
         $agents = User::find(auth()->user()->id)->agents()->pluck('id')->toArray();
+
         return $query->whereIn('agent_id', $agents);
     }
 }

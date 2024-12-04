@@ -44,6 +44,7 @@ class AgentController extends Controller
         //kzt
         // wlk
         $users = User::query()->agent()->get();
+
         return view('admin.agent.index', compact('users'));
     }
 

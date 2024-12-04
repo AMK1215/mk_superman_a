@@ -11,19 +11,21 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Validation\Rule;
 
-
 class BannerController extends Controller
 {
+    use AuthorizedCheck;
+
     /**
      * Display a listing of the resource.
      */
     use ImageUpload;
-    use AuthorizedCheck;
+
     public function index()
     {
         $auth = Auth::user();
         $this->MasterAgentRoleCheck();
-        $banners = $auth->hasPermission("master_access") ? Banner::query()->master()->latest()->get() : Banner::query()->agent()->latest()->get();
+        $banners = $auth->hasPermission('master_access') ? Banner::query()->master()->latest()->get() : Banner::query()->agent()->latest()->get();
+
         return view('admin.banners.index', compact('banners'));
     }
 
@@ -33,6 +35,7 @@ class BannerController extends Controller
     public function create()
     {
         $this->MasterAgentRoleCheck();
+
         return view('admin.banners.create');
     }
 
@@ -50,14 +53,14 @@ class BannerController extends Controller
         ]);
         $agentId = $masterCheck ? $request->agent_id : $user->id;
         $this->FeaturePermission($agentId);
-        $filename = $this->handleImageUpload($request->image, "banners");
+        $filename = $this->handleImageUpload($request->image, 'banners');
         Banner::create([
             'image' => $filename,
             'agent_id' => $masterCheck ? $request->agent_id : $user->id,
         ]);
+
         return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
-
 
     /**
      * Display the specified resource.
@@ -65,10 +68,11 @@ class BannerController extends Controller
     public function show(Banner $banner)
     {
         $this->MasterAgentRoleCheck();
-        if (!$banner) {
+        if (! $banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $this->FeaturePermission($banner->agent_id);
+
         return view('admin.banners.show', compact('banner'));
     }
 
@@ -78,10 +82,11 @@ class BannerController extends Controller
     public function edit(Banner $banner)
     {
         $this->MasterAgentRoleCheck();
-        if (!$banner) {
+        if (! $banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $this->FeaturePermission($banner->agent_id);
+
         return view('admin.banners.edit', compact('banner'));
     }
 
@@ -91,16 +96,17 @@ class BannerController extends Controller
     public function update(Request $request, Banner $banner)
     {
         $this->MasterAgentRoleCheck();
-        if (!$banner) {
+        if (! $banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $this->FeaturePermission($banner->agent_id);
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
         ]);
-        $this->handleImageDelete($banner->image, "banners");
-        $filename = $this->handleImageUpload($request->image, "banners");
+        $this->handleImageDelete($banner->image, 'banners');
+        $filename = $this->handleImageUpload($request->image, 'banners');
         $banner->update(['image' => $filename]);
+
         return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
     }
 
@@ -110,12 +116,13 @@ class BannerController extends Controller
     public function destroy(Banner $banner)
     {
         $this->MasterAgentRoleCheck();
-        if (!$banner) {
+        if (! $banner) {
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $this->FeaturePermission($banner->agent_id);
-        $this->handleImageDelete($banner->image, "banners");
+        $this->handleImageDelete($banner->image, 'banners');
         $banner->delete();
+
         return redirect()->back()->with('success', 'Banner Deleted.');
     }
 }

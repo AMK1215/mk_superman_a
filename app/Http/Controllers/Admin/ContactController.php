@@ -15,11 +15,13 @@ class ContactController extends Controller
      * Display a listing of the resource.
      */
     use AuthorizedCheck;
+
     public function index()
     {
         $auth = auth()->user();
         $this->MasterAgentRoleCheck();
-        $contacts = $auth->hasPermission("master_access") ? Contact::query()->master()->latest()->get() : Contact::query()->agent()->latest()->get();
+        $contacts = $auth->hasPermission('master_access') ? Contact::query()->master()->latest()->get() : Contact::query()->agent()->latest()->get();
+
         return view('admin.contact.index', compact('contacts'));
     }
 
@@ -30,6 +32,7 @@ class ContactController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $contact_types = ContactType::all();
+
         return view('admin.contact.create', compact('contact_types'));
     }
 
@@ -72,9 +75,10 @@ class ContactController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $contact_types = ContactType::all();
-        if (!$contact) {
+        if (! $contact) {
             return redirect()->back()->with('error', 'Contact Not Found');
         }
+
         return view('admin.contact.edit', compact('contact', 'contact_types'));
     }
 
@@ -84,7 +88,7 @@ class ContactController extends Controller
     public function update(Request $request, Contact $contact)
     {
         $this->MasterAgentRoleCheck();
-        if (!$contact) {
+        if (! $contact) {
             return redirect()->back()->with('error', 'Banner Text Not Found');
         }
         $this->FeaturePermission($contact->agent_id);
@@ -93,6 +97,7 @@ class ContactController extends Controller
             'contact_type_id' => 'required|exists:contact_types,id',
         ]);
         $contact->update($data);
+
         return redirect()->route('admin.contact.index')->with('success', 'Contact updated successfully');
 
     }
@@ -103,11 +108,12 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         $this->MasterAgentRoleCheck();
-        if (!$contact) {
+        if (! $contact) {
             return redirect()->back()->with('error', 'Contact Not Found');
         }
         $this->FeaturePermission($contact->agent_id);
         $contact->delete();
+
         return redirect()->back()->with('success', 'Contact Deleted Successfully.');
     }
 }

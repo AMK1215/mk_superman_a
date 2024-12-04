@@ -13,7 +13,7 @@ trait AuthorizedCheck
         $isAuthorized = $master ? in_array($agentId, $user->agents()->pluck('id')->toArray()) : $user->id === $agentId;
         if ($isAuthorized) {
             return true;
-        }else{
+        } else {
             abort(403, 'Unauthorized');
         }
     }
@@ -25,7 +25,7 @@ trait AuthorizedCheck
         $agent_access = $user->hasPermission('agent_access');
         if ($master_access || $agent_access) {
             return true;
-        }else{
+        } else {
             abort(403, 'Unauthorized');
         }
     }

@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class ContactType extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name',
-        'image'
+        'image',
     ];
+
     protected $appends = ['img_url'];
 
     public function getImgUrlAttribute()
     {
-        return asset('assets/img/contacts/' . $this->image);
+        return asset('assets/img/contacts/'.$this->image);
     }
 
     public function contacts()

@@ -14,11 +14,13 @@ class BannerTextController extends Controller
      * Display a listing of the resource.
      */
     use AuthorizedCheck;
+
     public function index()
     {
         $auth = auth()->user();
         $this->MasterAgentRoleCheck();
-        $texts = $auth->hasPermission("master_access") ? BannerText::query()->master()->latest()->get() : BannerText::query()->agent()->latest()->get();
+        $texts = $auth->hasPermission('master_access') ? BannerText::query()->master()->latest()->get() : BannerText::query()->agent()->latest()->get();
+
         return view('admin.banner_text.index', compact('texts'));
     }
 
@@ -28,6 +30,7 @@ class BannerTextController extends Controller
     public function create()
     {
         $this->MasterAgentRoleCheck();
+
         return view('admin.banner_text.create');
     }
 
@@ -49,6 +52,7 @@ class BannerTextController extends Controller
             'text' => $request->text,
             'agent_id' => $masterCheck ? $request->agent_id : $user->id,
         ]);
+
         return redirect(route('admin.text.index'))->with('success', 'New Banner Text Created Successfully.');
     }
 
@@ -58,9 +62,10 @@ class BannerTextController extends Controller
     public function show(BannerText $text)
     {
         $this->MasterAgentRoleCheck();
-        if (!$text) {
+        if (! $text) {
             return redirect()->back()->with('error', 'Banner Text Not Found');
         }
+
         return view('admin.banner_text.show', compact('text'));
     }
 
@@ -70,9 +75,10 @@ class BannerTextController extends Controller
     public function edit(BannerText $text)
     {
         $this->MasterAgentRoleCheck();
-        if (!$text) {
+        if (! $text) {
             return redirect()->back()->with('error', 'Banner Text Not Found');
         }
+
         return view('admin.banner_text.edit', compact('text'));
     }
 
@@ -82,7 +88,7 @@ class BannerTextController extends Controller
     public function update(Request $request, BannerText $text)
     {
         $this->MasterAgentRoleCheck();
-        if (!$text) {
+        if (! $text) {
             return redirect()->back()->with('error', 'Banner Text Not Found');
         }
         $this->FeaturePermission($text->agent_id);
@@ -90,6 +96,7 @@ class BannerTextController extends Controller
             'text' => 'required',
         ]);
         $text->update($data);
+
         return redirect(route('admin.text.index'))->with('success', 'Banner Text Updated Successfully.');
     }
 
@@ -99,11 +106,12 @@ class BannerTextController extends Controller
     public function destroy(BannerText $text)
     {
         $this->MasterAgentRoleCheck();
-        if (!$text) {
+        if (! $text) {
             return redirect()->back()->with('error', 'Banner Text Not Found');
         }
         $this->FeaturePermission($text->agent_id);
         $text->delete();
+
         return redirect()->back()->with('success', 'Banner Text Deleted Successfully.');
     }
 }

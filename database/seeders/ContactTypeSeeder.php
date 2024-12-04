@@ -28,7 +28,7 @@ class ContactTypeSeeder extends Seeder
             ['name' => 'Line', 'image' => 'line.png'],
             ['name' => 'Discord', 'image' => 'discord.png'],
         ];
-        foreach($types as $type){
+        foreach ($types as $type) {
             \App\Models\ContactType::create($type);
         }
     }
