@@ -62,6 +62,27 @@ class BannerController extends Controller
         return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
 
+    public function bulkStore(Request $request)
+    {
+        $auth = Auth::user();
+        $agents = $auth->agents;
+        if(!$auth->hasPermission('master_access')) {
+            $request->validate([
+                'image' => 'required|image|max:2048',
+            ]);
+            foreach($agents as $agent) {
+                $filename = $this->handleImageUpload($request->image, 'banners');
+                Banner::create([
+                    'image' => $filename,
+                    'agent_id' => $agent->id,
+                ]);
+            }
+            return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
+        }else{
+            abort(403, 'Unauthorized action.');
+        }
+    }
+
     /**
      * Display the specified resource.
      */
