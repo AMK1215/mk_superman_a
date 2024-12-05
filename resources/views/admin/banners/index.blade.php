@@ -29,7 +29,7 @@
             <div class="ms-auto my-auto">
               <a href="{{ route('admin.banners.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Banner</a>
               <button class="btn btn-sm btn-primary">
-                Bulk Create
+                Bulk Create 
               </button>
             </div>
           </div>
