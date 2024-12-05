@@ -43,7 +43,7 @@ class BannerController extends Controller
     {
         $auth = Auth::user();
         if($auth->hasPermission('master_access')) {
-            // return view('admin.banners.bulk-create');
+            // return view('admin.banners.bulk_create');
             return "reached";
         }else{
             abort(403, 'Unauthorized action.');
