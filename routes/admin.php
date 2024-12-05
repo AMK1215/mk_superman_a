@@ -71,7 +71,7 @@ Route::group([
     Route::put('/change-join-date', [ProfileController::class, 'JoinDate'])->name('addJoinDate');
     Route::resource('banners', BannerController::class);
     Route::get('/banners/bulk_create', [BannerController::class, 'bulkCreate']);
-    Route::post('/banners/bulk_store', [BannerController::class, 'bulkStore'])->name('banners.bulkStore');
+    Route::post('/banner_bulk_store', [BannerController::class, 'bulkStore'])->name('banners.bulkStore');
     Route::resource('adsbanners', BannerAdsController::class);
     Route::resource('text', BannerTextController::class);
     Route::resource('/promotions', PromotionController::class);
