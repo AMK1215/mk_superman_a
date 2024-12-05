@@ -28,7 +28,7 @@
           <div class="ms-auto my-auto mt-lg-0 mt-4">
             <div class="ms-auto my-auto">
               <a href="{{ route('admin.banners.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Create</a>
-              <a href="{{ url('/admin/banners/bulk_create') }}" class="btn bg-gradient-secondary btn-sm mb-0">+&nbsp; Bulk Create</a>
+              <a href="{{ url('/admin/banners/bulkcreate') }}" class="btn bg-gradient-secondary btn-sm mb-0">+&nbsp; Bulk Create</a>
             </div>
           </div>
         </div>
