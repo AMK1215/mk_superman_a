@@ -41,13 +41,14 @@ class BannerController extends Controller
 
     public function bulkCreate()
     {
-        $auth = Auth::user();
-        if($auth->hasPermission('master_access')) {
-            return view('admin.banners.bulk_create');
-            // return "reached";
-        }else{
-            abort(403, 'Unauthorized action.');
-        }
+        return view('admin.banners.bulk_create');
+        // $auth = Auth::user();
+        // if($auth->hasPermission('master_access')) {
+            
+        //     // return "reached";
+        // }else{
+        //     abort(403, 'Unauthorized action.');
+        // }
     }
 
     /**
