@@ -32,11 +32,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 
-//games api
-Route::get('game_types', [GameController::class, 'gameType']);
-Route::get('providers/{id}', [GameController::class, 'gameTypeProducts']);
-Route::get('game_lists/{product_id}/{game_type_id}', action: [GameController::class, 'gameList']);
-Route::get('hot_games', [GameController::class, 'HotgameList']);
+
 
 
 
@@ -59,7 +55,13 @@ Route::post('Reward', [RewardController::class, 'handleReward']);
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
 
-Route::group(['middleware' => ['auth:sanctum']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'checkBanned']], function () {
+
+    //games api
+    Route::get('game_types', [GameController::class, 'gameType']);
+    Route::get('providers/{id}', [GameController::class, 'gameTypeProducts']);
+    Route::get('game_lists/{product_id}/{game_type_id}', action: [GameController::class, 'gameList']);
+    Route::get('hot_games', [GameController::class, 'HotgameList']);
     Route::post('launch_game', [LaunchGameController::class, 'LaunchGame']);
     Route::get('wager-logs', [WagerController::class, 'index']);
     Route::get('transactions', [TransactionController::class, 'index']);
