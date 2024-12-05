@@ -82,8 +82,8 @@
 
 
 {{-- bulk create modal --}}
-<div class="modal fade" id="bulkCreateModal" tabindex="-1" aria-labelledby="bulkCreateModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade z-index-modal" id="bulkCreateModal" tabindex="-1" aria-labelledby="bulkCreateModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="exampleModalLabel">Bulk Create (For My Agents)</h1>
