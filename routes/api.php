@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
     Route::get('providers/{id}', [GameController::class, 'gameTypeProducts']);
     Route::get('game_lists/{product_id}/{game_type_id}', action: [GameController::class, 'gameList']);
     Route::get('hot_games', [GameController::class, 'HotgameList']);
-    Route::post('launch_game', [LaunchGameController::class, 'LaunchGame']);
+    Route::post('GameLogin', [LaunchGameController::class, 'LaunchGame']);
     Route::get('wager-logs', [WagerController::class, 'index']);
     Route::get('transactions', [TransactionController::class, 'index']);
 
@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
 
     Route::get('agent-payment-type', [UserPaymentControler::class, 'agentPayment']);
     Route::get('payment-type', [UserPaymentControler::class, 'paymentType']);
-    
+
 
     Route::group(['prefix' => 'transaction'], function () {
         Route::post('withdraw', [WithDrawController::class, 'withdraw']);
@@ -96,12 +96,12 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
     // Route::group(['prefix' => 'bank'], function () {
     //     Route::get('all', [BankController::class, 'all']);
     // });
-    Route::group(['prefix' => 'game'], function () {
-        Route::post('Seamless/LaunchGame', [LaunchGameController::class, 'launchGame']);
-    });
-    Route::group(['prefix' => 'direct'], function () {
-        Route::post('Seamless/LaunchGame', [LaunchGameController::class, 'directLaunchGame']);
-    });
+    // Route::group(['prefix' => 'game'], function () {
+    //     Route::post('Seamless/LaunchGame', [LaunchGameController::class, 'launchGame']);
+    // });
+    // Route::group(['prefix' => 'direct'], function () {
+    //     Route::post('Seamless/LaunchGame', [LaunchGameController::class, 'directLaunchGame']);
+    // });
 });
 
 Route::get('/game/gamelist/{provider_id}/{game_type_id}', [GameController::class, 'gameList']);
