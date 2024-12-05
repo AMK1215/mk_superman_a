@@ -20,7 +20,7 @@ class PlayerBannedCheck
     {
         if (Auth::check() && Auth::user()->status == 0) {
             Auth::user()->currentAccessToken()->delete();
-            return $this->error("You are banned",'', 401);
+            return $this->error("You are banned",'', 403);
         }
         return $next($request);
     }
