@@ -32,13 +32,16 @@ class AuthController extends Controller
             // return $this->error('', 'Credentials do not match!', 401);
         }
         if (Auth::user()->status == 0) {
-
-            return $this->error('', 'You are banned. Please contact your agent.', 401);
+            return $this->error('', [
+                'user_name' => 'Your account has benn banned. Please contact your agent.',
+            ], 422);
         }
 
         $user = User::where('user_name', $request->user_name)->first();
-        if (! $user->hasRole('Player')) {
-            return $this->error('', 'You are not a player!', 401);
+        if (!$user->hasRole('Player')) {
+            return $this->error('', [
+                'user_name' => 'You are not a player. Please contact your agent.',
+            ], 422);
         }
 
         UserLog::create([
