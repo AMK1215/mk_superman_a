@@ -82,7 +82,7 @@
 
 
 {{-- bulk create modal --}}
-<div class="modal fade" style="z-index: 1000;" id="bulkCreateModal" tabindex="-1" aria-labelledby="bulkCreateModalLabel" aria-hidden="true">
+<div class="modal" id="bulkCreateModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -104,10 +104,7 @@
           </button>
         </form>
       </div>
-      {{-- <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div> --}}
+      
     </div>
   </div>
 </div>
