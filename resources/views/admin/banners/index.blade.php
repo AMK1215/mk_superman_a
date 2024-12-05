@@ -28,7 +28,10 @@
           <div class="ms-auto my-auto mt-lg-0 mt-4">
             <div class="ms-auto my-auto">
               <a href="{{ route('admin.banners.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Create</a>
-              <button class="btn bg-gradient-secondary btn-sm mb-0">
+              <button 
+              class="btn bg-gradient-secondary btn-sm mb-0"
+              data-bs-toggle="modal" data-bs-target="#bulkCreateModal"
+              >
                 Bulk Create 
               </button>
             </div>
@@ -73,6 +76,38 @@
           </tbody>
         </table>
       </div>
+    </div>
+  </div>
+</div>
+
+
+{{-- bulk create modal --}}
+<div class="modal fade" id="bulkCreateModal" tabindex="-1" aria-labelledby="bulkCreateModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Bulk Create (For My Agents)</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{{ route('admin.banners.bulkStore') }}" method="POST" enctype="multipart/form-data">
+          @csrf
+          <div class="mb-4">
+            <label for="img_url" class="form-label">Choose Image</label>
+            <input type="file" class="form-control" name="image" id="img_url">
+            @error('image')
+              <span class="text-danger">*{{ $message }}</span>
+            @enderror
+          </div>
+          <button class="btn btn-secondary" type="submit">
+            <i class="fa-solid fa-floppy-disk"></i> Upload
+          </button>
+        </form>
+      </div>
+      {{-- <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div> --}}
     </div>
   </div>
 </div>
