@@ -55,7 +55,7 @@ Route::post('Reward', [RewardController::class, 'handleReward']);
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
 
-Route::group(['middleware' => ['auth:sanctum', 'checkBanned']], function () {
+Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function () {
 
     //games api
     Route::get('game_types', [GameController::class, 'gameType']);
