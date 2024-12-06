@@ -49,11 +49,11 @@ class BannerController extends Controller
         $masterCheck = $user->hasRole('Master');
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
-            'agent_id' => 'nullable|exists:users,id',
+            'agent_id' => ($masterCheck && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
         ]);
-        $agentId = $masterCheck ? $request->agent_id : $user->id;
-        $this->FeaturePermission($agentId);
         if($request->type === "" || $request->type === "single"){
+            $agentId = $masterCheck ? $request->agent_id : $user->id;
+            $this->FeaturePermission($agentId);
             $filename = $this->handleImageUpload($request->image, 'banners');
             Banner::create([
                 'image' => $filename,
