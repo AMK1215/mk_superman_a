@@ -101,7 +101,7 @@ class AuthController extends Controller
         ]);
         $player = Auth::user();
         $player->update([
-            'profile' => $this->uploadImage($request->file('profile'), 'profile'),
+            'profile' => $this->handleImageUpload($request->file('profile'), 'player_profile'),
         ]);
         return $this->success(new PlayerResource($player), 'Updated profile');
     }
