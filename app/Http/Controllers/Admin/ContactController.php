@@ -43,20 +43,34 @@ class ContactController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $user = Auth::user();
-        $masterCheck = $user->hasRole('Master');
+        $isMaster = $user->hasRole('Master');
+
+        // Validate the request
         $request->validate([
             'link' => 'required',
             'contact_type_id' => 'required|exists:contact_types,id',
-            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
+            'type' => $isMaster ? 'required' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
         ]);
-        $agentId = $masterCheck ? $request->agent_id : $user->id;
-        $this->FeaturePermission($agentId);
-        Contact::create([
-            'link' => $request->link,
-            'contact_type_id' => $request->contact_type_id,
-            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
-        ]);
-
+        
+        $type = $request->type ?? "single";
+        if ($type === "single") {
+            $agentId = $isMaster ? $request->agent_id : $user->id;
+            $this->FeaturePermission($agentId);
+            Contact::create([
+                'link' => $request->link,
+                'contact_type_id' => $request->contact_type_id,
+                'agent_id' => $agentId,
+            ]);
+        } elseif ($type === "all") {
+            foreach ($user->agents as $agent) {
+                Contact::create([
+                    'link' => $request->link,
+                    'contact_type_id' => $request->contact_type_id,
+                    'agent_id' => $agent->id,
+                ]);
+            }
+        }
         return redirect()->route('admin.contact.index')->with('success', 'Contact created successfully');
     }
 
