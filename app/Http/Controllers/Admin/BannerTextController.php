@@ -40,18 +40,31 @@ class BannerTextController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $user = Auth::user();
-        $masterCheck = $user->hasRole('Master');
+        $isMaster = $user->hasRole('Master');
+
+        // Validate the request
         $request->validate([
             'text' => 'required',
-            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
+            'type' => $isMaster ? 'required' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
         ]);
-        $agentId = $masterCheck ? $request->agent_id : $user->id;
-        $this->FeaturePermission($agentId);
-        BannerText::create([
-            'text' => $request->text,
-            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
-        ]);
-
+        $type = $request->type ?? "single";
+        if ($type === "single") {
+            $agentId = $isMaster ? $request->agent_id : $user->id;
+            $this->FeaturePermission($agentId);
+    
+            BannerText::create([
+                'text' => $request->text,
+                'agent_id' => $agentId,
+            ]);
+        } elseif ($type === "all") {
+            foreach ($user->agents as $agent) {
+                BannerText::create([
+                    'text' => $request->text,
+                    'agent_id' => $agent->id,
+                ]);
+            }
+        }
         return redirect(route('admin.text.index'))->with('success', 'New Banner Text Created Successfully.');
     }
 
