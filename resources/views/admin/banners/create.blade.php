@@ -88,29 +88,34 @@
                   @enderror
                 </div>
                 @if(Auth::user()->hasRole('Master'))
-                <div class="d-flex mb-3">
-                  <div class="me-2">
-                    <label for="single" class="form-label">
-                      <input type="radio"
-                      name="type"
-                      value="single"
-                      class=" me-2"
-                      id="single"
-                      >
-                      Single
-                    </label>
+                <div class="mb-3">
+                  <div class="d-flex">
+                    <div class="me-2">
+                      <label for="single" class="form-label">
+                        <input type="radio"
+                        name="type"
+                        value="single"
+                        class=" me-2"
+                        id="single"
+                        >
+                        Single
+                      </label>
+                    </div>
+                    <div class="me-2">
+                      <label for="all" class="form-label">
+                        <input type="radio"
+                        name="type"
+                        value="all"
+                        class=" me-2"
+                        id="all"
+                        >
+                        All
+                      </label>
+                    </div>
                   </div>
-                  <div class="me-2">
-                    <label for="all" class="form-label">
-                      <input type="radio"
-                      name="type"
-                      value="all"
-                      class=" me-2"
-                      id="all"
-                      >
-                      All
-                    </label>
-                  </div>
+                  @error('type')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
                 </div>
                 <div class="custom-form-group" id="singleAgent">
                   <label for="title">Select Agent</label>
@@ -146,6 +151,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
   $(document).ready(function () {
+    $("#singleAgent").hide();
     $("#single").on("change", function () {
         if (this.checked) {
             $("#singleAgent").show();
