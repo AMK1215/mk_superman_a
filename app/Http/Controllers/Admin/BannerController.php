@@ -39,19 +39,6 @@ class BannerController extends Controller
         return view('admin.banners.create');
     }
 
-    public function bulkCreate()
-    {
-        return "test";
-        return view('admin.banners.bulk_create');
-        // $auth = Auth::user();
-        // if($auth->hasPermission('master_access')) {
-            
-        //     // return "reached";
-        // }else{
-        //     abort(403, 'Unauthorized action.');
-        // }
-    }
-
     /**
      * Store a newly created resource in storage.
      */
@@ -66,34 +53,22 @@ class BannerController extends Controller
         ]);
         $agentId = $masterCheck ? $request->agent_id : $user->id;
         $this->FeaturePermission($agentId);
-        $filename = $this->handleImageUpload($request->image, 'banners');
-        Banner::create([
-            'image' => $filename,
-            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
-        ]);
-
-        return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
-    }
-
-    public function bulkStore(Request $request)
-    {
-        $auth = Auth::user();
-        $agents = $auth->agents;
-        if(!$auth->hasPermission('master_access')) {
-            $request->validate([
-                'image' => 'required|image|max:2048',
+        if($request->type === "" || $request->type === "single"){
+            $filename = $this->handleImageUpload($request->image, 'banners');
+            Banner::create([
+                'image' => $filename,
+                'agent_id' => $masterCheck ? $request->agent_id : $user->id,
             ]);
-            foreach($agents as $agent) {
+        }elseif($request->type === "all"){
+            foreach($user->agents as $agent){
                 $filename = $this->handleImageUpload($request->image, 'banners');
                 Banner::create([
                     'image' => $filename,
                     'agent_id' => $agent->id,
                 ]);
             }
-            return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
-        }else{
-            abort(403, 'Unauthorized action.');
         }
+        return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
 
     /**

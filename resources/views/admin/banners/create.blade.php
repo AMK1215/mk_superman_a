@@ -151,13 +151,11 @@
             $("#singleAgent").show();
         }
     });
-
     $("#all").on("change", function () {
         if (this.checked) {
             $("#singleAgent").hide();
         }
     });
   });
-
 </script>
 @endsection
