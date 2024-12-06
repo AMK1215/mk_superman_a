@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('changePassword', [AuthController::class, 'changePassword']);
     Route::post('profile', [AuthController::class, 'profile']);
+    Route::post('updateProfile', [AuthController::class, 'updateProfile']);
 
     //common api
     Route::get('banners', [BannerController::class, 'index']);

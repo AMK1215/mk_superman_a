@@ -11,6 +11,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Admin\UserLog;
 use App\Models\User;
 use App\Traits\HttpResponses;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     use HttpResponses;
-
+    use ImageUpload;
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('user_name', 'password');
@@ -92,5 +93,16 @@ class AuthController extends Controller
         ]);
 
         return $this->success(new PlayerResource($player), 'Update profile');
+    }
+
+    public function updateProfile(Request $request){
+        $request->validate([
+            'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+        $player = Auth::user();
+        $player->update([
+            'profile' => $this->uploadImage($request->file('profile'), 'profile'),
+        ]);
+        return $this->success(new PlayerResource($player), 'Updated profile');
     }
 }
