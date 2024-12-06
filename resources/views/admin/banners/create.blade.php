@@ -94,7 +94,7 @@
                       <input type="radio"
                       name="type"
                       value="single"
-                      class="form-check-input me-2"
+                      class="form-select me-2"
                       id="single"
                       >
                       Single
@@ -105,7 +105,7 @@
                       <input type="radio"
                       name="type"
                       value="all"
-                      class="form-check-input me-2"
+                      class="form-select me-2"
                       id="all"
                       >
                       All
