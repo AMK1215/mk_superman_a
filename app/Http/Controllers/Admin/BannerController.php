@@ -46,31 +46,38 @@ class BannerController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $user = Auth::user();
-        $masterCheck = $user->hasRole('Master');
+        $isMaster = $user->hasRole('Master');
+    
+        // Validate the request
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
-            'type' => $masterCheck ? 'required' : 'nullable',
-            'agent_id' => ($masterCheck && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
+            'type' => $isMaster ? 'required' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
         ]);
-        if($request->type === "" || $request->type === "single"){
-            $agentId = $masterCheck ? $request->agent_id : $user->id;
+    
+        $type = $request->type ?? "single";
+        $filename = $this->handleImageUpload($request->image, 'banners');
+    
+        if ($type === "single") {
+            $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
-            $filename = $this->handleImageUpload($request->image, 'banners');
+    
             Banner::create([
                 'image' => $filename,
-                'agent_id' => $masterCheck ? $request->agent_id : $user->id,
+                'agent_id' => $agentId,
             ]);
-        }elseif($request->type === "all"){
-            foreach($user->agents as $agent){
-                $filename = $this->handleImageUpload($request->image, 'banners');
+        } elseif ($type === "all") {
+            foreach ($user->agents as $agent) {
                 Banner::create([
                     'image' => $filename,
                     'agent_id' => $agent->id,
                 ]);
             }
         }
+    
         return redirect(route('admin.banners.index'))->with('success', 'New Banner Image Added.');
     }
+    
 
     /**
      * Display the specified resource.
