@@ -112,7 +112,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="custom-form-group">
+                <div class="custom-form-group" id="singleAgent">
                   <label for="title">Select Agent</label>
                   <select name="agent_id" class="form-control form-select" id="">
                     <option value="">Select Agent</option>
@@ -148,13 +148,13 @@
   $(document).ready(function () {
     $("#single").on("change", function () {
         if (this.checked) {
-            alert("Single");
+            $("#singleAgent").show();
         }
     });
 
     $("#all").on("change", function () {
         if (this.checked) {
-            alert("All");
+            $("#singleAgent").hide();
         }
     });
   });
