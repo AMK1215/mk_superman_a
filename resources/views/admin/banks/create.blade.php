@@ -107,19 +107,48 @@
                   @enderror
                 </div>
                 @if(Auth::user()->hasRole('Master'))
-                  <div class="custom-form-group">
-                    <label for="title">Select Agent</label>
-                    <select name="agent_id" class="form-control form-select" id="">
-                      <option value="">Select Agent</option>
-                      @foreach (Auth::user()->agents as $agent)
-                        <option value="{{ $agent->id }}">{{ $agent->name }}</option>
-                      @endforeach
-                    </select>
-                    @error('agent_id')
-                      <span class="text-danger">*{{ $message }}</span>
-                    @enderror
-                    {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
+                <div class="mb-3">
+                  <div class="d-flex">
+                    <div class="me-2">
+                      <label for="single" class="form-label">
+                        <input type="radio"
+                        name="type"
+                        value="single"
+                        class=" me-2"
+                        id="single"
+                        >
+                        Single
+                      </label>
+                    </div>
+                    <div class="me-2">
+                      <label for="all" class="form-label">
+                        <input type="radio"
+                        name="type"
+                        value="all"
+                        class=" me-2"
+                        id="all"
+                        >
+                        All
+                      </label>
+                    </div>
                   </div>
+                  @error('type')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="custom-form-group" id="singleAgent">
+                  <label for="title">Select Agent</label>
+                  <select name="agent_id" class="form-control form-select" id="">
+                    <option value="">Select Agent</option>
+                    @foreach (Auth::user()->agents as $agent)
+                      <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                    @endforeach
+                  </select>
+                  @error('agent_id')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                  {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
+                </div>
                 @endif
                 <div class="custom-form-group" type="submit">
                   <button class="btn btn-primary" type="submit">Create</button>
@@ -140,5 +169,19 @@
 <script src="{{ asset('admin_app/assets/js/plugins/choices.min.js') }}"></script>
 <script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-
+<script>
+  $(document).ready(function () {
+    $("#singleAgent").hide();
+    $("#single").on("change", function () {
+        if (this.checked) {
+            $("#singleAgent").show();
+        }
+    });
+    $("#all").on("change", function () {
+        if (this.checked) {
+            $("#singleAgent").hide();
+        }
+    });
+  });
+</script>
 @endsection

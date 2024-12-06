@@ -43,21 +43,37 @@ class BankController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $user = Auth::user();
-        $masterCheck = $user->hasRole('Master');
+        $isMaster = $user->hasRole('Master');
+
+        // Validate the request
         $request->validate([
             'account_name' => 'required',
             'account_number' => 'required|numeric',
             'payment_type_id' => 'required|exists:payment_types,id',
-            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
+            'type' => $isMaster ? 'required' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
         ]);
-        $agentId = $masterCheck ? $request->agent_id : $user->id;
-        $this->FeaturePermission($agentId);
-        Bank::create([
-            'account_name' => $request->account_name,
-            'account_number' => $request->account_number,
-            'payment_type_id' => $request->payment_type_id,
-            'agent_id' => $masterCheck ? $request->agent_id : $user->id,
-        ]);
+
+        $type = $request->type ?? "single";
+        if ($type === "single") {
+            $agentId = $isMaster ? $request->agent_id : $user->id;
+            $this->FeaturePermission($agentId);
+            Bank::create([
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+                'payment_type_id' => $request->payment_type_id,
+                'agent_id' => $agentId,
+            ]);
+        } elseif ($type === "all") {
+            foreach ($user->agents as $agent) {
+                Bank::create([
+                    'account_name' => $request->account_name,
+                    'account_number' => $request->account_number,
+                    'payment_type_id' => $request->payment_type_id,
+                    'agent_id' => $agent->id,
+                ]);
+            }
+        }
         return redirect(route('admin.banks.index'))->with('success', 'New userPayment Added.');
 
     }
