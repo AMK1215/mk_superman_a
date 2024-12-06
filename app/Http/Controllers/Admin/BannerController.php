@@ -49,7 +49,7 @@ class BannerController extends Controller
         $masterCheck = $user->hasRole('Master');
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
-            'agent_id' => $masterCheck ? 'required|exists:users,id' : 'nullable',
+            'agent_id' => 'nullable|exists:users,id',
         ]);
         $agentId = $masterCheck ? $request->agent_id : $user->id;
         $this->FeaturePermission($agentId);
