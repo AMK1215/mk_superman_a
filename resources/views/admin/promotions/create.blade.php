@@ -151,6 +151,21 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
+  $(document).ready(function () {
+    $("#singleAgent").hide();
+    $("#single").on("change", function () {
+        if (this.checked) {
+            $("#singleAgent").show();
+        }
+    });
+    $("#all").on("change", function () {
+        if (this.checked) {
+            $("#singleAgent").hide();
+        }
+    });
+  });
+</script>
+<script>
     $('#desc').summernote({
       placeholder: 'Write Down Full Text',
       tabsize: 2,
