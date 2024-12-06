@@ -99,6 +99,7 @@ class AuthController extends Controller
         $request->validate([
             'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        $this->handleImageDelete(Auth::user()->profile, 'player_profile');
         $player = Auth::user();
         $player->update([
             'profile' => $this->handleImageUpload($request->file('profile'), 'player_profile'),
