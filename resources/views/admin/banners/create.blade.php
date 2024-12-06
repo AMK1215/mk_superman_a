@@ -145,13 +145,19 @@
 <script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
-  $(document).ready(function() {
-    $("#single").checked(function(){
-      alert("Single");
+  $(document).ready(function () {
+    $("#single").on("change", function () {
+        if (this.checked) {
+            alert("Single");
+        }
     });
-    $("#all").checked(function(){
-      alert("All");
+
+    $("#all").on("change", function () {
+        if (this.checked) {
+            alert("All");
+        }
     });
   });
+
 </script>
 @endsection
