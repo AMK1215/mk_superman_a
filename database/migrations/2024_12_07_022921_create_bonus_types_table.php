@@ -6,19 +6,15 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up()
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
     {
-        Schema::create('settings', function (Blueprint $table): void {
+        Schema::create('bonus_types', function (Blueprint $table) {
             $table->id();
-
-            $table->string('group');
             $table->string('name');
-            $table->boolean('locked')->default(false);
-            $table->json('payload');
-
             $table->timestamps();
-
-            $table->unique(['group', 'name']);
         });
     }
 
@@ -27,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('payment_types');
+        Schema::dropIfExists('bonus_types');
     }
 };

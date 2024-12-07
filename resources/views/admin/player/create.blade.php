@@ -116,33 +116,40 @@
                         <form role="form" method="POST" class="text-start" action="{{ route('admin.player.store') }}">
                             @csrf
                             <div class="custom-form-group">
+                                <label for="title">Agent ReferralCode <span class="text-danger">*</span></label>
+                                <input type="text" name="referral_code" class="form-control" value="{{old('referral_code')}}">
+                                @error('referral_code')
+                                    <span class="text-danger d-block">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="custom-form-group">
                                 <label for="title">Player ID <span class="text-danger">*</span></label>
                                 <input type="text" name="user_name" class="form-control" value="{{ $player_name }}"
                                     readonly>
-                                @error('name')
-                                    <span class="text-danger d-block">*{{ $message }}</span>
+                                @error('user_name')
+                                    <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
                             </div>
 
                             <div class="custom-form-group">
                                 <label for="title">Name <span class="text-danger">*</span></label>
                                 <input type="text" name="name" class="form-control" value="{{ old('name') }}">
-                                @error('player_name')
-                                    <span class="text-danger d-block">*{{ $message }}</span>
+                                @error('name')
+                                    <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="custom-form-group">
                                 <label for="title">Password <span class="text-danger">*</span></label>
                                 <input type="text" name="password" class="form-control" value="{{ old('password') }}">
                                 @error('password')
-                                    <span class="text-danger d-block">*{{ $message }}</span>
+                                    <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="custom-form-group">
                                 <label for="title">Phone No <span class="text-danger">*</span></label>
                                 <input type="text" name="phone" class="form-control" value="{{ old('phone') }}">
                                 @error('phone')
-                                    <span class="text-danger d-block">*{{ $message }}</span>
+                                    <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
                             </div>
 
@@ -155,7 +162,7 @@
                                 <input type="text" name="amount" class="form-control" value="{{ old('amount') }}"
                                     placeholder="0.00">
                                 @error('amount')
-                                    <span class="text-danger d-block">*{{ $message }}</span>
+                                    <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
                             </div>
                             <div class="custom-form-group">

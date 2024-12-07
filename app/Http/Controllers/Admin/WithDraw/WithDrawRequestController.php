@@ -48,6 +48,10 @@ class WithDrawRequestController extends Controller
             $agent = Auth::user();
             $player = User::find($request->player);
 
+            if ($agent->hasRole('Master')) {
+                $agent = User::where('agent_id', Auth::id())->first();
+            }
+            
             if ($request->status == 1 && $player->balanceFloat < $request->amount) {
 
                 return redirect()->back()->with('error', 'Insufficient Balance!');

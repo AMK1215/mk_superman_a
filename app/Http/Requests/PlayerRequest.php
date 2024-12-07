@@ -27,6 +27,7 @@ class PlayerRequest extends FormRequest
             'password' => ['required', 'min:6'],
             'amount' => ['nullable', 'numeric'],
             'phone' => ['required', 'string'],
+            'referral_code' => ['sometimes', 'exists:users,referral_code']
         ];
     }
 }

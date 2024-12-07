@@ -38,7 +38,7 @@ class HomeController extends Controller
     {
         $user = Auth::user();
         $isAdmin = $user->hasRole('Admin');
-
+        
         $getUserCounts = function ($roleTitle) use ($isAdmin, $user) {
             return User::whereHas('roles', function ($query) use ($roleTitle) {
                 $query->where('title', '=', $roleTitle);

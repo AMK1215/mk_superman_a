@@ -40,6 +40,26 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
+                'title' => 'master_index',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'master_create',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'master_edit',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'master_delete',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
                 'title' => 'player_index',
                 'created_at' => now(),
                 'updated_at' => now(),
@@ -139,7 +159,16 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-
+            [
+                'title' => 'withdraw_requests',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'title' => 'deposit_requests',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         Permission::insert($permissions);

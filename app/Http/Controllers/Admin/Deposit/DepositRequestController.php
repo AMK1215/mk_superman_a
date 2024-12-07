@@ -28,7 +28,7 @@ class DepositRequestController extends Controller
                 $query->where('user_payment_id', $request->user_payment_id);
             })
             ->when(isset($request->start_date) && isset($request->end_date), function ($query) use ($request) {
-                $query->whereBetween('created_at', [$request->start_date.' 00:00:00', $request->end_date.' 23:59:59']);
+                $query->whereBetween('created_at', [$request->start_date . ' 00:00:00', $request->end_date . ' 23:59:59']);
             })
             ->orderBy('id', 'desc')
             ->get();
@@ -48,6 +48,11 @@ class DepositRequestController extends Controller
 
         try {
             $agent = Auth::user();
+
+            if ($agent->hasRole('Master')) {
+                $agent = User::where('agent_id', Auth::id())->first();
+            }
+
             $player = User::find($request->player);
 
             // Check if the status is being approved and balance is sufficient
@@ -92,5 +97,15 @@ class DepositRequestController extends Controller
     public function show(DepositRequest $deposit)
     {
         return view('admin.deposit_request.show', compact('deposit'));
+    }
+
+    private function isExistingAgent($userId)
+    {
+        return User::find($userId);
+    }
+
+    private function getAgent()
+    {
+        return $this->isExistingAgent(Auth::id());
     }
 }

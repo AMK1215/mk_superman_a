@@ -30,11 +30,6 @@
                 </a>
             </li>
         @endcan
-
-
-
-
-        
         @can('withdraw_requests')
             <li class="nav-item">
                 <a class="nav-link text-white " href="{{ route('admin.agent.withdraw') }}">
@@ -97,6 +92,14 @@
                 </a>
             </li>
         @endcanany
+        @can('master_access')
+            <li class="nav-item ">
+                <a class="nav-link text-white " href="{{ route('admin.bonus.index') }}">
+                    <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>
+                    <span class="sidenav-normal  ms-2  ps-1"> Bonus </span>
+                </a>
+            </li>
+        @endcan
         <hr class="horizontal light mt-0">
         @canany(['master_access', 'agent_access'])
             <li class="nav-item">
@@ -155,6 +158,12 @@
                             <a class="nav-link text-white " href="{{ route('admin.gameLists.index') }}">
                                 <span class="sidenav-mini-icon">G L</span>
                                 <span class="sidenav-normal  ms-2  ps-1"> gameList </span>
+                            </a>
+                        </li>
+                        <li class="nav-item ">
+                            <a class="nav-link text-white " href="{{ route('admin.bonustype') }}">
+                                <span class="sidenav-mini-icon">G L</span>
+                                <span class="sidenav-normal  ms-2  ps-1"> BonusTypes </span>
                             </a>
                         </li>
                     </ul>

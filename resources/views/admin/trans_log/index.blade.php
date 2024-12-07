@@ -63,41 +63,6 @@
   <div class="card-header pb-0">
         <div class="card-body">
           <h5 class="mb-0">Transfer Logs</h5>
-          <form action="{{route('admin.transferLog')}}" method="GET">
-            <div class="row mt-4">
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="Status">Type</label>
-                  <select class="form-control" id="" name="type">
-                    <option selected>Select Type</option>
-                    <option value="withdraw" {{ request()->get('type') == 'withdraw' ? 'selected' : ''  }}>Deposit
-                    </option>
-                    <option value="deposit" {{ request()->get('type') == 'deposit' ? 'selected' : ''  }}>Withdraw
-                    </option>
-                  
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="Start Date">Start Date</label>
-                  <input type="date" class="form-control" id="start_date" name="start_date" value="{{request()->start_date}}">
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="End Date">End Date</label>
-                  <input type="date" class="form-control" id="end_date" name="end_date" value="{{request()->end_date}}">
-                </div>
-              </div>
-
-              <div class="col-lg-2 mt-4">
-                <button type="submit" class="btn bg-gradient-primary btn-sm mb-0">Search</button>
-                <a href="{{route('admin.transferLog')}}" class="btn bg-gradient-primary btn-sm mb-0">Refresh</a>
-              </div>
-            </div>
-
-          </form>
         </div>
       </div>
    <div class="table-responsive">
@@ -109,11 +74,13 @@
             <th>To User</th>
             <th>Amount</th>
             <th>Type</th>
+            <th>CreatedBy</th>
             <th>Note</th>
         </tr>
     </thead>
     <tbody>
         @foreach($transferLogs as $log)
+        
             <tr>
                 <td>
                   {{ $log->created_at }}
@@ -129,6 +96,7 @@
                         <p class="text-danger font-weight-bold">Withdraw</p>
                     @endif
                 </td>
+                <td>{{$log->user->name ?? ''}}</td>
                 <td>{{$log->note}}</td>
             </tr>
         @endforeach

@@ -66,37 +66,7 @@
 
         <div class="card-body">
           <h5 class="mb-0">Player Dashboards</h5>
-          <form role="form" class="text-start" action="{{ route('admin.player.index') }}" method="GET">
-            <div class="row">
-              <div class="col-lg-3">
-                <div class="custom-form-group">
-                  <label for="Status">Status</label>
-                  <select name="status" id="">  
-                    <option selected disabled>--Please Select--</option>
-                     <option value="1" {{request()->status == "1" ? 'selected' : ''}}>Active</option>
-                     <option value="0"  {{ request()->status == "0" ? 'selected' : ''}}>Ban</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="custom-form-group">
-                  <label for="Start Date">Start Date</label>
-                  <input type="date" class="form-control" id="start_date" name="start_date" value="{{request()->start_date}}">
-                </div>
-              </div>
-              <div class="col-lg-3">
-                <div class="custom-form-group">
-                  <label for="End Date">End Date</label>
-                  <input type="date" class="form-control" id="end_date" name="end_date" value="{{request()->end_date}}">
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-3">
-            <button type="submit" class="btn bg-gradient-primary btn-sm mb-0">Search</button>
-            <a href="{{route('admin.player.index')}}" class="btn bg-gradient-primary btn-sm mb-0">Refresh</a>
-            </div>
-          </form>
-      
+
       </div>
     </div>
     <div class="table-responsive">
@@ -104,6 +74,9 @@
         <thead class="thead-light">
           <th>#</th>
           <th>PlayerID</th>
+          @can('master_access')
+          <th>AgentName</th>
+          @endcan
           <th>Name</th>
           <th>Phone</th>
           <th>Status</th>
@@ -120,8 +93,10 @@
             <td>{{ $loop->iteration }}</td>
             <td>
               <span class="d-block">{{ $user->user_name }}</span>
-
             </td>
+            @can('master_access')
+            <td>{{$user->parent->name}}</td>
+            @endcan
             <td>{{$user->name}}</td>
             <td>{{ $user->phone }}</td>
             <td>
@@ -148,7 +123,6 @@
               <a class="me-1" href="{{ route('admin.player.edit', $user->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Player">
                 <i class="fas fa-pen-to-square text-info" style="font-size: 20px;"></i>
               </a>
-
             </td>
             <td>
               <a href="{{ route('admin.player.getCashIn', $user->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Deposit To Player" class="btn btn-info btn-sm">

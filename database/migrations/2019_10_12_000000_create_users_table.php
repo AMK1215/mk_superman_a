@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->unsignedBigInteger('agent_id')->nullable();
             $table->decimal('commission')->default('0.00');
+            $table->string('referral_code')->nullable()->unique();
             $table->rememberToken();
             $table->timestamps();
 

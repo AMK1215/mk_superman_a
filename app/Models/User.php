@@ -47,7 +47,7 @@ class User extends Authenticatable implements Wallet
         'agent_id',
         'status',
         'type',
-
+        'referral_code',
         'commission',
     ];
 

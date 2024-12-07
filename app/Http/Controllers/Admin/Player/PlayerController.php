@@ -35,25 +35,15 @@ class PlayerController extends Controller
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
         //kzt
-        $users = User::with('roles', 'userPayments')
+        $agent = User::where('agent_id', Auth::id())->pluck('id');
+
+        $users = User::with('roles')
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', self::PLAYER_ROLE);
             })
-            ->where('agent_id', auth()->id())
             ->orderBy('id', 'desc')
-            ->when(isset($request->status), function ($query) use ($request) {
-                $query->where('status', $request->status);
-            })
-            ->when(isset($request->bank_number), function ($query) use ($request) {
-                $query->whereHas('userPayments', function ($query) use ($request) {
-                    $query->where('account_no', $request->bank_number);
-                });
-            })
-            ->when(isset($request->start_date) && isset($request->end_date), function ($query) use ($request) {
-                $query->whereBetween('created_at', [$request->start_date.' 00:00:00', $request->end_date.' 23:59:59']);
-            })
+            ->whereIn('agent_id', $agent)
             ->get();
-
         return view('admin.player.index', compact('users'));
     }
 
@@ -80,21 +70,25 @@ class PlayerController extends Controller
     public function store(PlayerRequest $request)
     {
         abort_if(
-            Gate::denies('player_store'),
+            Gate::denies('player_create'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot Access this page because you do not have permission'
         );
 
         try {
             // Validate input
-            $agent = Auth::user();
             $inputs = $request->validated();
 
-            if (isset($inputs['amount']) && $inputs['amount'] > $agent->balanceFloat) {
-                throw ValidationException::withMessages([
-                    'amount' => 'Insufficient balance for transfer.',
-                ]);
+            $agent = $this->isExistAgent($request->referral_code);
+
+            if (!$agent) {
+                return redirect()->back()->with('error', 'The referral code is not your agent code.');
             }
+
+            if (isset($inputs['amount']) && $inputs['amount'] > $agent->balanceFloat) {
+                return redirect()->back()->with('error',);
+            }
+
 
             $userPrepare = array_merge(
                 $inputs,
@@ -105,7 +99,7 @@ class PlayerController extends Controller
                 ]
             );
 
-            Log::info('User prepared: '.json_encode($userPrepare));
+            Log::info('User prepared: ' . json_encode($userPrepare));
 
             $player = User::create($userPrepare);
             $player->roles()->sync(self::PLAYER_ROLE);
@@ -120,7 +114,7 @@ class PlayerController extends Controller
                 ->with('password', $request->password)
                 ->with('user_name', $player->user_name);
         } catch (Exception $e) {
-            Log::error('Error creating user: '.$e->getMessage());
+            Log::error('Error creating user: ' . $e->getMessage());
 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -173,7 +167,7 @@ class PlayerController extends Controller
     public function destroy(User $player)
     {
         abort_if(
-            Gate::denies('user_delete') || ! $this->ifChildOfParent(request()->user()->id, $player->id),
+            Gate::denies('user_delete'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
@@ -192,18 +186,13 @@ class PlayerController extends Controller
 
     public function banUser($id)
     {
-        abort_if(
-            ! $this->ifChildOfParent(request()->user()->id, $id),
-            Response::HTTP_FORBIDDEN,
-            '403 Forbidden |You cannot  Access this page because you do not have permission'
-        );
 
         $user = User::find($id);
         $user->update(['status' => $user->status == 1 ? 0 : 1]);
 
         return redirect()->back()->with(
             'success',
-            'User '.($user->status == 1 ? 'activate' : 'inactive').' successfully'
+            'User ' . ($user->status == 1 ? 'activate' : 'inactive') . ' successfully'
         );
     }
 
@@ -221,7 +210,7 @@ class PlayerController extends Controller
     public function makeCashIn(TransferLogRequest $request, User $player)
     {
         abort_if(
-            Gate::denies('make_transfer') || ! $this->ifChildOfParent(request()->user()->id, $player->id),
+            Gate::denies('make_transfer'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
@@ -231,6 +220,10 @@ class PlayerController extends Controller
             $inputs['refrence_id'] = $this->getRefrenceId();
 
             $agent = Auth::user();
+            if ($agent->hasRole('Master')) {
+                $agent = User::where('agent_id', Auth::id())->first();
+            }
+       
             $cashIn = $inputs['amount'];
 
             if ($cashIn > $agent->balanceFloat) {
@@ -238,7 +231,13 @@ class PlayerController extends Controller
                 return redirect()->back()->with('error', 'You do not have enough balance to transfer!');
             }
 
-            app(WalletService::class)->transfer($agent, $player, $request->validated('amount'), TransactionName::CreditTransfer, ['note' => $request->note ?? '']);
+            app(WalletService::class)->transfer(
+                $agent,
+                $player,
+                $request->validated('amount'),
+                TransactionName::CreditTransfer,
+                ['note' => $request->note ?? '', 'agent_id' => Auth::id()],
+            );
 
             return redirect()->back()
                 ->with('success', 'CashIn submitted successfully!');
@@ -251,7 +250,7 @@ class PlayerController extends Controller
     public function getCashOut(User $player)
     {
         abort_if(
-            Gate::denies('make_transfer') || ! $this->ifChildOfParent(request()->user()->id, $player->id),
+            Gate::denies('make_transfer'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
@@ -262,7 +261,7 @@ class PlayerController extends Controller
     public function makeCashOut(TransferLogRequest $request, User $player)
     {
         abort_if(
-            Gate::denies('make_transfer') || ! $this->ifChildOfParent(request()->user()->id, $player->id),
+            Gate::denies('make_transfer'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
@@ -273,13 +272,21 @@ class PlayerController extends Controller
 
             $agent = Auth::user();
             $cashOut = $inputs['amount'];
-
+            if ($agent->hasRole('Master')) {
+                $agent = User::where('agent_id', Auth::id())->first();
+            }
             if ($cashOut > $player->balanceFloat) {
 
                 return redirect()->back()->with('error', 'You do not have enough balance to transfer!');
             }
 
-            app(WalletService::class)->transfer($player, $agent, $request->validated('amount'), TransactionName::DebitTransfer, ['note' => $request->note ?? '']);
+            app(WalletService::class)->transfer(
+                $player,
+                $agent,
+                $request->validated('amount'),
+                TransactionName::DebitTransfer,
+                ['note' => $request->note ?? '', 'agent_id' => Auth::id()]
+            );
 
             return redirect()->back()
                 ->with('success', 'CashOut submitted successfully!');
@@ -317,11 +324,16 @@ class PlayerController extends Controller
     {
         $randomNumber = mt_rand(10000000, 99999999);
 
-        return 'MKP'.$randomNumber;
+        return 'MKP' . $randomNumber;
     }
 
     private function getRefrenceId($prefix = 'REF')
     {
         return uniqid($prefix);
+    }
+
+    private function isExistAgent($referralCode)
+    {
+        return User::where('referral_code', $referralCode)->where('agent_id', Auth::id())->first();
     }
 }
