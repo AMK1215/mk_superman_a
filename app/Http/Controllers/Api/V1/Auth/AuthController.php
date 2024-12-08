@@ -132,4 +132,11 @@ class AuthController extends Controller
 
         return $this->success(new RegisterResource($user), 'User register successfully.');
     }
+
+    private function generateRandomString()
+    {
+        $randomNumber = mt_rand(10000000, 99999999);
+
+        return 'MKP' . $randomNumber;
+    }
 }
