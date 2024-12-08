@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\Auth;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\ChangePasswordRequest;
 use App\Http\Requests\Api\LoginRequest;
 use App\Http\Requests\Api\ProfileRequest;
+use App\Http\Requests\Api\RegisterRequest;
+use App\Http\Resources\Api\V1\RegisterResource;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\UserResource;
 use App\Models\Admin\UserLog;
@@ -20,6 +23,8 @@ class AuthController extends Controller
 {
     use HttpResponses;
     use ImageUpload;
+    private const PLAYER_ROLE = 4;
+
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('user_name', 'password');
@@ -105,5 +110,26 @@ class AuthController extends Controller
             'profile' => $this->handleImageUpload($request->file('profile'), 'player_profile'),
         ]);
         return $this->success(new PlayerResource($player), 'Updated profile');
+    }
+
+    public function register(RegisterRequest $request)
+    {
+        $agent = User::where('referral_code', $request->referral_code)->first();
+
+        if (! $agent) {
+            return $this->error('', 'Not Found Agent', 401);
+        }
+
+        $user = User::create([
+            'phone' => $request->phone,
+            'name' => $request->name,
+            'user_name' => $this->generateRandomString($agent),
+            'password' => Hash::make($request->password),
+            'agent_id' => $agent->id,
+            'type' => UserType::Player,
+        ]);
+        $user->roles()->sync(self::PLAYER_ROLE);
+
+        return $this->success(new RegisterResource($user), 'User register successfully.');
     }
 }

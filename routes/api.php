@@ -30,13 +30,7 @@ use Illuminate\Support\Facades\Route;
 
 //auth api
 Route::post('/login', [AuthController::class, 'login']);
-
-
-
-
-
-
-
+Route::post('/register', [AuthController::class, 'register']);
 Route::get('v1/validate', [AuthController::class, 'callback']);
 Route::get('gameTypeProducts/{id}', [GameController::class, 'gameTypeProducts']);
 Route::get('allGameProducts', [GameController::class, 'allGameProducts']);
