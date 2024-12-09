@@ -17,25 +17,33 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // $products = Product::with('gameTypes')->get();
-        $gameTypes = GameType::with(['products', function($query){
-            return $query->orderBy('order', 'asc');
+        // Fetch game types with products ordered by 'order'
+        $gameTypes = GameType::with(['products' => function ($query) {
+            $query->orderBy('order', 'asc');
         }])->get();
+
+        // Initialize an array to store providers
         $providers = [];
+
+        // Loop through game types and products
         foreach ($gameTypes as $gameType) {
             foreach ($gameType->products as $product) {
-                $providers[] = $product;
-                foreach($providers as $provider)
-                {
-                    $provider->id === $product->id ? $provider->game_type = $gameType->name : null;
-                }
+                // Clone the product and append game_type
+                $productClone = clone $product;
+                $productClone->game_type = $gameType->name;
+
+                // Add the modified product to the providers array
+                $providers[] = $productClone;
             }
         }
-        // return $providers;
+
+        // Transform the products using a resource
         $products = GameProviderResource::collection($providers);
 
+        // Pass the transformed products to the view
         return view('admin.product.index', compact('products'));
     }
+
 
     /**
      * Show the form for creating a new resource.
