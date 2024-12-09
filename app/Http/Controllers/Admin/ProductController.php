@@ -18,7 +18,9 @@ class ProductController extends Controller
     public function index()
     {
         // $products = Product::with('gameTypes')->get();
-        $gameTypes = GameType::with('products')->get();
+        $gameTypes = GameType::with('products', function($query){
+            $query->with('game_type');
+        })->get();
         $providers = [];
         foreach ($gameTypes as $gameType) {
             foreach ($gameType->products as $product) {
