@@ -27,7 +27,7 @@
           </div>
           <div class="ms-auto my-auto mt-lg-0 mt-4">
             <div class="ms-auto my-auto">
-              <a href="{{ route('admin.products.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Provider</a>
+              {{-- <a href="{{ route('admin.products.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Provider</a> --}}
               {{-- <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv" type="button" name="button">Export</button> --}}
             </div>
           </div>
@@ -43,7 +43,7 @@
               <th>Type</th>
               <th>Image</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Order</th>
             </tr>
           </thead>
           <tbody>
@@ -61,7 +61,7 @@
               </td>
               <td>
                 
-                <img src="{{ $product->image }}" width="20px" class="rounded" alt="">
+                <img src="{{ $product->image }}" width="50px" class="rounded" alt="">
               </td>
               <td>
                 {{ $product->status == 1 ? 'Active' : 'Inactive'}}
@@ -70,14 +70,14 @@
                 {{ $product->order }}
               </td>
               <td>
-                <a href="{{ route('admin.products.edit', $product->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Product"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
-                <form class="d-inline" action="{{ route('admin.products.destroy', $product->id) }}" method="POST">
+                {{-- <a href="{{ route('admin.products.edit', $product->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Product"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a> --}}
+                {{-- <form class="d-inline" action="{{ route('admin.products.destroy', $product->id) }}" method="POST">
                   @csrf
                   @method('DELETE')
                   <button type="submit" class="transparent-btn" data-bs-toggle="tooltip" data-bs-original-title="Delete Product">
                     <i class="material-icons text-secondary position-relative text-lg">delete</i>
                   </button>
-                </form>
+                </form> --}}
               </td>
             </tr>
             @endforeach
