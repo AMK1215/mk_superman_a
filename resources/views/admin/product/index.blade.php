@@ -27,7 +27,7 @@
           </div>
           <div class="ms-auto my-auto mt-lg-0 mt-4">
             <div class="ms-auto my-auto">
-              <a href="{{ route('admin.products.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Provider</a>
+              {{-- <a href="{{ route('admin.products.create') }}" class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; New Provider</a> --}}
               {{-- <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv" type="button" name="button">Export</button> --}}
             </div>
           </div>
@@ -61,7 +61,7 @@
               </td>
               <td>
                 
-                <img src="{{ $product->image }}" width="20px" class="rounded" alt="">
+                <img src="{{ $product->image }}" width="50px" class="rounded" alt="">
               </td>
               <td>
                 {{ $product->status == 1 ? 'Active' : 'Inactive'}}
