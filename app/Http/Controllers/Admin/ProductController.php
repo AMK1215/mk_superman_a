@@ -30,12 +30,13 @@ class ProductController extends Controller
             foreach ($gameType->products as $product) {
                 // Clone the product and append game_type
                 $productClone = clone $product;
-                $productClone->name = $productClone->provider_name;
-                $productClone->code = $productClone->provider_code;
+                $provider = new $product;
+                $provider->name = $productClone->provider_name;
+                $provider->code = $productClone->provider_code;
                 // $productClone->image = $productClone->image;
-                $productClone->game_type = $gameType->name;
+                $provider->game_type = $gameType->name;
                 // Add the modified product to the providers array
-                $providers[] = $productClone;
+                $providers[] = $provider;
             }
         }
 
