@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
+use App\Http\Resources\Api\V1\GameProviderResource;
 use App\Models\Admin\GameType;
 use App\Models\Admin\GameTypeProduct;
 use App\Models\Admin\Product;
@@ -17,7 +18,8 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('gameTypes')->get();
-        return $products;
+        // return $products;
+        return GameProviderResource::collection($products);
 
         return view('admin.product.index', compact('products'));
     }
