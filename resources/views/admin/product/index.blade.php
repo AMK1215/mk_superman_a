@@ -60,6 +60,7 @@
                 {{ $product->game_type }}
               </td>
               <td>
+                
                 <img src="{{ $product->image }}" width="20px" class="rounded" alt="">
               </td>
               <td>
