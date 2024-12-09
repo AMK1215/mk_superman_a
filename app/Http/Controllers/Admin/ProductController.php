@@ -25,8 +25,8 @@ class ProductController extends Controller
                 $providers[] = $product;
             }
         }
-        // return $products;
-        return GameProviderResource::collection($providers);
+        return $providers;
+        // return GameProviderResource::collection($providers);
 
         return view('admin.product.index', compact('products'));
     }
