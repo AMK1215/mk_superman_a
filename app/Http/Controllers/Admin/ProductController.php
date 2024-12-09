@@ -18,7 +18,9 @@ class ProductController extends Controller
     public function index()
     {
         // $products = Product::with('gameTypes')->get();
-        $gameTypes = GameType::with('products')->get();
+        $gameTypes = GameType::with('products', function($query){
+            return $query->orderBy('order', 'asc');
+        })->get();
         $providers = [];
         foreach ($gameTypes as $gameType) {
             foreach ($gameType->products as $product) {
@@ -30,7 +32,7 @@ class ProductController extends Controller
             }
         }
         // return $providers;
-        return GameProviderResource::collection($providers);
+        $products = GameProviderResource::collection($providers);
 
         return view('admin.product.index', compact('products'));
     }
