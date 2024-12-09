@@ -23,9 +23,10 @@ class ProductController extends Controller
         foreach ($gameTypes as $gameType) {
             foreach ($gameType->products as $product) {
                 $providers[] = $product;
+                $providers[$product->id]['game_type'] = $gameType->name;
             }
         }
-        return $gameTypes;
+        return $providers;
         // return GameProviderResource::collection($providers);
 
         return view('admin.product.index', compact('products'));
