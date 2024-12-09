@@ -79,8 +79,8 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
         Route::post('withdraw', [WithDrawController::class, 'withdraw']);
         Route::post('deposit', [DepositController::class, 'deposit']);
         Route::get('player-transactionlog', [PlayerTransactionLogController::class, 'index']);
-        Route::get('deposit-requestlog', [TransactionController::class, 'depositRequestLog']);
-        Route::get('withdraw-requestlog', [TransactionController::class, 'withDrawRequestLog']);
+        Route::get('deposit-log', [TransactionController::class, 'depositRequestLog']);
+        Route::get('withdraw-log', [TransactionController::class, 'withDrawRequestLog']);
     });
 
     // Route::group(['prefix' => 'bank'], function () {
