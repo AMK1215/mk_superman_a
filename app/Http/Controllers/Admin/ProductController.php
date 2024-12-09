@@ -17,9 +17,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('gameTypes')->get();
+        // $products = Product::with('gameTypes')->get();
+        $gameTypes = GameType::with('products')->get();
+        $providers = [];
+        foreach ($gameTypes as $gameType) {
+            foreach ($gameType->products as $product) {
+                $providers[] = $product;
+            }
+        }
         // return $products;
-        return GameProviderResource::collection($products);
+        return GameProviderResource::collection($providers);
 
         return view('admin.product.index', compact('products'));
     }
