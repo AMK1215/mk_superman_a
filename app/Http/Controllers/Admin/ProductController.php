@@ -30,8 +30,8 @@ class ProductController extends Controller
             foreach ($gameType->products as $product) {
                 // Clone the product and append game_type
                 $productClone = clone $product;
-                $productClone->name = $productClone->product_name;
-                $productClone->code = $productClone->product_code;
+                $productClone->name = $productClone->provider_name;
+                $productClone->code = $productClone->provider_code;
                 // $productClone->image = $productClone->image;
                 $productClone->game_type = $gameType->name;
                 // Add the modified product to the providers array
@@ -40,7 +40,7 @@ class ProductController extends Controller
         }
 
         // Transform the products using a resource
-        // $products = GameProviderResource::collection($providers);
+        $products = GameProviderResource::collection($providers);
         return $providers;
         // Pass the transformed products to the view
         return view('admin.product.index', compact('products'));
