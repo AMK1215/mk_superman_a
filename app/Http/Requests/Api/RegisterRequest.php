@@ -24,8 +24,7 @@ class RegisterRequest extends FormRequest
         return [
             'name' => 'required|min:3|string',
             'password' => 'required|min:6|confirmed',
-            'phone' => ['required', 'regex:/^[0-9]+$/'],
-            'referral_code' => 'required|exists:users,referral_code',
+            'phone' => ['required', 'regex:/^[0-9]+$/']
         ];
     }
 }

@@ -23,10 +23,9 @@ class DepositRequest extends FormRequest
     {
 
         return [
-            'user_payment_id' => ['required'],
+            'bank_id' => ['required'],
             'amount' => ['required', 'integer'],
-            'image' => ['required'],
-            'note' => ['nullable', 'string'],
+            'image' => ['required']
         ];
     }
 }

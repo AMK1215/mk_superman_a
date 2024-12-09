@@ -62,63 +62,7 @@
         <div class="card">
             <!-- Card header -->
             <div class="card-header pb-0">
-        <div class="card-body">
-          <h5 class="mb-0">WithDraw Requested Lists</h5>
-          <form action="{{route('admin.agent.withdraw')}}" method="GET">
-            <div class="row mt-4">
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="Status">Status</label>
-                  <select class="form-control" id="" name="status">
-                    <option value="all" {{ request()->get('status') == 'all' ? 'selected' : ''  }}>All
-                    </option>
-                    <option value="0" {{ request()->get('status') == '0' ? 'selected' : ''  }}>Pending
-                    </option>
-                    <option value="1" {{ request()->get('status') == '1' ? 'selected' : ''  }}>Approved
-                    </option>
-                    <option value="2" {{ request()->get('status') == '2' ? 'selected' : ''  }}>Rejected
-                    </option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="End Date">PlayerId</label>
-                  <input type="text" class="form-control" id="player_id" name="player_id" value="{{request()->player_id}}">
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="End Date">PaymentType</label>
-                  <select name="user_payment_id" id="" class="form-control">
-                    <option selected>Select Payment Type</option>
-                    @foreach($paymentTypes as $payment)
-                    <option value="{{$payment->paymentType->id}}" {{request()->user_payment_id == $payment->paymentType->id ? 'selected' : ''}}>{{$payment->paymentType->name}}</option>
-                    @endforeach
-                  </select>
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="Start Date">Start Date</label>
-                  <input type="date" class="form-control" id="start_date" name="start_date" value="{{request()->start_date}}">
-                </div>
-              </div>
-              <div class="col-lg-2">
-                <div class="custom-form-group">
-                  <label for="End Date">End Date</label>
-                  <input type="date" class="form-control" id="end_date" name="end_date" value="{{request()->end_date}}">
-                </div>
-              </div>
 
-              <div class="col-lg-2 mt-4">
-                <button type="submit" class="btn bg-gradient-primary btn-sm mb-0">Search</button>
-                <a href="{{route('admin.agent.withdraw')}}" class="btn bg-gradient-primary btn-sm mb-0">Refresh</a>
-              </div>
-            </div>
-
-          </form>
-        </div>
       </div>
             <div class="table-responsive">
                 <table class="table table-flush" id="users-search">
@@ -143,7 +87,6 @@
                                 <span class="d-block">{{ $withdraw->user->name }}</span>
                             </td>
                             <td>{{ number_format($withdraw->amount) }}</td>
-                            <td>{{ $withdraw->paymentType->name }}</td>
                             <td>{{$withdraw->account_name}}</td>
                             <td>{{$withdraw->account_no}}</td>
                             <td>

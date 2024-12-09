@@ -22,9 +22,6 @@ class WithDrawController extends Controller
             $inputs = $request->validated();
             $player = Auth::user();
 
-            if (! $player || ! Hash::check($request->password, $player->password)) {
-                return $this->error('', 'လျို့ဝှက်နံပါတ်ကိုက်ညီမှု မရှိပါ။', 401);
-            }
             if ($player->balanceFloat < $inputs['amount']) {
                 return $this->error('', 'Insufficient balance', 401);
             }

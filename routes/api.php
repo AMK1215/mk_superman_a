@@ -73,12 +73,7 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
     Route::get('ads_banner', [BannerController::class, 'AdsBannerIndex']);
     Route::get('promotions', [PromotionController::class, 'index']);
     Route::get('contacts', [ContactController::class, 'contact']);
-    Route::get('/banks', [BankController::class, 'banks']);
-
-
-    Route::get('agent-payment-type', [UserPaymentControler::class, 'agentPayment']);
-    Route::get('payment-type', [UserPaymentControler::class, 'paymentType']);
-
+    Route::get('banks', [BankController::class, 'banks']);
 
     Route::group(['prefix' => 'transaction'], function () {
         Route::post('withdraw', [WithDrawController::class, 'withdraw']);

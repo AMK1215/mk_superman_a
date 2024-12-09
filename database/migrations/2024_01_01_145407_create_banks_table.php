@@ -20,9 +20,6 @@ return new class extends Migration
             $table->foreign('payment_type_id')->references('id')->on('payment_types');
             $table->foreign('agent_id')->references('id')->on('users');
             $table->timestamps();
-            // $table->id();
-            // $table->string('name');
-            // $table->timestamps();
         });
     }
 

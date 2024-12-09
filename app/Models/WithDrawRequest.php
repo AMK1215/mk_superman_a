@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Admin\Bank;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +11,7 @@ class WithDrawRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'payment_type_id', 'agent_id', 'user_id', 'account_name', 'account_no', 'amount', 'status', 'note',
+        'bank_id', 'agent_id', 'user_id', 'account_name', 'account_no', 'amount', 'status', 'note',
     ];
 
     public function user()
@@ -18,8 +19,8 @@ class WithDrawRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function paymentType()
+    public function bank()
     {
-        return $this->belongsTo(PaymentType::class);
+        return $this->belongsTo(Bank::class);
     }
 }

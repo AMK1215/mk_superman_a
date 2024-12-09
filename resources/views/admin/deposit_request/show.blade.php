@@ -93,16 +93,16 @@
                             <div class="custom-form-group">
                                 <label class="form-label">Bank Account Name</label>
                                 <input type="text" class="form-control" name="account_name"
-                                       value="{{ $deposit->userPayment->account_name }}" readonly>
+                                       value="{{ $deposit->bank->account_name }}" readonly>
                             </div>
                             <div class="custom-form-group"><label class="form-label">Bank Account No</label>
-                                <input type="text" class="form-control" name="account_no"
-                                       value="{{ $deposit->userPayment->account_no }}" readonly>
+                                <input type="text" class="form-control" name="account_number"
+                                       value="{{ $deposit->bank->account_number }}" readonly>
                             </div>
                             <div class="custom-form-group">
                                 <label class="form-label">Payment Method</label>
                                 <input type="text" class="form-control" name=""
-                                       value="{{ $deposit->userPayment->paymentType->name }}" readonly>
+                                       value="{{ $deposit->bank->paymentType->name }}" readonly>
                             </div>
                                 <div class="d-lg-flex">
                                     <form action="{{ route('admin.agent.depositStatusreject', $deposit->id) }}"

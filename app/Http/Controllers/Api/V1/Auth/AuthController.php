@@ -114,20 +114,33 @@ class AuthController extends Controller
 
     public function register(RegisterRequest $request)
     {
-        $agent = User::where('referral_code', $request->referral_code)->first();
+        if($request->referral_code)
+        {
+            $agent = User::where('referral_code', $request->referral_code)->first();
 
-        if (! $agent) {
-            return $this->error('', 'Not Found Agent', 401);
+            if (! $agent) {
+                return $this->error('', 'Not Found Agent', 401);
+            }
+
+            $user = User::create([
+                'phone' => $request->phone,
+                'name' => $request->name,
+                'user_name' => $this->generateRandomString(),
+                'password' => Hash::make($request->password),
+                'agent_id' => $agent->id,
+                'type' => UserType::Player,
+            ]);
+        }else{
+            $user = User::create([
+                'phone' => $request->phone,
+                'name' => $request->name,
+                'user_name' => $this->generateRandomString(),
+                'password' => Hash::make($request->password),
+                'agent_id' => 4,
+                'type' => UserType::Player,
+            ]);
         }
 
-        $user = User::create([
-            'phone' => $request->phone,
-            'name' => $request->name,
-            'user_name' => $this->generateRandomString($agent),
-            'password' => Hash::make($request->password),
-            'agent_id' => $agent->id,
-            'type' => UserType::Player,
-        ]);
         $user->roles()->sync(self::PLAYER_ROLE);
 
         return $this->success(new RegisterResource($user), 'User register successfully.');
