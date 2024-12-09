@@ -26,8 +26,8 @@ class ProductController extends Controller
                 $providers[$product->id]['game_type'] = $gameType->name;
             }
         }
-        return $providers;
-        // return GameProviderResource::collection($providers);
+        // return $providers;
+        return GameProviderResource::collection($providers);
 
         return view('admin.product.index', compact('products'));
     }

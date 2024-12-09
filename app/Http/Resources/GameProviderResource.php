@@ -20,7 +20,8 @@ class GameProviderResource extends JsonResource
             'code' => $this->provider_code,
             'order' => $this->order,
             'status' => $this->status,
-            'image' => $this->imgUrl
+            'image' => $this->imgUrl,
+            'game_type' => $this->game_type,
         ];
     }
 }
