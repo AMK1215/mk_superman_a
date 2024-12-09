@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
-use App\Http\Resources\Api\V1\GameProviderResource;
+use App\Http\Resources\GameProviderResource;
 use App\Models\Admin\GameType;
 use App\Models\Admin\GameTypeProduct;
 use App\Models\Admin\Product;
