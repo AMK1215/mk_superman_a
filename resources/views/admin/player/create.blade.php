@@ -115,6 +115,7 @@
                     <div class="card-body">
                         <form role="form" method="POST" class="text-start" action="{{ route('admin.player.store') }}">
                             @csrf
+                            @if(auth()->user()->hasRole('Master'))
                             <div class="custom-form-group">
                                 <label for="title">Agent ReferralCode <span class="text-danger">*</span></label>
                                 <input type="text" name="referral_code" class="form-control" value="{{old('referral_code')}}">
@@ -122,6 +123,7 @@
                                     <span class="text-danger d-block">{{ $message }}</span>
                                 @enderror
                             </div>
+                            @endif
                             <div class="custom-form-group">
                                 <label for="title">Player ID <span class="text-danger">*</span></label>
                                 <input type="text" name="user_name" class="form-control" value="{{ $player_name }}"

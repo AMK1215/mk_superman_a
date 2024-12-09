@@ -35,14 +35,19 @@ class PlayerController extends Controller
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
         //kzt
-        $agent = User::where('agent_id', Auth::id())->pluck('id');
+        $user = Auth::user();
+        $agentIds = [$user->id];
+
+        if ($user->hasRole('Master')) {
+            $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
+        }
 
         $users = User::with('roles')
             ->whereHas('roles', function ($query) {
                 $query->where('role_id', self::PLAYER_ROLE);
             })
             ->orderBy('id', 'desc')
-            ->whereIn('agent_id', $agent)
+            ->whereIn('agent_id', $agentIds)
             ->get();
         return view('admin.player.index', compact('users'));
     }
@@ -64,61 +69,42 @@ class PlayerController extends Controller
         return view('admin.player.create', compact('player_name', 'paymentTypes'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(PlayerRequest $request)
     {
         abort_if(
             Gate::denies('player_create'),
             Response::HTTP_FORBIDDEN,
-            '403 Forbidden |You cannot Access this page because you do not have permission'
+            '403 Forbidden | You cannot access this page because you do not have permission.'
         );
 
         try {
-            // Validate input
-            $inputs = $request->validated();
+            $agent = $this->determineAgent($request);
 
-            $agent = $this->isExistAgent($request->referral_code);
-
-            if (!$agent) {
-                return redirect()->back()->with('error', 'The referral code is not your agent code.');
+            // Validate agent balance for the specified amount
+            if ($this->isAmountExceedingBalance($request->amount ?? 0, $agent->balanceFloat)) {
+                return redirect()->back()->with('error', 'Insufficient balance to create the player.');
             }
 
-            if (isset($inputs['amount']) && $inputs['amount'] > $agent->balanceFloat) {
-                return redirect()->back()->with('error',);
-            }
+            // Create the player
+            $player = $this->createPlayer($request, $agent);
 
-
-            $userPrepare = array_merge(
-                $inputs,
-                [
-                    'password' => Hash::make($inputs['password']),
-                    'agent_id' => Auth()->user()->id,
-                    'type' => UserType::Player,
-                ]
-            );
-
-            Log::info('User prepared: ' . json_encode($userPrepare));
-
-            $player = User::create($userPrepare);
-            $player->roles()->sync(self::PLAYER_ROLE);
-
-            if (isset($inputs['amount'])) {
-                app(WalletService::class)->transfer($agent, $player, $inputs['amount'], TransactionName::CreditTransfer);
+            // Handle initial amount transfer
+            if (!empty($request->amount)) {
+                $this->transferInitialAmount($agent, $player, $request->amount);
             }
 
             return redirect()->back()
                 ->with('success', 'Player created successfully')
-                ->with('url', env('APP_URL'))
+                ->with('url', config('app.url'))
                 ->with('password', $request->password)
                 ->with('user_name', $player->user_name);
         } catch (Exception $e) {
-            Log::error('Error creating user: ' . $e->getMessage());
-
+            Log::error('Error creating player: ' . $e->getMessage());
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+
 
     /**
      * Display the specified resource.
@@ -223,7 +209,7 @@ class PlayerController extends Controller
             if ($agent->hasRole('Master')) {
                 $agent = User::where('agent_id', Auth::id())->first();
             }
-       
+
             $cashIn = $inputs['amount'];
 
             if ($cashIn > $agent->balanceFloat) {
@@ -335,5 +321,48 @@ class PlayerController extends Controller
     private function isExistAgent($referralCode)
     {
         return User::where('referral_code', $referralCode)->where('agent_id', Auth::id())->first();
+    }
+    private function determineAgent($request)
+    {
+        $agent = Auth::user();
+
+        if ($agent->hasRole('Master')) {
+            if (!empty($request->referral_code)) {
+                $agent = $this->isExistAgent($request->referral_code);
+                if (!$agent) {
+                    throw new Exception('The referral code is not your agent code.');
+                }
+            } else {
+                $agent = User::findOrFail(4); // Default agent (fallback)
+            }
+        }
+
+        return $agent;
+    }
+
+    private function isAmountExceedingBalance($amount, $balance)
+    {
+        return $amount > $balance;
+    }
+
+    private function createPlayer($request, $agent)
+    {
+        $player = User::create([
+            'name' => $request->name,
+            'user_name' => $request->user_name,
+            'password' => Hash::make($request->password),
+            'phone' => $request->phone,
+            'agent_id' => $agent->id ?? Auth::id(),
+            'type' => UserType::Player,
+        ]);
+
+        $player->roles()->sync(self::PLAYER_ROLE);
+
+        return $player;
+    }
+
+    private function transferInitialAmount($agent, $player, $amount)
+    {
+        app(WalletService::class)->transfer($agent, $player, $amount, TransactionName::CreditTransfer);
     }
 }
