@@ -47,31 +47,31 @@
             </tr>
           </thead>
           <tbody>
-            @foreach($providers as $provider)
+            @foreach($products as $product)
             <tr>
               <td class="text-sm font-weight-normal">{{ $loop->iteration }}</td>
               <td>
-                {{ $provider->name }}
+                {{ $product->name }}
               </td>
               <td>
-                {{ $provider->code }}
+                {{ $product->code }}
               </td>
               <td>
-                {{ $provider->game_type }}
+                {{ $product->game_type }}
               </td>
               <td>
                 
-                <img src="{{ $provider->image }}" width="20px" class="rounded" alt="">
+                <img src="{{ $product->image }}" width="20px" class="rounded" alt="">
               </td>
               <td>
-                {{ $provider->status == 1 ? 'Active' : 'Inactive'}}
+                {{ $product->status == 1 ? 'Active' : 'Inactive'}}
               </td>
               <td>
-                {{ $provider->order }}
+                {{ $product->order }}
               </td>
               <td>
-                <a href="{{ route('admin.products.edit', $provider->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Product"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
-                <form class="d-inline" action="{{ route('admin.products.destroy', $provider->id) }}" method="POST">
+                <a href="{{ route('admin.products.edit', $product->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Product"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
+                <form class="d-inline" action="{{ route('admin.products.destroy', $product->id) }}" method="POST">
                   @csrf
                   @method('DELETE')
                   <button type="submit" class="transparent-btn" data-bs-toggle="tooltip" data-bs-original-title="Delete Product">
