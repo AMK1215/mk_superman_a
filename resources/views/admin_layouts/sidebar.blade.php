@@ -108,7 +108,7 @@
                     <i class="material-icons py-2">settings</i>
                     <span class="nav-link-text ms-2 ps-1">General Setup</span>
                 </a>
-                <div class="collapse " id="dashboardsExamples">
+                <div class="collapse" id="dashboardsExamples">
                     <ul class="nav">
                         @canany(['master_access', 'agent_access'])
                         <li class="nav-item ">
