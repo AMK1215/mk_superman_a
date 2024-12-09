@@ -23,7 +23,10 @@ class ProductController extends Controller
         foreach ($gameTypes as $gameType) {
             foreach ($gameType->products as $product) {
                 $providers[] = $product;
-                $providers[$product->id]['game_type'] = $gameType->name;
+                foreach($providers as $provider)
+                {
+                    $provider->id === $product->id ? $provider->game_type = $gameType->name : null;
+                }
             }
         }
         return $providers;
