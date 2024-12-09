@@ -33,6 +33,8 @@ class ProductController extends Controller
                 $provider = new $product;
                 $provider->name = $productClone->provider_name;
                 $provider->code = $productClone->provider_code;
+                $provider->order = $productClone->order;
+                $provider->status = $productClone->status;
                 $provider->image = $productClone->imgUrl;
                 $provider->game_type = $gameType->name;
                 // Add the modified product to the providers array
