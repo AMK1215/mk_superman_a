@@ -39,7 +39,7 @@ class ProductController extends Controller
 
         // Transform the products using a resource
         $products = GameProviderResource::collection($providers);
-        return $products;
+        // return $products;
         // Pass the transformed products to the view
         return view('admin.product.index', compact('products'));
     }
