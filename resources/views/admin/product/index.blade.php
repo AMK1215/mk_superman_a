@@ -43,7 +43,7 @@
               <th>Type</th>
               <th>Image</th>
               <th>Status</th>
-              <th>Actions</th>
+              <th>Order</th>
             </tr>
           </thead>
           <tbody>
