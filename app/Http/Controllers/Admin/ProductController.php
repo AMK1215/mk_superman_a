@@ -38,13 +38,13 @@ class ProductController extends Controller
         }
 
         // Transform the products using a resource
-        $products = GameProviderResource::collection($providers);
+        $gameProviders = GameProviderResource::collection($providers);
         $data = [
-            'name' => $products[0]->name,
-            'code' => $products[0]->code,
-            'order' => $products[0]->order,
-            'game_type' => $products[0]->game_type,
-            'image' => $products[0]->image,
+            'name' => $gameProviders[0]->name,
+            'code' => $gameProviders[0]->code,
+            'order' => $gameProviders[0]->order,
+            'game_type' => $gameProviders[0]->game_type,
+            'image' => $gameProviders[0]->image,
         ];
         return $data;
         // Pass the transformed products to the view
