@@ -18,12 +18,16 @@ return new class extends Migration
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('amount');
             $table->unsignedBigInteger('before_amount');
+            $table->unsignedBigInteger('after_amount')->nullable();
+            $table->unsignedBigInteger('created_id');
             $table->string('remark')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('agent_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('bonus_types')->onDelete('cascade');
+            $table->foreign('created_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

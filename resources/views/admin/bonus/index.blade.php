@@ -39,14 +39,29 @@
                             <th>#</th>
                             <th>PlayerId</th>
                             <th>Name</th>
-                            <th>Amount</th>
                             <th>BonusType</th>
                             <th>Amount</th>
-                            <th>beforeAmount</th>
+                            <th>BeforeAmount</th>
+                            <th>AfterAmount</th>
                             <th>Remark</th>
+                            <th>CreatedBy</th>
                         </tr>
                     </thead>
-
+                    <tbody>
+                        @foreach($bonuses as $bonus)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$bonus->user->user_name}}</td>
+                            <td>{{$bonus->user->name}}</td>
+                            <td>{{$bonus->type->name}}</td>
+                            <td>{{$bonus->amount}}</td>
+                            <td>{{$bonus->before_amount}}</td>
+                            <td>{{$bonus->after_amount}}</td>
+                            <td>{{$bonus->remark}}</td>
+                            <td>{{$bonus->agent->name}}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
                 </table>
             </div>
         </div>

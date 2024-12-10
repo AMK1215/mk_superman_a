@@ -92,7 +92,7 @@
                 </a>
             </li>
         @endcanany
-        @can('master_access')
+        @canany(['master_access', 'agent_access'])
             <li class="nav-item ">
                 <a class="nav-link text-white " href="{{ route('admin.bonus.index') }}">
                     <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>

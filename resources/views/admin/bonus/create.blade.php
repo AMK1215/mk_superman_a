@@ -109,11 +109,12 @@
                 </div>
                 <div class="card-body">
                     <div class="custom-form-group">
-                        <label for="title" style="text-align: justify;">PlayerId</label>
-                        <input type="text" class="form-control"  placeholder="search player id" name="user_name" id="user_name">
+                        <label for="title" style="text-align: justify;">Player ID</label>
+                        <input type="text"  placeholder="search player id" name="user_name" id="user_name" value="{{old('user_name')}}">
                     </div> 
-                    <form role="form" method="POST" class="text-start" action="{{ route('admin.agent.store') }}">
+                    <form role="form" method="POST" class="text-start" action="{{ route('admin.bonus.store') }}">
                         @csrf
+                        <input type="hidden" name="id" value="{{old('id')}}">
                         <div class="custom-form-group">
                             <label for="title">BonusTypes</label>
                             <select name="type_id" class="form-control form-select" id="">
@@ -126,36 +127,32 @@
                             <span class="text-danger">*{{ $message }}</span>
                             @enderror
                         </div>
-
                         <div class="custom-form-group">
-                            <label for="title">PlayerId<span class="text-danger">*</span></label>
-                            <input type="text" name="player_id" class="form-control" value="{{old('player_id')}}">
-                            @error('player_id')
+                            <label for="title">UserName<span class="text-danger">*</span></label>
+                            <input type="text" name="user_name" class="form-control" value="{{old('user_name')}}">
+                            @error('user_name')
                             <span class="text-danger d-block">*{{ $message }}</span>
                             @enderror
                         </div>
 
                         <div class="custom-form-group">
-                            <label for="title">PlayerName</label>
+                            <label for="title">PlayerName<span class="text-danger">*</span></label>
                             <input type="text" name="name" class="form-control" value="{{old('name')}}">
                             @error('name')
                             <span class="text-danger d-block">*{{ $message }}</span>
                             @enderror
                         </div>
-
                         <div class="custom-form-group">
-                            <label>PlayerBalance : </label>
-                            <span class="badge badge-sm bg-gradient-success"></span>
-                        </div>
-                        <div class="custom-form-group">
-                            <label for="title">Amount</label>
+                            <label for="title">Amount<span class="text-danger">*</span></label>
                             <input type="text" name="amount" class="form-control" value="{{old('amount')}}" placeholder="0.00">
                             @error('amount')
                             <span class="text-danger d-block">*{{ $message }}</span>
                             @enderror
                         </div>
-
-
+                        <div class="custom-form-group">
+                            <label for="title">Remark</label>
+                            <input type="text" name="" id="" class="form-control">
+                        </div>
                         <div class="custom-form-group">
                             <button class="btn btn-info" type="button" id="resetFormButton">Cancel</button>
 
@@ -195,18 +192,18 @@
 
             if (playerId.trim() !== '') {
                 $.ajax({
-                    url: '/admin/bonus/player', 
+                    url: '/admin/bonusPlayer', 
                     type: 'GET',
                     data: { user_name: playerId },
                     success: function(response) {
                         if (response.success && response.data) {
                             let player = response.data;
-                            $('input[name="name"]').val(player.name);
+                            $('input[name="user_name"]').val(player.user_name);
                             $('input[name="name"]').val(player.name);
                             $('input[name="phone"]').val(player.phone);
+                            $('input[name="id"]').val(player.id);
                             $('span.badge').text(player.balance.toFixed(2)); // Display formatted balance
                         } else {
-                            console.log('here');
                             clearPlayerData();
                             alert('Player not found');
                         }
@@ -223,8 +220,10 @@
 
         // Function to clear player-related form fields
         function clearPlayerData() {
+            $('input[name="user_name"]').val('');
             $('input[name="name"]').val('');
             $('input[name="phone"]').val('');
+            $('input[name="id"]').val('');
             $('span.badge').text('');
         }
     });

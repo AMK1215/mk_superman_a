@@ -79,7 +79,7 @@ Route::group([
     Route::resource('contact', ContactController::class);
     Route::get('bonustype', [BonusTypeController::class, 'get'])->name('bonustype');
     Route::resource('bonus', BonusController::class);
-    Route::get('bonus/player', [BonusController::class, 'search'])->name('bonus.search');
+    Route::get('bonusPlayer', [BonusController::class, 'search'])->name('bonus.search');
     Route::get('gametypes', [GameTypeProductController::class, 'index'])->name('gametypes.index');
     Route::get('gametypes/{game_type_id}/product/{product_id}', [GameTypeProductController::class, 'edit'])->name('gametypes.edit');
     Route::post('gametypes/{game_type_id}/product/{product_id}', [GameTypeProductController::class, 'update'])->name('gametypes.update');
