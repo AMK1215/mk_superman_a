@@ -24,7 +24,7 @@ class AdjustmentController extends Controller
 
         DB::beginTransaction();
         try {
-            Log::info('Starting handleAdjustment method for multiple transactions');
+            // Log::info('Starting handleAdjustment method for multiple transactions');
 
             foreach ($transactions as $transaction) {
                 // Retrieve the player
@@ -39,7 +39,7 @@ class AdjustmentController extends Controller
 
                 // Validate signature
                 $signature = $this->generateSignature($transaction);
-                Log::info('Adjustment Signature', ['GeneratedAdjustmentSignature' => $signature]);
+                // Log::info('Adjustment Signature', ['GeneratedAdjustmentSignature' => $signature]);
 
                 if ($signature !== $transaction['Signature']) {
                     Log::warning('Signature validation failed', [
@@ -92,7 +92,7 @@ class AdjustmentController extends Controller
             }
 
             DB::commit();
-            Log::info('All Adjustment transactions committed successfully');
+            // Log::info('All Adjustment transactions committed successfully');
 
             return $this->buildSuccessResponse($newBalance);
         } catch (\Exception $e) {
@@ -122,7 +122,6 @@ class AdjustmentController extends Controller
         return response()->json([
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
-            'ResponseDateTime' => now()->format('Y-m-d H:i:s'),
             'Balance' => round($balance, 4),
         ]);
     }
