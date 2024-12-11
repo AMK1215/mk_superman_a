@@ -16,6 +16,7 @@ class BankResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'bank_id' => $this->paymentType->id,
             'bank' => $this->paymentType->name,
             'logo' => $this->paymentType->img_url,
             'account_name' => $this->account_name,
