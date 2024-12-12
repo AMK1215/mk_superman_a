@@ -41,7 +41,7 @@ class BetResultController extends Controller
                 $lock = Redis::set($lockKey, true, 'EX', 10, 'NX'); // 10-second lock
 
                 if (! $lock) {
-                    return $this->buildErrorResponse(StatusCode::DuplicateTransaction, $player->wallet->balanceFloat);
+                    return $this->buildErrorResponse(StatusCode::BetTransactionNotFound, $player->wallet->balanceFloat);
                 }
 
                 try {
@@ -58,7 +58,7 @@ class BetResultController extends Controller
                     if ($this->isDuplicateResult($transaction)) {
                         Redis::del($lockKey); // Release lock
 
-                        return $this->buildErrorResponse(StatusCode::BetTransactionNotFound, $player->wallet->balanceFloat);
+                        return $this->buildErrorResponse(StatusCode::DuplicateTransaction, $player->wallet->balanceFloat);
                     }
 
                     // Process payout if WinAmount > 0
