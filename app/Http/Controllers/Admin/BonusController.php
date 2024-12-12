@@ -42,12 +42,12 @@ class BonusController extends Controller
             'type_id' => ['required']
         ]);
         $agent = Auth::user();
+        $player = User::find($request->id);
 
         if ($agent->hasRole('Master')) {
-            $agent = User::where('agent_id', Auth::id())->first();
+            $agent = User::where('agent_id', $player->agent_id)->first();
         }
 
-        $player = User::find($request->id);
 
         if ($agent->balanceFloat < $request->amount) {
             return redirect()->back()->with('error', 'You do not have enough balance to transfer!');
