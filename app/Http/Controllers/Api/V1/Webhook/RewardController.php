@@ -66,7 +66,9 @@ class RewardController extends Controller
                     $transaction['Amount']
                 );
 
-                $newBalance = $player->wallet->refreshBalance()->balanceFloat;
+                //$newBalance = $player->wallet->refreshBalance()->balanceFloat;
+                $player->wallet->refreshBalance();
+                $newBalance = $player->wallet->balanceFloat;
 
                 // Create the reward record
                 $reward = Reward::create([
@@ -120,6 +122,7 @@ class RewardController extends Controller
         return response()->json([
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
+            'ResponseDateTime' => now()->format('Y-m-d H:i:s'),
             'Balance' => round($balance, 4),
         ]);
     }

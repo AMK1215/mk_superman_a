@@ -42,19 +42,10 @@ class BetResultController extends Controller
 
                 if (! $lock) {
                     return $this->buildErrorResponse(StatusCode::DuplicateTransaction, $player->wallet->balanceFloat);
-                    // return response()->json([
-                    //     'Status' => StatusCode::DuplicateTransaction->value,
-                    //     'Description' => 'Wallet is currently locked. Please try again later.',
-                    // ], 409); // Valid HTTP status code
                 }
 
                 try {
-                    // Validate signature and prevent duplicate ResultId
-                    // if (! $this->isValidSignature($transaction) || $this->isDuplicateResult($transaction)) {
-                    //     Redis::del($lockKey); // Release lock
 
-                    //     return $this->buildErrorResponse(StatusCode::InvalidSignature, $player->wallet->balanceFloat);
-                    // }
 
                     // Validate signature
                     if (! $this->isValidSignature($transaction)) {
@@ -67,7 +58,7 @@ class BetResultController extends Controller
                     if ($this->isDuplicateResult($transaction)) {
                         Redis::del($lockKey); // Release lock
 
-                        return $this->buildErrorResponse(StatusCode::DuplicateTransaction, $player->wallet->balanceFloat);
+                        return $this->buildErrorResponse(StatusCode::BetTransactionNotFound, $player->wallet->balanceFloat);
                     }
 
                     // Process payout if WinAmount > 0
@@ -124,6 +115,7 @@ class BetResultController extends Controller
         return response()->json([
             'Status' => $statusCode->value,
             'Description' => $statusCode->name,
+            'ResponseDateTime' => now()->format('Y-m-d H:i:s'),
             'Balance' => round($balance, 4),
         ]);
     }
