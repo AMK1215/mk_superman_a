@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Player;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\DepositRequest as ApiDepositRequest;
+use App\Http\Resources\Api\V1\DepositResource;
 use App\Models\DepositRequest;
 use App\Traits\HttpResponses;
 use Exception;
@@ -67,7 +68,7 @@ class DepositController extends Controller
             //         'type' => 'scanner'
             //     ]);
             // }
-            return $this->success($deposit, 'Deposit Request Success');
+            return $this->success(DepositResource::collection($deposit), 'Deposit Request Success');
         } catch (Exception $e) {
 
             return $this->error('', $e->getMessage(), 401);

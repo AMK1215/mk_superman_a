@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Player;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\WithdrawRequest;
+use App\Http\Resources\Api\V1\WithdrawResource;
 use App\Models\WithDrawRequest as ModelsWithDrawRequest;
 use App\Services\ApiService;
 use App\Traits\HttpResponses;
@@ -34,7 +35,7 @@ class WithDrawController extends Controller
                 ]
             ));
 
-            return $this->success($withdraw, 'Withdraw Request Success');
+            return $this->success(WithdrawResource::collection($withdraw), 'Withdraw Request Success');
         } catch (Exception $e) {
             return $this->error('', $e->getMessage(), 401);
         }

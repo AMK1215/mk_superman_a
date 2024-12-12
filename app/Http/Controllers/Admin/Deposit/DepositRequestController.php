@@ -37,12 +37,11 @@ class DepositRequestController extends Controller
 
         try {
             $agent = Auth::user();
+            $player = User::find($request->player);
 
             if ($agent->hasRole('Master')) {
-                $agent = User::where('agent_id', Auth::id())->first();
+                $agent = User::where('agent_id', $player->agent_id)->first();
             }
-
-            $player = User::find($request->player);
 
             // Check if the status is being approved and balance is sufficient
             if ($request->status == 1 && $agent->balanceFloat < $request->amount) {
