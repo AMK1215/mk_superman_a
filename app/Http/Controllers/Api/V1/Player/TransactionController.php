@@ -47,7 +47,7 @@ class TransactionController extends Controller
     {
         $transactions = DepositRequest::with('user')->where('user_id', Auth::id())
             ->orderBy('id', 'DESC')
-            ->get();
+            ->paginate();
 
         return $this->success(DepositResource::collection($transactions));
     }
@@ -56,7 +56,7 @@ class TransactionController extends Controller
     {
         $transactions = WithDrawRequest::with('user')->where('user_id', Auth::id())
             ->orderBy('id', 'DESC')
-            ->get();
+            ->paginate();
 
         return $this->success(WithdrawResource::collection($transactions));
     }
