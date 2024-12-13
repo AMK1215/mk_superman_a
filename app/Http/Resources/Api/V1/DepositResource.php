@@ -20,6 +20,7 @@ class DepositResource extends JsonResource
             'account_number' => $this->bank->account_number,
             'payment_type' => $this->bank->paymentType->name,
             'status' => $this->status ? 'approved' : 'pending',
+            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }
