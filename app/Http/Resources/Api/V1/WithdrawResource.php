@@ -22,6 +22,7 @@ class WithdrawResource extends JsonResource
             'account_no' => $this->account_no,
             'amount' => $this->amount,
             'bank_id' => $this->bank,
+            'status' => $this->status
         ];
     }
 }
