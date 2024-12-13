@@ -157,6 +157,7 @@ class AgentController extends Controller
         $user->update([
             'name' => $request->name,
             'phone' => $request->phone,
+            'referral_code' => $request->referral_code
         ]);
 
         return redirect()->back()
