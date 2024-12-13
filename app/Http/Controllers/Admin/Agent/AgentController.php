@@ -13,9 +13,9 @@ use App\Services\WalletService;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -59,8 +59,9 @@ class AgentController extends Controller
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
         $agent_name = $this->generateRandomString();
+        $referralCode = $this->generateReferralCode();
 
-        return view('admin.agent.create', compact('agent_name'));
+        return view('admin.agent.create', compact('agent_name', 'referralCode'));
     }
 
     /**
@@ -141,10 +142,16 @@ class AgentController extends Controller
     public function update(Request $request, string $id)
     {
         abort_if(
-            Gate::denies('agent_edit') || ! $this->ifChildOfParent(request()->user()->id, $id),
+            Gate::denies('agent_edit'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
+        $request->validate([
+            'referral_code' => [
+                'required',
+                Rule::unique('users')->ignore($id),
+            ],
+        ]);
 
         $user = User::find($id);
         $user->update([
@@ -327,5 +334,18 @@ class AgentController extends Controller
             ->with('success', 'Agent Change Password successfully')
             ->with('password', $request->password)
             ->with('username', $agent->user_name);
+    }
+
+    private function generateReferralCode($length = 8)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+
+        return $randomString;
     }
 }
