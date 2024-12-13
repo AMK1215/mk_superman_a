@@ -68,7 +68,7 @@ class DepositController extends Controller
             //         'type' => 'scanner'
             //     ]);
             // }
-            return $this->success(DepositResource::collection($deposit), 'Deposit Request Success');
+            return $this->success(new DepositResource($deposit), 'Deposit Request Success');
         } catch (Exception $e) {
 
             return $this->error('', $e->getMessage(), 401);

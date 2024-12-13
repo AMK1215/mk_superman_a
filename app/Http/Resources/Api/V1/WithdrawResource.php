@@ -16,13 +16,12 @@ class WithdrawResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'bank_id' => $this->bank,
             'agent_id' => $this->agent_id,
             'user_id' => $this->user_id,
             'account_name' => $this->account_name,
             'account_no' => $this->account_no,
             'amount' => $this->amount,
-            'status' => $this->status
+            'bank_id' => $this->bank,
         ];
     }
 }

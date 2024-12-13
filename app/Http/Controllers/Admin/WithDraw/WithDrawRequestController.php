@@ -42,7 +42,7 @@ class WithDrawRequestController extends Controller
             $player = User::find($request->player);
 
             if ($agent->hasRole('Master')) {
-                $agent = User::where('agent_id', $player->agent_id)->first();
+                $agent = User::where('id', $player->agent_id)->first();
             }
 
             if ($request->status == 1 && $player->balanceFloat < $request->amount) {

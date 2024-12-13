@@ -71,7 +71,7 @@
         </div>
         <div class="{{ Auth::user()->balance < 0 ? 'text-danger' : 'text-success'}}">
           <i class="fas fa-wallet me-1"></i>
-          <span>{{ number_format(Auth::user()->balance) }}</span>
+          <span>{{ number_format(Auth::user()->balanceFloat) }}</span>
         </div>
       </div>
     </div>

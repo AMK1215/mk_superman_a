@@ -69,7 +69,7 @@ class AgentController extends Controller
     public function store(AgentRequest $request)
     {
         abort_if(
-            Gate::denies('agent_store'),
+            Gate::denies('agent_create'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
@@ -141,7 +141,7 @@ class AgentController extends Controller
     public function update(Request $request, string $id)
     {
         abort_if(
-            Gate::denies('agent_update') || ! $this->ifChildOfParent(request()->user()->id, $id),
+            Gate::denies('agent_edit') || ! $this->ifChildOfParent(request()->user()->id, $id),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );

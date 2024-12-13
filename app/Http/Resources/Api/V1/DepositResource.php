@@ -17,10 +17,8 @@ class DepositResource extends JsonResource
         return [
             'user_id' => $this->user_id,
             'agent_id' => $this->agent_id,
-            'bank_id' => $this->bank,
             'amount' => $this->amount,
-            'refrence_no' => $this->refrence_no,
-            'status' => $this->status,
+            'bank' => $this->bank
         ];
     }
 }

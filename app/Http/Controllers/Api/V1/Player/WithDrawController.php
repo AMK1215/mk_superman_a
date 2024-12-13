@@ -35,7 +35,7 @@ class WithDrawController extends Controller
                 ]
             ));
 
-            return $this->success(WithdrawResource::collection($withdraw), 'Withdraw Request Success');
+            return $this->success(new WithdrawResource($withdraw), 'Withdraw Request Success');
         } catch (Exception $e) {
             return $this->error('', $e->getMessage(), 401);
         }

@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\V1\Player;
 
 use App\Enums\TransactionStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V1\DepositResource;
 use App\Http\Resources\Api\V1\SeamlessTransactionResource;
+use App\Http\Resources\Api\V1\WithdrawResource;
 use App\Http\Resources\TransactionResource;
 use App\Models\DepositRequest;
 use App\Models\SeamlessTransaction;
@@ -47,7 +49,7 @@ class TransactionController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate();
 
-        return $this->success($transactions);
+        return $this->success(DepositResource::collection($transactions));
     }
 
     public function withDrawRequestLog()
@@ -56,6 +58,6 @@ class TransactionController extends Controller
             ->orderBy('id', 'DESC')
             ->paginate();
 
-        return $this->success($transactions);
+        return $this->success(WithdrawResource::collection($transactions));
     }
 }
