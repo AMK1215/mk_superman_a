@@ -19,7 +19,7 @@ class DepositResource extends JsonResource
             'account_name' => $this->bank->account_name,
             'account_number' => $this->bank->account_number,
             'payment_type' => $this->bank->paymentType->name,
-            'status' => $this->status,
+            'status' => $this->status ? 'approved' : 'pending',
         ];
     }
 }
