@@ -15,10 +15,9 @@ class DepositResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id' => $this->user_id,
-            'agent_id' => $this->agent_id,
             'amount' => $this->amount,
-            'bank' => $this->bank,
+            'account_name' => $this->bank->account_name,
+            'account_number' => $this->bank->account_number,
             'payment_type' => $this->bank->paymentType->name,
             'status' => $this->status,
         ];
