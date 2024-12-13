@@ -337,7 +337,7 @@ class AgentController extends Controller
             ->with('username', $agent->user_name);
     }
 
-    private function generateReferralCode($length = 8)
+    private function generateReferralCode($length = 5)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
