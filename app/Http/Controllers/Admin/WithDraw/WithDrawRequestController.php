@@ -24,6 +24,7 @@ class WithDrawRequestController extends Controller
 
         $withdraws = WithDrawRequest::with('bank')
             ->whereIn('agent_id', $agentIds)
+            ->latest()
             ->get();
 
         return view('admin.withdraw_request.index', compact('withdraws'));

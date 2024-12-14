@@ -51,7 +51,7 @@ class MasterController extends Controller
     public function store(MasterRequest $request)
     {
         abort_if(
-            Gate::denies('master_store'),
+            Gate::denies('master_create'),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );
@@ -280,7 +280,7 @@ class MasterController extends Controller
     public function update(Request $request, string $id)
     {
         abort_if(
-            Gate::denies('master_update') || ! $this->ifChildOfParent($request->user()->id, $id),
+            Gate::denies('master_edit') || ! $this->ifChildOfParent($request->user()->id, $id),
             Response::HTTP_FORBIDDEN,
             '403 Forbidden |You cannot  Access this page because you do not have permission'
         );

@@ -22,7 +22,7 @@ class DepositRequestController extends Controller
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
         }
-        $deposits = DepositRequest::with('bank')->whereIn('agent_id', $agentIds)->get();
+        $deposits = DepositRequest::with('bank')->whereIn('agent_id', $agentIds)->latest()->get();
 
         return view('admin.deposit_request.index', compact('deposits'));
     }
