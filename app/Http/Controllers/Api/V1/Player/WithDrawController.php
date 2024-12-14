@@ -26,6 +26,7 @@ class WithDrawController extends Controller
         $withdraw = ModelsWithDrawRequest::create(array_merge(
             $inputs,
             [
+                'payment_type_id' => $request->bank_id,
                 'user_id' => $player->id,
                 'agent_id' => $player->agent_id,
             ]

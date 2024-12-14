@@ -82,7 +82,7 @@
                         @foreach ($withdraws as $withdraw)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{$withdraw->user->user_name}}</td>
+                            <td>{{$withdraw->paymentType->name}}</td>
                             <td>
                                 <span class="d-block">{{ $withdraw->user->name }}</span>
                             </td>

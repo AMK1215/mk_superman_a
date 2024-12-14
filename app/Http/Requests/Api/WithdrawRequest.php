@@ -21,7 +21,6 @@ class WithdrawRequest extends FormRequest
      */
     public function rules(): array
     {
-
         return [
             'account_name' => ['required'],
             'account_no' => ['required', 'regex:/^[0-9]+$/'],

@@ -22,10 +22,11 @@ class WithDrawRequestController extends Controller
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
         }
 
-        $withdraws = WithDrawRequest::with('bank')
+        $withdraws = WithDrawRequest::with('paymentType')
             ->whereIn('agent_id', $agentIds)
             ->latest()
             ->get();
+        dd($withdraws);
 
         return view('admin.withdraw_request.index', compact('withdraws'));
     }
@@ -56,7 +57,7 @@ class WithDrawRequestController extends Controller
             ]);
 
             if ($request->status == 1) {
-                app(WalletService::class)->transfer($player, $agent, $request->amount, TransactionName::DebitTransfer);
+                app(WalletService::class)->transfer($player, $agent, $request->amount, TransactionName::DebitTransfer, ['agent_id' => Auth::id()]);
             }
 
             return redirect()->back()->with('success', 'Withdraw status updated successfully!');

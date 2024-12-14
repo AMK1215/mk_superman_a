@@ -60,7 +60,7 @@ class BonusController extends Controller
             'agent_id' => $player->agent_id,
             'created_id' => Auth::id()
         ]);
-        app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::DebitTransfer);
+        app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::BonusLocal, ['agent_id' => Auth::id()]);
         $bonus->update([
             'after_amount' => $player->balanceFloat
         ]);

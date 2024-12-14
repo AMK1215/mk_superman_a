@@ -11,7 +11,7 @@ class WithDrawRequest extends Model
     use HasFactory;
 
     protected $fillable = [
-        'bank_id', 'agent_id', 'user_id', 'account_name', 'account_no', 'amount', 'status', 'note',
+        'payment_type_id', 'agent_id', 'user_id', 'account_name', 'account_no', 'amount', 'status', 'note',
     ];
 
     public function user()
@@ -19,8 +19,8 @@ class WithDrawRequest extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function bank()
+    public function paymentType()
     {
-        return $this->belongsTo(Bank::class);
+        return $this->belongsTo(PaymentType::class);
     }
 }

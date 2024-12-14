@@ -19,7 +19,7 @@ class WithdrawResource extends JsonResource
             'agent_id' => $this->agent_id,
             'user_id' => $this->user_id,
             'account_name' => $this->account_name,
-            'account_no' => $this->account_no,
+            'account_number' => $this->account_no,
             'amount' => $this->amount,
             'payment_type' => $this->bank->paymentType->name,
             'status' => $this->status ? 'approved' : 'pending',   

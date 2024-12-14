@@ -37,24 +37,26 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $isAdmin = $user->hasRole('Admin');
-        
-        $getUserCounts = function ($roleTitle) use ($isAdmin, $user) {
+        $isAdmin = $user->hasRole('Owner');
+        $isMaster = $user->hasRole('Master');
+       
+        $getUserCounts = function ($roleTitle) use ($isAdmin, $isMaster, $user) {
             return User::whereHas('roles', function ($query) use ($roleTitle) {
                 $query->where('title', '=', $roleTitle);
             })->when(! $isAdmin, function ($query) use ($user) {
                 $query->where('agent_id', $user->id);
-            })->count();
+            })
+            ->when($isMaster, function ($query) use ($user) {
+                $query->where('agent_id', $user->id);
+            })
+            ->count();
         };
 
         $master_count = $getUserCounts('Master');
         $agent_count = $getUserCounts('Agent');
         $player_count = $getUserCounts('Player');
 
-        $provider_balance = (new AppSetting)->provider_initial_balance + SeamlessTransaction::sum('transaction_amount');
-
         return view('admin.dashboard', compact(
-            'provider_balance',
             'master_count',
             'agent_count',
             'player_count',

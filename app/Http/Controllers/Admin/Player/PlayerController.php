@@ -7,7 +7,6 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerRequest;
 use App\Http\Requests\TransferLogRequest;
-use App\Models\Admin\Bank;
 use App\Models\PaymentType;
 use App\Models\User;
 use App\Services\WalletService;
@@ -17,7 +16,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
 
 class PlayerController extends Controller
@@ -209,7 +207,7 @@ class PlayerController extends Controller
             if ($agent->hasRole('Master')) {
                 $agent = User::where('agent_id', $player->agent_id)->first();
             }
-
+            dd($agent);
             $cashIn = $inputs['amount'];
 
             if ($cashIn > $agent->balanceFloat) {
@@ -365,6 +363,6 @@ class PlayerController extends Controller
 
     private function transferInitialAmount($agent, $player, $amount)
     {
-        app(WalletService::class)->transfer($agent, $player, $amount, TransactionName::CreditTransfer);
+        app(WalletService::class)->transfer($agent, $player, $amount, TransactionName::CreditTransfer, ['agent_id' => Auth::id()]);
     }
 }
