@@ -6,9 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\WithdrawRequest;
 use App\Http\Resources\Api\V1\WithdrawResource;
 use App\Models\WithDrawRequest as ModelsWithDrawRequest;
+use App\Services\ApiService;
 use App\Traits\HttpResponses;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class WithDrawController extends Controller
 {
@@ -20,7 +23,7 @@ class WithDrawController extends Controller
         $player = Auth::user();
 
         if ($player->balanceFloat < $inputs['amount']) {
-            return $this->error('', 'Insufficient balance', 401);
+            return $this->error('', ['amount' => 'Insufficient balance'], 422);
         }
 
         $withdraw = ModelsWithDrawRequest::create(array_merge(
