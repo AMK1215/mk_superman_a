@@ -204,10 +204,11 @@ class PlayerController extends Controller
             $inputs['refrence_id'] = $this->getRefrenceId();
 
             $agent = Auth::user();
+
             if ($agent->hasRole('Master')) {
-                $agent = User::where('agent_id', $player->agent_id)->first();
+                $agent = User::where('id', $player->agent_id)->first();
             }
-            dd($agent);
+
             $cashIn = $inputs['amount'];
 
             if ($cashIn > $agent->balanceFloat) {
@@ -258,7 +259,7 @@ class PlayerController extends Controller
             $cashOut = $inputs['amount'];
 
             if ($agent->hasRole('Master')) {
-                $agent = User::where('agent_id', $player->agent_id)->first();
+                $agent = User::where('id', $player->agent_id)->first();
             }
             if ($cashOut > $player->balanceFloat) {
 

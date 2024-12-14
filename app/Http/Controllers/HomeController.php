@@ -46,16 +46,13 @@ class HomeController extends Controller
             })->when(! $isAdmin, function ($query) use ($user) {
                 $query->where('agent_id', $user->id);
             })
-            ->when($isMaster, function ($query) use ($user) {
-                $query->where('agent_id', $user->id);
-            })
             ->count();
         };
 
         $master_count = $getUserCounts('Master');
         $agent_count = $getUserCounts('Agent');
         $player_count = $getUserCounts('Player');
-
+     
         return view('admin.dashboard', compact(
             'master_count',
             'agent_count',
