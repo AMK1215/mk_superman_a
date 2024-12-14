@@ -31,7 +31,7 @@ class PaymentTypeTableSeeder extends Seeder
             ],
             [
                 'name' => 'KBZ Bank',
-                'image' => 'kbzbank.png',
+                'image' => 'kbzbank.webp',
             ],
             [
                 'name' => 'KBZ Pay',
