@@ -21,7 +21,7 @@ class WithdrawResource extends JsonResource
             'account_name' => $this->account_name,
             'account_number' => $this->account_no,
             'amount' => $this->amount,
-            'payment_type' => $this->bank->paymentType->name,
+            'payment_type' => $this->paymentType->name,
             'status' => $this->status ? 'approved' : 'pending',   
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
