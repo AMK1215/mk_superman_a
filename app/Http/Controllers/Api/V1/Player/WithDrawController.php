@@ -19,8 +19,26 @@ class WithDrawController extends Controller
         $inputs = $request->validated();
         $player = Auth::user();
 
+<<<<<<< HEAD
         if ($player->balanceFloat < $inputs['amount']) {
             return $this->error('', 'Insufficient balance', 401);
+=======
+            if ($player->balanceFloat < $inputs['amount']) {
+                return $this->error('', ['amount' => 'Insufficient balance'], 422);
+            }
+
+            $withdraw = ModelsWithDrawRequest::create(array_merge(
+                $inputs,
+                [
+                    'user_id' => $player->id,
+                    'agent_id' => $player->agent_id,
+                ]
+            ));
+
+            return $this->success(new WithdrawResource($withdraw), 'Withdraw Request Success');
+        } catch (Exception $e) {
+            return $this->error('', $e->getMessage(), 422);
+>>>>>>> f6a1cd8 (a)
         }
 
         $withdraw = ModelsWithDrawRequest::create(array_merge(
