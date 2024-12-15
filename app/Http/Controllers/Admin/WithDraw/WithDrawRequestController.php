@@ -26,7 +26,6 @@ class WithDrawRequestController extends Controller
             ->whereIn('agent_id', $agentIds)
             ->latest()
             ->get();
-        dd($withdraws);
 
         return view('admin.withdraw_request.index', compact('withdraws'));
     }
