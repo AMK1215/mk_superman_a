@@ -22,18 +22,21 @@
         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
       </ol>
       <h6 class="font-weight-bolder mb-0">Dashboard</h6>
-      
     </nav>
-    
-    {{-- <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-        <div class="input-group input-group-outline">
-          <label class="form-label">Search here</label>
-          <input type="text" class="form-control">
+    <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none ">
+      <a href="javascript:;" class="nav-link text-body p-0">
+        <div class="sidenav-toggler-inner">
+          <i class="sidenav-toggler-line"></i>
+          <i class="sidenav-toggler-line"></i>
+          <i class="sidenav-toggler-line"></i>
         </div>
+      </a>
+    </div>
+    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+      <div class="ms-md-auto pe-md-3 d-flex align-items-center">
       </div>
       <ul class="navbar-nav  justify-content-end">
-      
+        <li> <span class="badge badge-success">{{\Illuminate\Support\Facades\Auth::user()->name}}</span></li>
         <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
           <a href="javascript:;" class="nav-link text-body p-0" id="iconNavbarSidenav">
             <div class="sidenav-toggler-inner">
@@ -44,36 +47,12 @@
           </a>
         </li>
         <li class="nav-item px-3">
-          <a href="javascript:;" class="nav-link text-body p-0">
-            <i class="material-icons fixed-plugin-button-nav cursor-pointer">
-              settings
-            </i>
-          </a>
+          <p class="font-weight-bolder mb-0">Balance :
+            <span class="{{ Auth::user()->balance < 0 ? 'text-danger' : 'text-success'}}">{{number_format(\Illuminate\Support\Facades\Auth::user()->balanceFloat)}} </span>
+          </p>
         </li>
-  
+
       </ul>
-    </div> --}}
-    <div>
-      <div class="d-flex justify-content-end align-items-center">
-        <div class="sidenav-toggler sidenav-toggler-inner d-xl-block d-none me-2">
-          <a href="javascript:;" class="nav-link text-body p-0">
-            <div class="sidenav-toggler-inner">
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-              <i class="sidenav-toggler-line"></i>
-            </div>
-          </a>
-        </div>
-        <div class="me-2">
-          <span class="badge badge-success">
-            {{ Auth::user()->roles->pluck('title')->implode(', ') }}
-          </span>
-        </div>
-        <div class="{{ Auth::user()->balance < 0 ? 'text-danger' : 'text-success'}}">
-          <i class="fas fa-wallet me-1"></i>
-          <span>{{ number_format(Auth::user()->balanceFloat) }}</span>
-        </div>
-      </div>
     </div>
   </div>
 </nav>
