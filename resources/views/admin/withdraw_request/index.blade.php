@@ -82,11 +82,10 @@
                         @foreach ($withdraws as $withdraw)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
-                            <td>{{$withdraw->paymentType->name}}</td>
-                            <td>
-                                <span class="d-block">{{ $withdraw->user->name }}</span>
-                            </td>
+                            <td>{{$withdraw->user->user_name}}</td>
+                            <td>{{$withdraw->user->name}}</td>
                             <td>{{ number_format($withdraw->amount) }}</td>
+                            <td>{{$withdraw->paymentType->name}}</td>
                             <td>{{$withdraw->account_name}}</td>
                             <td>{{$withdraw->account_no}}</td>
                             <td>
@@ -98,7 +97,7 @@
                                 <span class="badge text-bg-danger text-white mb-2">Rejected</span>
                                 @endif
                             </td>
-                            <td>{{ $withdraw->created_at->format('d-m-Y') }}</td>
+                            <td>{{ $withdraw->created_at->format('d-m-Y H:m:i') }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <form action="{{ route('admin.agent.withdrawStatusUpdate', $withdraw->id) }}" method="post">
