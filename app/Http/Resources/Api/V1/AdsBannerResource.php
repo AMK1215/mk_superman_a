@@ -15,7 +15,8 @@ class AdsBannerResource extends JsonResource
     {
         return [
             'mobile_image' => $this->mobile_image_url,
-            'desktop_image' => $this->desktop_image_url
+            'desktop_image' => $this->desktop_image_url,
+            'text' => $this->description,
         ];
     }
 }
