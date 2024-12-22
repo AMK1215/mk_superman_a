@@ -86,6 +86,13 @@
                   <span class="text-danger d-block">*{{ $message }}</span>
                   @enderror
                 </div>
+                <div class="mb-3">
+                  <label for="inputEmail3" class="form-label text-dark">Description</label>
+                  <textarea name="description" id="" style="border: 1px solid gray;" class="form-control"></textarea>
+                  @error('description')
+                  <span class="text-danger d-block">*{{ $message }}</span>
+                  @enderror
+                </div>
                 @if(Auth::user()->hasRole('Master'))
                 <div class="mb-3">
                   <div class="d-flex">

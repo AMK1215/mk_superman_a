@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserPaymentRequest;
 use App\Models\Admin\Bank;
+use App\Models\BankAgent;
 use App\Models\PaymentType;
 use App\Models\UserPayment;
 use App\Traits\AuthorizedCheck;
@@ -22,7 +23,9 @@ class BankController extends Controller
     {
         $auth = auth()->user();
         $this->MasterAgentRoleCheck();
-        $banks = $auth->hasPermission('master_access') ? Bank::query()->master()->latest()->get() : Bank::query()->agent()->latest()->get();
+        $banks = $auth->hasPermission('master_access') ? 
+            Bank::query()->master()->latest()->get() : 
+            Bank::query()->agent()->latest()->get();
         return view('admin.banks.index', compact('banks'));
     }
 
@@ -58,19 +61,26 @@ class BankController extends Controller
         if ($type === "single") {
             $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
-            Bank::create([
+            $bank = Bank::create([
                 'account_name' => $request->account_name,
                 'account_number' => $request->account_number,
                 'payment_type_id' => $request->payment_type_id,
-                'agent_id' => $agentId,
             ]);
+            BankAgent::create([
+                'bank_id' => $bank->id,
+                'agent_id' => $agentId
+            ]);
+
         } elseif ($type === "all") {
+            $bank = Bank::create([
+                'account_name' => $request->account_name,
+                'account_number' => $request->account_number,
+                'payment_type_id' => $request->payment_type_id,
+            ]);
             foreach ($user->agents as $agent) {
-                Bank::create([
-                    'account_name' => $request->account_name,
-                    'account_number' => $request->account_number,
-                    'payment_type_id' => $request->payment_type_id,
-                    'agent_id' => $agent->id,
+                BankAgent::create([
+                    'bank_id' => $bank->id,
+                    'agent_id' => $agent->id
                 ]);
             }
         }
@@ -93,6 +103,7 @@ class BankController extends Controller
             return redirect()->back()->with('error', 'Bank Not Found');
         }
         $payment_types = PaymentType::all();
+
         return view('admin.banks.edit', compact('bank', 'payment_types'));
     }
 
@@ -102,15 +113,37 @@ class BankController extends Controller
     public function update(Request $request, Bank $bank)
     {
         $this->MasterAgentRoleCheck();
+        $user = Auth::user();
+        $isMaster = $user->hasRole('Master');
         if (!$bank) {
             return redirect()->back()->with('error', 'Bank Not Found');
         }
-        $this->FeaturePermission($bank->agent_id);
         $data = $request->validate([
             'account_name' => 'required',
             'account_number' => 'required|numeric',
             'payment_type_id' => 'required|exists:payment_types,id',
         ]);
+
+        $bank->update([
+            'account_name' => $request->account_name,
+            'account_number' => $request->account_number,
+            'payment_type_id' => $request->payment_type_id
+        ]);
+
+        if ($request->type === "single") {
+            $agentId = $isMaster ? $request->agent_id : $user->id;
+            $bank->bankAgents()->update([
+                'agent_id' => $agentId
+            ]);         
+
+        } elseif ($request->type === "all") {
+            foreach ($user->agents as $agent) {
+                $bank->bankAgents()->updateOrCreate(
+                    ['agent_id' => $agent->id],
+                    ['bank_id' => $bank->id]
+                ); 
+            }
+        }
         $bank->update($data);
         return redirect(route('admin.banks.index'))->with('success', 'Bank Updated Successfully.');
     }
@@ -124,8 +157,21 @@ class BankController extends Controller
         if (!$bank) {
             return redirect()->back()->with('error', 'Bank Not Found');
         }
-        $this->FeaturePermission($bank->agent_id);
         $bank->delete();
         return redirect()->back()->with('success', 'Bank Deleted Successfully.');
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:banks,id',
+            'status' => 'required|boolean',
+        ]);
+    
+        $item = Bank::find($request->id);
+        $item->status = $request->status;
+        $item->save();
+    
+        return response()->json(['success' => true, 'message' => 'Status updated successfully.']);    
     }
 }

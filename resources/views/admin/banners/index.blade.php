@@ -37,9 +37,9 @@
           <thead class="thead-light">
             <tr>
               <th>#</th>
-              <th>Image</th>
+              <th>Mobile Image</th>
+              <th>Desktop Image</th>
               <th>Agent</th>
-              {{-- <th>Updated At</th> --}}
               <th>Action</th>
             </tr>
           </thead>
@@ -48,10 +48,12 @@
             <tr>
               <td class="text-sm font-weight-normal">{{ ++$key }}</td>
               <td>
-                <img width="100px" class="img-thumbnail" src="{{ $banner->img_url }}" alt="">
+                <img width="100px" class="img-thumbnail" src="{{ $banner->mobile_image_url }}" alt="">
+              </td>
+              <td>
+                <img width="100px" class="img-thumbnail" src="{{ $banner->desktop_image_url}}" alt="">
               </td>
               <td class="text-sm font-weight-normal">{{ $banner->agent->name }}</td>
-              {{-- <td class="text-sm font-weight-normal">{{ $banner->updated_at->format('F j, Y') }}</td> --}}
               <td>
                 <a href="{{ route('admin.banners.edit', $banner->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Banner"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
                 <a href="{{ route('admin.banners.show', $banner->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Preview Banner Detail">

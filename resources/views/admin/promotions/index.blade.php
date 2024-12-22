@@ -38,9 +38,7 @@
               <th>#</th>
               <th>Image</th>
               <th>Agent</th>
-              {{-- <th>Description</th> --}}
               <th>Created At</th>
-              {{-- <th>Updated At</th> --}}
               <th>Action</th>
             </tr>
           </thead>
@@ -52,7 +50,6 @@
                 <img width="150px" class="img-thumbnail" src="{{ $promotion->img_url }}" alt="">
               </td>
               <td>{{ $promotion->agent->name }}</td>
-              {{-- <td>{!! $promotion->description !!}</td> --}}
               <td class="text-sm font-weight-normal">{{ $promotion->created_at->format('F j, Y') }}</td>
               {{-- <td class="text-sm font-weight-normal">{{ $promotion->updated_at->format('F j, Y') }}</td> --}}
               <td>

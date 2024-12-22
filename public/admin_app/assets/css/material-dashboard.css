@@ -22492,12 +22492,12 @@ body.dark-version {
 
 .form-switch .form-check-input:checked:after {
   transform: translateX(21px);
-  border-color: #42424a;
+  border-color: green;
 }
 
 .form-switch .form-check-input:checked {
-  border-color: #42424a;
-  background-color: #42424a;
+  border-color: green;
+  background-color: green;
 }
 
 .form-switch .form-check-input:checked:active:after {

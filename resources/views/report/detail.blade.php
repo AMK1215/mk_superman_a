@@ -1,118 +1,92 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
- <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=1.0">
- <meta http-equiv="X-UA-Compatible" content="ie=edge">
- <title>Monkey King</title>
- <script src="//code.jquery.com/jquery-1.12.3.js"></script>
-<script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-<script
-    src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js"></script>
-<link rel="stylesheet"
-    href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-<link rel="stylesheet"
-    href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
-</head>
-<body>
- <style>
-    h1 {
-        font-family: Arial, sans-serif;
-        font-size: 24px;
-        color: #333;
-        margin-bottom: 20px;
-        text-align: center;
-        font-weight: bold;
-    }
+@extends('admin_layouts.app')
 
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-    }
+@section('content')
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header pb-0">
 
-    .table th, .table td {
-        border: 1px solid #ddd;
-        padding: 8px;
-        text-align: center;
-    }
+                <div class="card-body">
+                    <h5 class="mb-0">Win/Lose Details</h5>
+                </div>
+                <form action="{{route('admin.report.detail', $playerId)}}" method="GET">
+                    <div class="row mt-3">
+                        <div class="col-md-3">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="">Product Type</label>
+                                <select name="product_type_id" id="" class="form-control">
+                                    <option value="" disabled>Select Product type</option>
+                                    @foreach($productTypes as $type)
+                                    <option value="{{$type->provider_name}}">{{$type->provider_name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-    .table th {
-        background-color: #f2f2f2;
-        color: #333;
-        font-weight: bold;
-    }
+                        <div class="col-md-3">
+                            <button class="btn btn-sm btn-primary" id="search" type="submit">Search</button>
+                            <a href="{{route('admin.report.detail', $playerId)}}" class="btn btn-link text-primary ms-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh">
+                                <i class="material-icons text-lg mt-0">refresh</i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-flush" id="users-search">
+                    <thead class="thead-light">
+                        <th>#</th>
+                        <th>PlayerID</th>
+                        <th>Name</th>
+                        <th>Product Name</th>
+                        <th>Game Name</th>
+                        <th>Valid Bet</th>
+                        <th>Win/Lose Amt</th>
+                        <th>Created At</th>
+                    </thead>
+                    <tbody>
+                        @foreach($details as $detail)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$detail->user->user_name}}</td>
+                            <td>{{$detail->user->name}}</td>
+                            <td>{{$detail->game_provide_name}}</td>
+                            <td>{{$detail->game_name}}</td>
+                            <td>{{number_format($detail->total_bet_amount, 2)}}</td>
+                            <td><span class="{{$detail->net_win > 0 ? 'text-success' : 'text-danger' }}">{{number_format($detail->net_win, 2)}}</span></td>
+                            <td>{{$detail->created_at}}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+@section('scripts')
+<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
 
-    .table tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
+<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
+<script>
+    if (document.getElementById('users-search')) {
+        const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
+            searchable: true,
+            fixedHeight: false,
+            perPage: 7
+        });
 
-    .table tbody tr:hover {
-        background-color: #f1f1f1;
-    }
-</style>
-<section>
-<h1>Player Detail Report</h1>
-<br>
-<table class="table table-bordered data-table">
-<thead>
-        <tr>
-            <th>Id</th>
-            <th>Date</th>
-            <th>Product</th>
-            <th>GameName</th>
-            <th>WagerID</th>
-            <th>Bet Amount</th>
-            <th>Valid Amount</th>
-            <th>Payout Amount</th>
-            <th>Win/Lose</th>
-        </tr>
-    </thead>
-
-</table>
-</section>
-<script type="text/javascript">
-
-  $(function () {
-    var path = window.location.pathname;
-    
-    var userName = path.split('/').pop();
-    var ajaxUrl = "{{ url('admin/report/detail') }}/" + userName;
-    var table = $('.data-table').DataTable({
-
-        processing: true,
-        serverSide: true,
-        pageLength: 20,
-        ajax: {
-            url: ajaxUrl
-        },
-        columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-
-            {data: 'created_at', name: 'created_at'
-            },
-            {data: 'product_name', name: 'product_name'},
-            {data: 'gamename', name: 'gamename'},
-            {
-                data: 'wager_id',
-                name: 'wager_id',
-                render: function(data, type, row) {
-                    return `<a href="https://prodmd.9977997.com/Report/BetDetail?agentCode=E829&WagerID=${data}" target="_blank" style="color: blueviolet; text-decoration: underline;">${data}</a>`;
-                }
-            },
-            {data: 'bet_amount', name: 'bet_amount'},
-
-            {data: 'valid_bet_amount', name: 'valid_bet_amount'},
-            {data: 'payout_amount', name: 'payout_amount'},
-            {data: 'win_or_lose' , name: 'win_or_lose'},
-        ]
-
-    });
-
-    
-
-  });
-
+    };
 </script>
-</body>
-</html>
+<script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+@endsection

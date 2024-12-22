@@ -27,15 +27,15 @@ class WagerController extends Controller
         $user = auth()->user();
 
         $transactions = $this->makeJoinTable()->select(
-            'products.name as product_name',
-            DB::raw('MIN(reports.settlement_date) as from_date'),
-            DB::raw('MAX(reports.settlement_date) as to_date'),
-            DB::raw('COUNT(product_code) as total_count'),
-            DB::raw('SUM(reports.bet_amount) as total_bet_amount'),
-            DB::raw('SUM(reports.payout_amount) as total_payout_amount'))
+            'results.game_provide_name as product_name',
+            DB::raw('MIN(results.tran_date_time) as from_date'),
+            DB::raw('MAX(results.tran_date_time) as to_date'),
+            DB::raw('COUNT(results.game_provide_name) as total_count'),
+            DB::raw('SUM(results.total_bet_amount) as total_bet_amount'),
+            DB::raw('SUM(results.net_win) as total_net_win_amount'))
             ->groupBy('product_name')
-            ->where('member_name', $user->user_name)
-            ->whereBetween('reports.settlement_date', [$from, $to])
+            ->where('results.user_id', $user->id)
+            ->whereBetween('results.tran_date_time', [$from, $to])
             ->paginate();
 
         return $this->success(SeamlessTransactionResource::collection($transactions));
@@ -44,9 +44,7 @@ class WagerController extends Controller
     private function makeJoinTable()
     {
         $query = User::query();
-        $query->join('reports', 'reports.member_name', '=', 'users.user_name')
-            ->join('products', 'reports.product_code', '=', 'products.code')
-            ->where('reports.status', '101');
+        $query->join('results', 'results.user_id', '=', 'users.id');
 
         return $query;
     }

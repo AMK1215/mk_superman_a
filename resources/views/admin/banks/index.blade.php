@@ -41,7 +41,7 @@
               <th>Logo</th>
               <th>Account Name</th>
               <th>Account No</th>
-              <th>Agent</th>
+              <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -55,7 +55,15 @@
               </td>
               <td class="text-sm font-weight-normal">{{ $bank->account_name }}</td>
               <td class="text-sm font-weight-normal">{{ $bank->account_number }}</td>
-              <td class="text-sm font-weight-normal">{{ $bank->agent->name }}</td>
+              <td>
+                    <div class="form-check form-switch">
+                        <input 
+                            type="checkbox" 
+                            class="form-check-input toggle-status" 
+                            data-id="{{ $bank->id }}" 
+                            {{ $bank->status ? 'checked' : '' }}>
+                    </div>
+                </td>
               <td>
                 <a href="{{ route('admin.banks.edit', $bank->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Bank"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
 
@@ -114,6 +122,35 @@
   })
 </script>
 <script>
+$(document).ready(function () {
+    $('.toggle-status').change(function () {
+        let status = $(this).is(':checked') ? 1 : 0;
+        let itemId = $(this).data('id');
+
+        $.ajax({
+            url: "{{ route('admin.bank.status') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                id: itemId,
+                status: status,
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert('Status updated successfully!');
+                } else {
+                    alert('Failed to update status.');
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again later.');
+            }
+        });
+    });
+});
+</script>
+<script>
   $(document).ready(function() {
     $('.transparent-btn').on('click', function(e) {
       e.preventDefault();
@@ -144,6 +181,4 @@
   })
 </script>
 @endif
-
-
 @endsection

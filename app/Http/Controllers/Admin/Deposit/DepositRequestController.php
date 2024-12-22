@@ -22,7 +22,24 @@ class DepositRequestController extends Controller
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
         }
-        $deposits = DepositRequest::with('bank')->whereIn('agent_id', $agentIds)->latest()->get();
+        $deposits = DepositRequest::with('bank')
+            ->when($request->start_date && $request->end_date, function ($query) use ($request) {
+                $query->whereBetween('created_at', [
+                    $request->start_date . ' 00:00:00',
+                    $request->end_date . ' 23:59:59',
+                ]);
+            })
+            ->when($request->player_id, function ($query) use ($request) {
+                $query->whereHas('user', function ($subQuery) use ($request) {
+                    $subQuery->where('user_name', $request->player_id);
+                });
+            })
+            ->when($request->status, function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->whereIn('agent_id', $agentIds)
+            ->latest()
+            ->get();
 
         return view('admin.deposit_request.index', compact('deposits'));
     }
@@ -38,11 +55,11 @@ class DepositRequestController extends Controller
         try {
             $agent = Auth::user();
             $player = User::find($request->player);
-           
+
             if ($agent->hasRole('Master')) {
                 $agent = User::where('id', $player->agent_id)->first();
             }
-          
+
 
             // Check if the status is being approved and balance is sufficient
             if ($request->status == 1 && $agent->balanceFloat < $request->amount) {
@@ -56,7 +73,7 @@ class DepositRequestController extends Controller
 
             // Transfer the amount if the status is approved
             if ($request->status == 1) {
-                app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::DebitTransfer , ['agent_id' => Auth::id()]);
+                app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::DebitTransfer, ['agent_id' => Auth::id()]);
             }
 
             return redirect()->route('admin.agent.deposit')->with('success', 'Deposit status updated successfully!');

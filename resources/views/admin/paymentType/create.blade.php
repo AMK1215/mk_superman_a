@@ -76,33 +76,19 @@
               </div>
             </div>
             <div class="card-body">
-              <form role="form" class="text-start" action="{{ route('admin.userPayment.store') }}" method="post" enctype="multipart/form-data">
+              <form role="form" class="text-start" action="{{ route('admin.paymentType.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="custom-form-group">
-                <label for="title">Payment Type <span class="text-danger">*</span></label>
-                <div class="custom-select-wrapper">
-                <select name="payment_type_id" class="form-control custom-select">
-                  @foreach ($paymentType as $type)
-                  <option value="{{ $type->id}}">{{$type->name}}</option>
-
-                  @endforeach
-                </select>
-              </div>
+                  <label for="title">Name <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="name">
                   @error('name')
                   <span class="text-danger d-block">*{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="custom-form-group">
-                  <label for="title">Account Name</label>
-                  <input type="text" class="form-control" name="account_name">
-                  @error('bank_account_name')
-                  <span class="text-danger d-block">*{{ $message }}</span>
-                  @enderror
-                </div>
-                <div class="custom-form-group">
-                  <label for="title">Account No</label>
-                  <input type="text" class="form-control" name="account_no">
-                  @error('bank_account_no')
+                  <label for="title">Image <span class="text-danger">*</span></label>
+                  <input type="file" class="form-control" name="image">
+                  @error('image')
                   <span class="text-danger d-block">*{{ $message }}</span>
                   @enderror
                 </div>

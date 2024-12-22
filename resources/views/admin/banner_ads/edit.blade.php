@@ -80,10 +80,19 @@
               @csrf
               @method('PUT')
               <div class="custom-form-group">
-                  <label for="title">Ads Banner Image</label>
-                  <input type="file" class="form-control" id="inputEmail3" name="image">
-                  <img src="{{ $adsbanner->img_url }}" width="150px" class="img-thumbnail" alt="">
+                  <label for="title">Mobile Image</label>
+                  <input type="file" class="form-control" id="inputEmail3" name="mobile_image">
+                  <img src="{{ $adsbanner->mobile_image_url }}" width="150px" class="img-thumbnail" alt="">
               </div>
+              <div class="custom-form-group">
+                  <label for="title">Desktop Image</label>
+                  <input type="file" class="form-control" id="inputEmail3" name="desktop_image">
+                  <img src="{{ $adsbanner->desktop_image_url }}" width="150px" class="img-thumbnail" alt="">
+              </div>
+              <div class="custom-form-group">
+                  <label for="title">Description</label>
+                  <textarea type="file" class="form-control" id="" name="description" style="border: 1px solid gray;"> {{$adsbanner->description}}</textarea>
+                </div>
               <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Edit</button>
               </div>

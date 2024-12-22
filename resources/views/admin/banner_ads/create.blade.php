@@ -79,11 +79,22 @@
               <form role="form" class="text-start" action="{{ route('admin.adsbanners.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="custom-form-group">
-                  <label for="title">Ads Banner Image</label>
-                  <input type="file" class="form-control" id="inputEmail3" name="image">
-                  @error('image')
-                    <span class="text-danger">*{{ $message }}</span>
+                  <label for="title">Mobile Image<span class="text-danger">*</span></label>
+                  <input type="file" class="form-control" id="" name="mobile_image">
+                  @error('mobile_image')
+                  <span class="text-danger">*{{ $message }}</span>
                   @enderror
+                </div>
+                <div class="custom-form-group">
+                  <label for="title">Desktop Image<span class="text-danger">*</span></label>
+                  <input type="file" class="form-control" id="inputEmail3" name="desktop_image">
+                  @error('desktop_image')
+                  <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="custom-form-group">
+                  <label for="title">Description</label>
+                  <textarea type="file" class="form-control" id="" name="description" style="border: 1px solid gray;"></textarea>
                 </div>
                 @if(Auth::user()->hasRole('Master'))
                 <div class="mb-3">
@@ -91,28 +102,26 @@
                     <div class="me-2">
                       <label for="single" class="form-label">
                         <input type="radio"
-                        name="type"
-                        value="single"
-                        class=" me-2"
-                        id="single"
-                        >
+                          name="type"
+                          value="single"
+                          class=" me-2"
+                          id="single">
                         Single
                       </label>
                     </div>
                     <div class="me-2">
                       <label for="all" class="form-label">
                         <input type="radio"
-                        name="type"
-                        value="all"
-                        class=" me-2"
-                        id="all"
-                        >
+                          name="type"
+                          value="all"
+                          class=" me-2"
+                          id="all">
                         All
                       </label>
                     </div>
                   </div>
                   @error('type')
-                    <span class="text-danger">*{{ $message }}</span>
+                  <span class="text-danger">*{{ $message }}</span>
                   @enderror
                 </div>
                 <div class="custom-form-group" id="singleAgent">
@@ -120,11 +129,11 @@
                   <select name="agent_id" class="form-control form-select" id="">
                     <option value="">Select Agent</option>
                     @foreach (Auth::user()->agents as $agent)
-                      <option value="{{ $agent->id }}">{{ $agent->name }}</option>
+                    <option value="{{ $agent->id }}">{{ $agent->name }}</option>
                     @endforeach
                   </select>
                   @error('agent_id')
-                    <span class="text-danger">*{{ $message }}</span>
+                  <span class="text-danger">*{{ $message }}</span>
                   @enderror
                   {{-- <input type="file" class="form-control" id="inputEmail3" name="image"> --}}
                 </div>
@@ -148,17 +157,17 @@
 <script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
-  $(document).ready(function () {
+  $(document).ready(function() {
     $("#singleAgent").hide();
-    $("#single").on("change", function () {
-        if (this.checked) {
-            $("#singleAgent").show();
-        }
+    $("#single").on("change", function() {
+      if (this.checked) {
+        $("#singleAgent").show();
+      }
     });
-    $("#all").on("change", function () {
-        if (this.checked) {
-            $("#singleAgent").hide();
-        }
+    $("#all").on("change", function() {
+      if (this.checked) {
+        $("#singleAgent").hide();
+      }
     });
   });
 </script>

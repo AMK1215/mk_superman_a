@@ -13,7 +13,7 @@
                 <span class="sidenav-normal  ms-2  ps-1"> Profile </span>
             </a>
         </li>
-        @can('admin_access')
+        @can('owner_access')
             <li class="nav-item">
                 <a class="nav-link text-white " href="{{ route('admin.report.index') }}">
                     <span class="sidenav-mini-icon"> <i class="fa-solid fa-chart-column"></i> </span>
@@ -150,15 +150,14 @@
                                 <span class="sidenav-normal  ms-2  ps-1"> Game Lists </span>
                             </a>
                         </li>
-                        @endcan
-                        
-                        {{-- <li class="nav-item ">
-                            <a class="nav-link text-white " href="{{ route('admin.gametypes.index') }}">
-                                <span class="sidenav-mini-icon">G</span>
-                                <span class="sidenav-normal  ms-2  ps-1"> GameType </span>
+                        <li class="nav-item ">
+                            <a class="nav-link text-white " href="{{ route('admin.paymentType.index') }}">
+                                <span class="sidenav-mini-icon">P Y</span>
+                                <span class="sidenav-normal  ms-2  ps-1"> PaymentType </span>
                             </a>
-                        </li> --}}
-
+                        </li>
+                        
+                        @endcan
                         
                         <li class="nav-item ">
                             <a class="nav-link text-white " href="{{ route('admin.bonustype') }}">

@@ -62,7 +62,45 @@
     <div class="card">
       <!-- Card header -->
       <div class="card-header pb-0">
-        
+        <form action="{{route('admin.agent.deposit')}}" method="GET">
+          <div class="row mt-3">
+            <div class="col-md-3">
+              <div class="input-group input-group-static mb-4">
+                <label for="">PlayerId</label>
+                <input type="text" class="form-control" name="player_id" value="{{request()->player_id}}">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-static mb-4">
+                <label for="">Start Date</label>
+                <input type="date" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-static mb-4">
+                <label for="">EndDate</label>
+                <input type="date" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-static mb-4">
+                <label for="">Status</label>
+                <select name="status" id="" class="form-control">
+                  <option value="disabled">Select Status</option>
+                  <option value="1">approved</option>
+                  <option value="2">Reject</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-sm btn-primary mt-3" id="search" type="submit">Search</button>
+              <button class="btn btn-outline-primary btn-sm  mb-0 mt-sm-0" data-type="csv" type="button" name="button" id="export-csv">Export</button>
+              <a href="{{route('admin.agent.deposit')}}" class="btn btn-link text-primary ms-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh">
+                <i class="material-icons text-lg mt-0">refresh</i>
+              </a>
+            </div>
+          </div>
+        </form>
       </div>
       <div class="table-responsive">
         <table class="table table-flush" id="users-search">
@@ -116,22 +154,13 @@
           perPage: 7
         });
 
-        document.querySelectorAll(".export").forEach(function(el) {
-          el.addEventListener("click", function(e) {
-            var type = el.dataset.type;
-
-            var data = {
-              type: type,
-              filename: "material-" + type,
-            };
-
-            if (type === "csv") {
-              data.columnDelimiter = "|";
-            }
-
-            dataTableSearch.export(data);
+        document.getElementById('export-csv').addEventListener('click', function() {
+          dataTableSearch.export({
+            type: "csv",
+            filename: "deposit",
           });
         });
+
       };
     </script>
     <script>
