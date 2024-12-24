@@ -20,7 +20,7 @@ class BankController extends Controller
     public function banks()
     {
         $banks = Bank::agentPlayer()->where('status', 1)->get();
-        
+
         return $this->success(BankResource::collection($banks), 'Banks retrieved successfully');
     }
 

@@ -36,7 +36,7 @@ class Bank extends Model
     public function scopeAgentPlayer($query)
     {
         return $query->whereHas('bankAgents', function ($query) {
-            $query->where('agent_id', Auth::id());
+            $query->where('agent_id', Auth::user()->agent_id);
         });
     }
 
