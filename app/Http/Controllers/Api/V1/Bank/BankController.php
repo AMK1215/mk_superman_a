@@ -26,7 +26,7 @@ class BankController extends Controller
 
     public function bonusLog()
     {
-        $bonus = Bonus::where('user_id', Auth::id())->get();
+        $bonus = Bonus::where('user_id', Auth::id())->latest()->paginate(10);
 
         return $this->success(BonusResource::collection($bonus), 'Bonus retrieved successfully');
     }
