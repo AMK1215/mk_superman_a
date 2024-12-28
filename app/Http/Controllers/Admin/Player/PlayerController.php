@@ -47,6 +47,7 @@ class PlayerController extends Controller
             ->orderBy('id', 'desc')
             ->whereIn('agent_id', $agentIds)
             ->get();
+
         return view('admin.player.index', compact('users'));
     }
 
@@ -87,7 +88,7 @@ class PlayerController extends Controller
             $player = $this->createPlayer($request, $agent);
 
             // Handle initial amount transfer
-            if (!empty($request->amount)) {
+            if (! empty($request->amount)) {
                 $this->transferInitialAmount($agent, $player, $request->amount);
             }
 
@@ -97,12 +98,11 @@ class PlayerController extends Controller
                 ->with('password', $request->password)
                 ->with('user_name', $player->user_name);
         } catch (Exception $e) {
-            Log::error('Error creating player: ' . $e->getMessage());
+            Log::error('Error creating player: '.$e->getMessage());
+
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
-
 
     /**
      * Display the specified resource.
@@ -176,7 +176,7 @@ class PlayerController extends Controller
 
         return redirect()->back()->with(
             'success',
-            'User ' . ($user->status == 1 ? 'activate' : 'inactive') . ' successfully'
+            'User '.($user->status == 1 ? 'activate' : 'inactive').' successfully'
         );
     }
 
@@ -310,7 +310,7 @@ class PlayerController extends Controller
     {
         $randomNumber = mt_rand(10000000, 99999999);
 
-        return 'MKP' . $randomNumber;
+        return 'MKP'.$randomNumber;
     }
 
     private function getRefrenceId($prefix = 'REF')
@@ -328,9 +328,9 @@ class PlayerController extends Controller
         $agent = Auth::user();
 
         if ($agent->hasRole('Master')) {
-            if (!empty($request->referral_code)) {
+            if (! empty($request->referral_code)) {
                 $agent = $this->isExistAgent($request->referral_code);
-                if (!$agent) {
+                if (! $agent) {
                     throw new Exception('The referral code is not your agent code.');
                 }
             } else {

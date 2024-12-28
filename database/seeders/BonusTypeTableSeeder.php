@@ -33,11 +33,10 @@ class BonusTypeTableSeeder extends Seeder
             'Recharge Reward Bonus   ',
             'Betting Reward  ',
             'Game Loss Reward ',
-            'Other'
+            'Other',
         ];
 
-        foreach($data as $name)
-        {
+        foreach ($data as $name) {
             BonusType::create(['name' => $name]);
         }
     }

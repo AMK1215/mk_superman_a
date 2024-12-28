@@ -46,7 +46,6 @@ class BetResultController extends Controller
 
                 try {
 
-
                     // Validate signature
                     if (! $this->isValidSignature($transaction)) {
                         Redis::del($lockKey); // Release lock
@@ -215,7 +214,7 @@ class BetResultController extends Controller
                 'tran_date_time' => $transaction['TranDateTime'],
             ]);
 
-           // Log::info('Game result logged successfully', ['PlayerId' => $transaction['PlayerId'], 'ResultId' => $transaction['ResultId']]);
+            // Log::info('Game result logged successfully', ['PlayerId' => $transaction['PlayerId'], 'ResultId' => $transaction['ResultId']]);
         } catch (\Exception $e) {
             Log::error('Failed to log game result', [
                 'PlayerId' => $transaction['PlayerId'],

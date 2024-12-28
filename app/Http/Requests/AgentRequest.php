@@ -27,7 +27,7 @@ class AgentRequest extends FormRequest
             'phone' => ['nullable', 'string'],
             'password' => 'required|min:6',
             'amount' => 'nullable',
-            'referral_code' => ['required', 'unique:users,referral_code']
+            'referral_code' => ['required', 'unique:users,referral_code'],
         ];
     }
 }

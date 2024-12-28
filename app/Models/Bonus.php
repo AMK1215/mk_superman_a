@@ -9,7 +9,7 @@ class Bonus extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'type_id', 'amount' ,'before_amount', 'after_amount','remark' , 'user_id', 'agent_id', 'created_id'];
+    protected $fillable = ['name', 'type_id', 'amount', 'before_amount', 'after_amount', 'remark', 'user_id', 'agent_id', 'created_id'];
 
     public function type()
     {

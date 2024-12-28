@@ -51,19 +51,19 @@ class BannerAdsController extends Controller
         $request->validate([
             'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
             'type' => $isMaster ? 'required' : 'nullable',
-            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === 'single') ? 'required|exists:users,id' : 'nullable',
         ]);
-        $type = $request->type ?? "single";
+        $type = $request->type ?? 'single';
         $filename = $this->handleImageUpload($request->image, 'banners_ads');
-        
-        if ($type === "single") {
+
+        if ($type === 'single') {
             $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
             BannerAds::create([
                 'image' => $filename,
                 'agent_id' => $agentId,
             ]);
-        } elseif ($type === "all") {
+        } elseif ($type === 'all') {
             foreach ($user->agents as $agent) {
                 BannerAds::create([
                     'image' => $filename,

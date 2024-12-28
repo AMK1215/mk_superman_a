@@ -18,11 +18,13 @@ class BankController extends Controller
      * Display a listing of the resource.
      */
     use AuthorizedCheck;
+
     public function index()
     {
         $auth = auth()->user();
         $this->MasterAgentRoleCheck();
         $banks = $auth->hasPermission('master_access') ? Bank::query()->master()->latest()->get() : Bank::query()->agent()->latest()->get();
+
         return view('admin.banks.index', compact('banks'));
     }
 
@@ -33,6 +35,7 @@ class BankController extends Controller
     {
         $this->MasterAgentRoleCheck();
         $payment_types = PaymentType::all();
+
         return view('admin.banks.create', compact('payment_types'));
     }
 
@@ -51,11 +54,11 @@ class BankController extends Controller
             'account_number' => 'required|numeric',
             'payment_type_id' => 'required|exists:payment_types,id',
             'type' => $isMaster ? 'required' : 'nullable',
-            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === 'single') ? 'required|exists:users,id' : 'nullable',
         ]);
 
-        $type = $request->type ?? "single";
-        if ($type === "single") {
+        $type = $request->type ?? 'single';
+        if ($type === 'single') {
             $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
             Bank::create([
@@ -64,7 +67,7 @@ class BankController extends Controller
                 'payment_type_id' => $request->payment_type_id,
                 'agent_id' => $agentId,
             ]);
-        } elseif ($type === "all") {
+        } elseif ($type === 'all') {
             foreach ($user->agents as $agent) {
                 Bank::create([
                     'account_name' => $request->account_name,
@@ -74,6 +77,7 @@ class BankController extends Controller
                 ]);
             }
         }
+
         return redirect(route('admin.banks.index'))->with('success', 'New userPayment Added.');
 
     }
@@ -89,10 +93,11 @@ class BankController extends Controller
     public function edit(Bank $bank)
     {
         $this->MasterAgentRoleCheck();
-        if (!$bank) {
+        if (! $bank) {
             return redirect()->back()->with('error', 'Bank Not Found');
         }
         $payment_types = PaymentType::all();
+
         return view('admin.banks.edit', compact('bank', 'payment_types'));
     }
 
@@ -102,7 +107,7 @@ class BankController extends Controller
     public function update(Request $request, Bank $bank)
     {
         $this->MasterAgentRoleCheck();
-        if (!$bank) {
+        if (! $bank) {
             return redirect()->back()->with('error', 'Bank Not Found');
         }
         $this->FeaturePermission($bank->agent_id);
@@ -112,6 +117,7 @@ class BankController extends Controller
             'payment_type_id' => 'required|exists:payment_types,id',
         ]);
         $bank->update($data);
+
         return redirect(route('admin.banks.index'))->with('success', 'Bank Updated Successfully.');
     }
 
@@ -121,11 +127,12 @@ class BankController extends Controller
     public function destroy(Bank $bank)
     {
         $this->MasterAgentRoleCheck();
-        if (!$bank) {
+        if (! $bank) {
             return redirect()->back()->with('error', 'Bank Not Found');
         }
         $this->FeaturePermission($bank->agent_id);
         $bank->delete();
+
         return redirect()->back()->with('success', 'Bank Deleted Successfully.');
     }
 }

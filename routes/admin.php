@@ -2,9 +2,12 @@
 
 use App\Http\Controllers\Admin\Agent\AgentController;
 use App\Http\Controllers\Admin\Agent\AgentReportController;
+use App\Http\Controllers\Admin\BankController;
 use App\Http\Controllers\Admin\BannerAds\BannerAdsController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BannerTextController;
+use App\Http\Controllers\Admin\BonusController;
+use App\Http\Controllers\Admin\BonusTypeController;
 use App\Http\Controllers\Admin\ContactController;
 use App\Http\Controllers\Admin\Deposit\DepositRequestController;
 use App\Http\Controllers\Admin\GameListController;
@@ -20,9 +23,6 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PromotionController;
 use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\TransferLog\TransferLogController;
-use App\Http\Controllers\Admin\BankController;
-use App\Http\Controllers\Admin\BonusController;
-use App\Http\Controllers\Admin\BonusTypeController;
 use App\Http\Controllers\Admin\WithDraw\WithDrawRequestController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ReportController;

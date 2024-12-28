@@ -30,6 +30,7 @@ class ContactController extends Controller
     public function contact()
     {
         $contacts = Contact::agentPlayer()->get();
+
         return $this->success(ContactResource::collection($contacts));
     }
 }

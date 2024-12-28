@@ -39,7 +39,7 @@ class BonusController extends Controller
         $request->validate([
             'amount' => ['required'],
             'remark' => ['nullable', 'string'],
-            'type_id' => ['required']
+            'type_id' => ['required'],
         ]);
         $agent = Auth::user();
         $player = User::find($request->id);
@@ -58,16 +58,18 @@ class BonusController extends Controller
             'amount' => $request->amount,
             'before_amount' => $player->balanceFloat,
             'agent_id' => $player->agent_id,
-            'created_id' => Auth::id()
+            'created_id' => Auth::id(),
         ]);
         app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::BonusLocal, ['agent_id' => Auth::id()]);
         $bonus->update([
-            'after_amount' => $player->balanceFloat
+            'after_amount' => $player->balanceFloat,
         ]);
+
         return redirect()->back()->with('success', 'Bonus Added!');
     }
 
     public function show($id) {}
+
     public function edit($id) {}
 
     public function update(Request $request, $id) {}
@@ -79,11 +81,11 @@ class BonusController extends Controller
         $agent = Auth::user();
         $player = User::where('user_name', $request->user_name)->first();
 
-        if (!$player) {
+        if (! $player) {
             return $this->response(false, 'Player not found');
         }
 
-        if (!$this->isPlayerUnderAgent($player, $agent)) {
+        if (! $this->isPlayerUnderAgent($player, $agent)) {
             return $this->response(false, 'This player is not your player');
         }
 
@@ -101,8 +103,7 @@ class BonusController extends Controller
         return $player->agent_id === $agent->id;
     }
 
-
-    private function response(bool $success, string $message = null, array $data = null)
+    private function response(bool $success, ?string $message = null, ?array $data = null)
     {
         $response = ['success' => $success];
 

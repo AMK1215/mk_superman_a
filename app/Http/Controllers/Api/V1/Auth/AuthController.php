@@ -23,6 +23,7 @@ class AuthController extends Controller
 {
     use HttpResponses;
     use ImageUpload;
+
     private const PLAYER_ROLE = 4;
 
     public function login(LoginRequest $request)
@@ -31,9 +32,9 @@ class AuthController extends Controller
 
         $user = User::where('user_name', $request->user_name)->first();
 
-        if (!Auth::attempt($credentials)) {
-            return $this->error("", [
-                "user_name" => "Credentials do not match!",
+        if (! Auth::attempt($credentials)) {
+            return $this->error('', [
+                'user_name' => 'Credentials do not match!',
             ], 422);
             // return $this->error('', 'Credentials do not match!', 401);
         }
@@ -44,7 +45,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('user_name', $request->user_name)->first();
-        if (!$user->hasRole('Player')) {
+        if (! $user->hasRole('Player')) {
             return $this->error('', [
                 'user_name' => 'You are not a player. Please contact your agent.',
             ], 422);
@@ -82,7 +83,7 @@ class AuthController extends Controller
                 'status' => 1,
             ]);
         } else {
-            return $this->error('', ["current_password" => 'Old Passowrd is incorrect'], 422);
+            return $this->error('', ['current_password' => 'Old Passowrd is incorrect'], 422);
         }
 
         return $this->success($player, 'Password has been changed successfully.');
@@ -100,7 +101,8 @@ class AuthController extends Controller
         return $this->success(new PlayerResource($player), 'Update profile');
     }
 
-    public function updateProfile(Request $request){
+    public function updateProfile(Request $request)
+    {
         $request->validate([
             'profile' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -109,13 +111,13 @@ class AuthController extends Controller
         $player->update([
             'profile' => $this->handleImageUpload($request->file('profile'), 'player_profile'),
         ]);
+
         return $this->success(new PlayerResource($player), 'Updated profile');
     }
 
     public function register(RegisterRequest $request)
     {
-        if($request->referral_code)
-        {
+        if ($request->referral_code) {
             $agent = User::where('referral_code', $request->referral_code)->first();
 
             if (! $agent) {
@@ -130,7 +132,7 @@ class AuthController extends Controller
                 'agent_id' => $agent->id,
                 'type' => UserType::Player,
             ]);
-        }else{
+        } else {
             $user = User::create([
                 'phone' => $request->phone,
                 'name' => $request->name,
@@ -150,6 +152,6 @@ class AuthController extends Controller
     {
         $randomNumber = mt_rand(10000000, 99999999);
 
-        return 'MKP' . $randomNumber;
+        return 'MKP'.$randomNumber;
     }
 }

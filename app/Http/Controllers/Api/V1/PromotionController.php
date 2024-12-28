@@ -14,6 +14,7 @@ class PromotionController extends Controller
     public function index()
     {
         $data = Promotion::agentPlayer()->latest()->get();
+
         return $this->success(PromotionResource::collection($data));
 
     }

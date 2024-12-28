@@ -26,10 +26,10 @@ class UsersTableSeeder extends Seeder
         $master_2 = $this->createUser(UserType::Master, 'Master 2', 'MK898438', '09112345679', $admin->id);
         (new WalletService)->transfer($admin, $master_2, 1 * 100_0000, TransactionName::CreditTransfer);
 
-        $agent_1 = $this->createUser(UserType::Agent, 'Agent 1', 'MKA898737', '09112345674', $master->id,'vH4HueE9');
+        $agent_1 = $this->createUser(UserType::Agent, 'Agent 1', 'MKA898737', '09112345674', $master->id, 'vH4HueE9');
         (new WalletService)->transfer($master, $agent_1, 1 * 100_0000, TransactionName::CreditTransfer);
 
-        $agent_2 = $this->createUser(UserType::Agent, 'Agent 2', 'MKA898738', '09112345675', $master->id , '4Hvqiu7G');
+        $agent_2 = $this->createUser(UserType::Agent, 'Agent 2', 'MKA898738', '09112345675', $master->id, '4Hvqiu7G');
         (new WalletService)->transfer($master, $agent_2, 2 * 100_0000, TransactionName::CreditTransfer);
 
         $agent_3 = $this->createUser(UserType::Agent, 'Agent 3', 'MKA898739', '09112345676', $master->id, 'i0Yvb4df');
@@ -63,7 +63,7 @@ class UsersTableSeeder extends Seeder
             'agent_id' => $parent_id,
             'status' => 1,
             'type' => $type->value,
-            'referral_code' => $referral_code
+            'referral_code' => $referral_code,
         ]);
     }
 }

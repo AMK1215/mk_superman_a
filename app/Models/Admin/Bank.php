@@ -19,7 +19,8 @@ class Bank extends Model
         return $this->belongsTo(PaymentType::class);
     }
 
-    public function agent(){
+    public function agent()
+    {
         return $this->belongsTo(User::class, 'agent_id');
     }
 

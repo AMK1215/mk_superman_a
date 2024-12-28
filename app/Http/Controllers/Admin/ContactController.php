@@ -50,11 +50,11 @@ class ContactController extends Controller
             'link' => 'required',
             'contact_type_id' => 'required|exists:contact_types,id',
             'type' => $isMaster ? 'required' : 'nullable',
-            'agent_id' => ($isMaster && $request->type === "single") ? 'required|exists:users,id' : 'nullable',
+            'agent_id' => ($isMaster && $request->type === 'single') ? 'required|exists:users,id' : 'nullable',
         ]);
-        
-        $type = $request->type ?? "single";
-        if ($type === "single") {
+
+        $type = $request->type ?? 'single';
+        if ($type === 'single') {
             $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
             Contact::create([
@@ -62,7 +62,7 @@ class ContactController extends Controller
                 'contact_type_id' => $request->contact_type_id,
                 'agent_id' => $agentId,
             ]);
-        } elseif ($type === "all") {
+        } elseif ($type === 'all') {
             foreach ($user->agents as $agent) {
                 Contact::create([
                     'link' => $request->link,
@@ -71,6 +71,7 @@ class ContactController extends Controller
                 ]);
             }
         }
+
         return redirect()->route('admin.contact.index')->with('success', 'Contact created successfully');
     }
 

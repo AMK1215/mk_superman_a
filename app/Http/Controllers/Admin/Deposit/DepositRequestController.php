@@ -38,11 +38,10 @@ class DepositRequestController extends Controller
         try {
             $agent = Auth::user();
             $player = User::find($request->player);
-           
+
             if ($agent->hasRole('Master')) {
                 $agent = User::where('id', $player->agent_id)->first();
             }
-          
 
             // Check if the status is being approved and balance is sufficient
             if ($request->status == 1 && $agent->balanceFloat < $request->amount) {
@@ -56,7 +55,7 @@ class DepositRequestController extends Controller
 
             // Transfer the amount if the status is approved
             if ($request->status == 1) {
-                app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::DebitTransfer , ['agent_id' => Auth::id()]);
+                app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::DebitTransfer, ['agent_id' => Auth::id()]);
             }
 
             return redirect()->route('admin.agent.deposit')->with('success', 'Deposit status updated successfully!');

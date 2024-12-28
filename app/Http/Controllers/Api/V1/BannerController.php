@@ -18,6 +18,7 @@ class BannerController extends Controller
     public function index()
     {
         $data = Banner::agentPlayer()->get();
+
         // return $this->success($data);
         return $this->success(BannerResource::collection($data));
     }
@@ -25,6 +26,7 @@ class BannerController extends Controller
     public function bannerText()
     {
         $data = BannerText::agentPlayer()->latest()->first();
+
         return $this->success(new BannerTextResource($data));
         // return $this->success($data);
     }
@@ -32,6 +34,7 @@ class BannerController extends Controller
     public function AdsBannerIndex()
     {
         $data = BannerAds::agentPlayer()->latest()->first();
+
         return $this->success(new AdsBannerResource($data));
         // return $this->success($data);
     }

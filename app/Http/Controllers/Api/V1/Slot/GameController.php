@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\V1\Slot;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\GameProviderResource;
 use App\Http\Resources\Api\V1\GameTypeResource;
-use App\Http\Resources\GameListResource;
 use App\Http\Resources\GameDetailResource;
+use App\Http\Resources\GameListResource;
 use App\Http\Resources\Slot\HotGameListResource;
 use App\Models\Admin\GameList;
 use App\Models\Admin\GameType;
@@ -21,6 +21,7 @@ class GameController extends Controller
     public function gameType()
     {
         $gameTypes = GameType::where('status', 1)->get();
+
         return $this->success(GameTypeResource::collection($gameTypes));
     }
 
@@ -58,8 +59,6 @@ class GameController extends Controller
 
         return $this->success(GameDetailResource::collection($gameLists), 'Hot Game Detail Successfully');
     }
-
-
 
     public function allGameProducts()
     {

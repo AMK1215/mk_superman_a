@@ -197,7 +197,7 @@ class MasterController extends Controller
 
             // Transfer money
             app(WalletService::class)->transfer($admin, $master, $request->validated('amount'), TransactionName::CreditTransfer, ['note' => $request->note ?? '',
-            'agent_id' => Auth::id()]);
+                'agent_id' => Auth::id()]);
 
             return redirect()->back()->with('success', 'Money fill request submitted successfully!');
         } catch (Exception $e) {
