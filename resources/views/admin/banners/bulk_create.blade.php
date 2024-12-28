@@ -81,9 +81,16 @@
               <form role="form" class="text-start" action="{{ route('admin.banners.bulkStore') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="custom-form-group">
-                  <label for="title">Banner Image</label>
-                  <input type="file" class="form-control" id="inputEmail3" name="image">
-                  @error('image')
+                  <label for="title">Mobile Image<span class="text-danger">*</span></label>
+                  <input type="file" class="form-control" id="mobile_image" name="mobile_image">
+                  @error('mobile_image')
+                    <span class="text-danger">*{{ $message }}</span>
+                  @enderror
+                </div>
+                <div class="custom-form-group">
+                  <label for="title">Desktop Image<span class="text-danger">*</span></label>
+                  <input type="file" class="form-control" id="" name="desktop_image">
+                  @error('desktop_image')
                     <span class="text-danger">*{{ $message }}</span>
                   @enderror
                 </div>

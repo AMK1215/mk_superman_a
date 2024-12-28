@@ -23,6 +23,20 @@ class WithDrawRequestController extends Controller
         }
 
         $withdraws = WithDrawRequest::with('paymentType')
+            ->when($request->start_date && $request->end_date, function ($query) use ($request) {
+                $query->whereBetween('created_at', [
+                    $request->start_date . ' 00:00:00',
+                    $request->end_date . ' 23:59:59',
+                ]);
+            })
+            ->when($request->player_id, function ($query) use ($request) {
+                $query->whereHas('user', function ($subQuery) use ($request) {
+                    $subQuery->where('user_name', $request->player_id);
+                });
+            })
+            ->when($request->status, function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
             ->whereIn('agent_id', $agentIds)
             ->latest()
             ->get();

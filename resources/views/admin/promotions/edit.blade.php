@@ -85,7 +85,13 @@
                   <input type="file" class="form-control border border-1 border-secondary ps-2" id="image" name="image">
                   <img src="{{ $promotion->img_url }}" width="150px" class="img-thumbnail" alt="">
                 </div>
-                
+                <div class="mb-3">
+                  <label for="" class="form-label text-dark">Description</label>
+                  <textarea name="description" id="" style="border: 1px solid gray;" class="form-control"> {{$promotion->description}}</textarea>
+                  @error('description')
+                  <span class="text-danger d-block">*{{ $message }}</span>
+                  @enderror
+                </div>
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Edit</button>
                 </div>
@@ -107,20 +113,19 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 <script>
-    $('#desc').summernote({
-      placeholder: 'Write Down Full Text',
-      tabsize: 2,
-      height: 120,
-      toolbar: [
-        ['style', ['style']],
-        ['font', ['bold', 'underline', 'clear']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        // ['insert', ['link', 'picture', 'video']],
-        ['view', ['fullscreen', 'codeview', 'help']]
-      ]
-    });
-
+  $('#desc').summernote({
+    placeholder: 'Write Down Full Text',
+    tabsize: 2,
+    height: 120,
+    toolbar: [
+      ['style', ['style']],
+      ['font', ['bold', 'underline', 'clear']],
+      ['color', ['color']],
+      ['para', ['ul', 'ol', 'paragraph']],
+      ['table', ['table']],
+      // ['insert', ['link', 'picture', 'video']],
+      ['view', ['fullscreen', 'codeview', 'help']]
+    ]
+  });
 </script>
 @endsection

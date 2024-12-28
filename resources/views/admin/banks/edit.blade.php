@@ -80,34 +80,75 @@
                 @csrf
                 @method('PUT')
                 <div class="custom-form-group">
-                <label for="title">Bank Type <span class="text-danger">*</span></label>
-                <div class="custom-select-wrapper">
-                <select name="payment_type_id" class="form-control custom-select">
-                  @foreach ($payment_types as $type)
-                  <option value="{{ $type->id}}"
-                    {{ $bank->payment_type_id == $type->id ? 'selected' : ''}}
-                    >{{$type->name}}</option>
-                  @endforeach
-                </select>
-               </div>
-                <div class="custom-form-group">
-                  <label for="title">Account Name</label>
-                  <input type="text" class="form-control" id="" name="account_name" value="{{$bank->account_name}}">
-                  @error('account_name')
-                  <span class="text-danger d-block">*{{ $message }}</span>
-                  @enderror
-                </div>
-                <div class="custom-form-group">
-                  <label for="title">Account No</label>
-                  <input type="text" class="form-control" id="" name="account_number" value="{{$bank->account_number}}">
-                  @error('account_number')
-                  <span class="text-danger d-block">*{{ $message }}</span>
-                  @enderror
-                </div>
-                
-                <div class="custom-form-group">
-                  <button class="btn btn-primary" type="submit">Edit</button>
-                </div>
+                  <label for="title">Bank Type <span class="text-danger">*</span></label>
+                  <div class="custom-select-wrapper">
+                    <select name="payment_type_id" class="form-control custom-select">
+                      @foreach ($payment_types as $type)
+                      <option value="{{ $type->id}}"
+                        {{ $bank->payment_type_id == $type->id ? 'selected' : ''}}>{{$type->name}}</option>
+                      @endforeach
+                    </select>
+                  </div>
+                  <div class="custom-form-group">
+                    <label for="title">Account Name</label>
+                    <input type="text" class="form-control" id="" name="account_name" value="{{$bank->account_name}}">
+                    @error('account_name')
+                    <span class="text-danger d-block">*{{ $message }}</span>
+                    @enderror
+                  </div>
+                  <div class="custom-form-group">
+                    <label for="title">Account No</label>
+                    <input type="text" class="form-control" id="" name="account_number" value="{{$bank->account_number}}">
+                    @error('account_number')
+                    <span class="text-danger d-block">*{{ $message }}</span>
+                    @enderror
+                  </div>
+                  @if(Auth::user()->hasRole('Master'))
+                  <div class="mb-3">
+                    <div class="d-flex">
+                      <div class="me-2 single" id="single">
+                        <label for="single" class="form-label">
+                          <input type="radio"
+                            name="type"
+                            value="single"
+                            class=" me-2"
+                            id="single" {{$bank->bankAgents->count() == 1 ? 'checked' : '' }}>
+                          Single
+                        </label>
+                      </div>
+                      <div class="me-2">
+                        <label for="all" class="form-label">
+                          <input type="radio"
+                            name="type"
+                            value="all"
+                            class=" me-2"
+                            id="all" {{$bank->bankAgents->count() > 1 ? 'checked' : '' }}>
+                          All
+                        </label>
+                      </div>
+                    </div>
+                    @error('type')
+                    <span class="text-danger">*{{ $message }}</span>
+                    @enderror
+                  </div>
+                  <div class="custom-form-group {{$bank->bankAgents->count() > 1 ? 'is-hide' : '' }} " id="singleAgent">
+                    <label for="title">Select Agent</label>
+                    <select name="agent_id" class="form-control form-select" id="">
+                      @foreach (Auth::user()->agents as $agent)
+                      <option
+                        value="{{ $agent->id }}"
+                        {{ $bank->bankAgents->contains('agent_id', $agent->id) ? 'selected' : '' }}>
+                        {{ $agent->name }}
+                      </option> @endforeach
+                    </select>
+                    @error('agent_id')
+                    <span class="text-danger">*{{ $message }}</span>
+                    @enderror
+                  </div>
+                  @endif
+                  <div class="custom-form-group">
+                    <button class="btn btn-primary" type="submit">Edit</button>
+                  </div>
               </form>
             </div>
           </div>
@@ -124,5 +165,16 @@
 <script src="{{ asset('admin_app/assets/js/plugins/choices.min.js') }}"></script>
 <script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-
+<script>
+  $(document).ready(function() {
+    $(".is-hide").hide();
+    $("#single").on("change", function() {
+      console.log('here');
+      $("#singleAgent").show();
+    });
+    $("#all").on("change", function() {
+      $("#singleAgent").hide();
+    });
+  });
+</script>
 @endsection

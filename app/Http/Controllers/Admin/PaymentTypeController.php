@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\PaymentType;
 use App\Models\UserPayment;
+use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -12,12 +13,14 @@ use Illuminate\Support\Facades\Log;
 
 class PaymentTypeController extends Controller
 {
+    use ImageUpload;
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $paymentTypes = UserPayment::with('paymentType')->where('user_id', Auth::id())->get();
+        $paymentTypes = PaymentType::orderBy('id', 'DESC')->get();
 
         return view('admin.paymentType.index', compact('paymentTypes'));
     }
@@ -27,13 +30,27 @@ class PaymentTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.paymentType.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {}
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'image' => 'required'
+        ]);
+        $filename = $this->handleImageUpload($request->image, 'paymentType');
+
+        PaymentType::create([
+            'name' => $request->name,
+            'image' => $filename
+        ]);
+
+        return redirect(route('admin.paymentType.index'))->with('success', 'New Payment Type Added.');
+    }
 
     /**
      * Display the specified resource.
@@ -59,8 +76,13 @@ class PaymentTypeController extends Controller
     public function update(Request $request, string $id)
     {
         $paymentType = PaymentType::findOrFail($id);
+        $this->handleImageDelete($paymentType->image, 'paymentType');
+        $filename = $this->handleImageUpload($request->image, 'paymentType');
 
-        $paymentType->update($request->all());
+        $paymentType->update([
+            'name' => $request->name,
+            'image' => $filename
+        ]);
 
         return redirect()->route('admin.paymentType.index');
     }
@@ -70,6 +92,10 @@ class PaymentTypeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $paymentType = PaymentType::find($id);
+
+        $this->handleImageDelete($paymentType->image, 'paymentType');
+        $paymentType->delete();
+        return redirect()->route('admin.paymentType.index');
     }
 }

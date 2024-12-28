@@ -11,20 +11,26 @@ class Banner extends Model
     use HasFactory;
 
     protected $fillable = [
-        'image',
+        'mobile_image',
+        'desktop_image',
         'agent_id',
     ];
 
-    protected $appends = ['img_url'];
+    protected $appends = ['mobile_image_url' , 'desktop_image_url'];
 
     public function agent()
     {
         return $this->belongsTo(User::class, 'agent_id'); // The admin that owns the banner
     }
 
-    public function getImgUrlAttribute()
+    public function getMobileImageUrlAttribute()
     {
-        return asset('assets/img/banners/'.$this->image);
+        return asset('assets/img/banners/'.$this->mobile_image);
+    }
+
+    public function getDesktopImageUrlAttribute()
+    {
+        return asset('assets/img/banners/'.$this->desktop_image);
     }
 
     public function scopeAgent($query)

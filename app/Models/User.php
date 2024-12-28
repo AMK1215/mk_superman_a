@@ -11,6 +11,7 @@ use App\Models\Admin\BannerText;
 use App\Models\Admin\Permission;
 use App\Models\Admin\Promotion;
 use App\Models\Admin\Role;
+use App\Models\Admin\UserLog;
 use App\Models\SeamlessTransaction;
 use App\Models\Webhook\Bet;
 use Bavix\Wallet\Interfaces\Wallet;
@@ -77,7 +78,7 @@ class User extends Authenticatable implements Wallet
         'password' => 'hashed',
         'type' => UserType::class,
     ];
-
+    
     public function getIsAdminAttribute()
     {
         return $this->roles()->where('id', 1)->exists();
@@ -267,5 +268,10 @@ class User extends Authenticatable implements Wallet
         return $query->whereHas('roles', function ($query) {
             $query->where('title', 'Agent'); // Assuming you have roles for users
         })->where('agent_id', Auth::user()->id);
+    }
+
+    public function userLog()
+    {
+        return $this->hasMany(UserLog::class);
     }
 }

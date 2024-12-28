@@ -54,22 +54,25 @@ class PromotionController extends Controller
             'agent_id' => ($isMaster && $request->type === 'single') ? 'required|exists:users,id' : 'nullable',
         ]);
 
-        $type = $request->type ?? 'single';
+        $type = $request->type ?? "single";
         $filename = $this->handleImageUpload($request->image, 'promotions');
 
-        if ($type === 'single') {
+        if ($type === "single") {
             $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
 
             Promotion::create([
                 'image' => $filename,
                 'agent_id' => $agentId,
+                'description' => $request->description
+
             ]);
         } elseif ($type === 'all') {
             foreach ($user->agents as $agent) {
                 Promotion::create([
                     'image' => $filename,
                     'agent_id' => $agent->id,
+                    'description' => $request->description
                 ]);
             }
         }
@@ -120,7 +123,10 @@ class PromotionController extends Controller
         ]);
         $this->handleImageDelete($promotion->image, 'promotions');
         $filename = $this->handleImageUpload($request->image, 'promotions');
-        $promotion->update(['image' => $filename]);
+        $promotion->update([
+            'image' => $filename,
+            'description' => $request->description
+        ]);
 
         return redirect(route('admin.promotions.index'))->with('success', 'Promotion Image Updated.');
     }

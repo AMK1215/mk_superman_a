@@ -15,7 +15,9 @@ class AdsBannerResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'image' => $this->img_url,
+            'mobile_image' => $this->mobile_image_url,
+            'desktop_image' => $this->desktop_image_url,
+            'text' => $this->description,
         ];
     }
 }

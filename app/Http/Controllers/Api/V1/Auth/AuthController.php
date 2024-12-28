@@ -145,13 +145,22 @@ class AuthController extends Controller
 
         $user->roles()->sync(self::PLAYER_ROLE);
 
+        UserLog::create([
+            'ip_address' => $request->ip(),
+            'register_ip' => $request->ip(),
+            'user_id' => $user->id,
+            'user_agent' => $request->userAgent(),
+        ]);
+
         return $this->success(new RegisterResource($user), 'User register successfully.');
     }
 
     private function generateRandomString()
     {
-        $randomNumber = mt_rand(10000000, 99999999);
+        $latestPlayer = User::where('type', UserType::Player)->latest('id')->first();
 
-        return 'MKP'.$randomNumber;
+        $nextNumber = $latestPlayer ? intval(substr($latestPlayer->user_name, 3)) + 1 : 1;
+
+        return 'SPM' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
     }
 }

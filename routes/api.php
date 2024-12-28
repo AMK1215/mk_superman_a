@@ -74,6 +74,7 @@ Route::group(['middleware' => ['auth:sanctum', 'playerBannedCheck']], function (
     Route::get('promotions', [PromotionController::class, 'index']);
     Route::get('contacts', [ContactController::class, 'contact']);
     Route::get('banks', [BankController::class, 'banks']);
+    Route::get('bonus-log', [BankController::class, 'bonusLog']);
 
     Route::group(['prefix' => 'transaction'], function () {
         Route::post('withdraw', [WithDrawController::class, 'withdraw']);

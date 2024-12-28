@@ -15,8 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('ip_address');
-            $table->integer('lastupdate')->nullable();
-            $table->string('func_access')->nullable();
+            $table->string('register_ip')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

@@ -33,9 +33,6 @@ Route::group([
     'prefix' => 'admin', 'as' => 'admin.',
     'middleware' => ['auth', 'checkBanned'],
 ], function () {
-    Route::post('test', function () {
-        dd('here');
-    })->name('test');
 
     Route::post('balance-up', [HomeController::class, 'balanceUp'])->name('balanceUp');
     Route::get('logs/{id}', [HomeController::class, 'logs'])
@@ -48,6 +45,7 @@ Route::group([
     // Players
     Route::delete('user/destroy', [PlayerController::class, 'massDestroy'])->name('user.massDestroy');
     Route::resource('banks', BankController::class);
+    Route::post('/bank-status', [BankController::class, 'updateStatus'])->name('bank.status');
     Route::resource('paymentType', PaymentTypeController::class);
 
     Route::put('player/{id}/ban', [PlayerController::class, 'banUser'])->name('player.ban');
@@ -74,7 +72,6 @@ Route::group([
     Route::resource('adsbanners', BannerAdsController::class);
     Route::resource('text', BannerTextController::class);
     Route::resource('/promotions', PromotionController::class);
-    Route::resource('/payments', PaymentController::class);
     Route::resource('products', ProductController::class);
     Route::resource('contact', ContactController::class);
     Route::get('bonustype', [BonusTypeController::class, 'get'])->name('bonustype');
@@ -126,13 +123,8 @@ Route::group([
 
     Route::get('transer-log', [TransferLogController::class, 'index'])->name('transferLog');
     Route::group(['prefix' => 'report'], function () {
-        // admin
         Route::get('index', [ReportController::class, 'index'])->name('report.index');
         Route::get('/detail/{playerId}', [ReportController::class, 'detail'])->name('report.detail');
-        // agent
-        Route::get('agent_index', [AgentReportController::class, 'index'])->name('agent_report.index');
-        Route::get('/detail/{product_name}', [AgentReportController::class, 'detail'])->name('agent_report.detail');
-
     });
 
     // get bet deatil

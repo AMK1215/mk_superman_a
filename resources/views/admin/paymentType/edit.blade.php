@@ -82,14 +82,12 @@
                
                 <div class="custom-form-group">
                   <label for="title">Name</label>
-                  <input type="text" class="form-control" id="" name="account_name" value="{{$paymentType->name}}">
+                  <input type="text" class="form-control" id="" name="name" value="{{$paymentType->name}}">
                 </div>
                 <div class="custom-form-group">
                   <label for="title">Banner</label>
-                  <input type="file" class="form-control" id="" name="image[]"  multiple> <br>
-                  @foreach ($paymentType->paymentImages as $payment)
-                  <img src="{{ asset('assets/img/paymentType/banners/'. $payment->image)}}" alt="" width="100px"  class="mb-3"> <br>
-                  @endforeach
+                  <input type="file" class="form-control" id="" name="image"  multiple> <br>
+                  <img src="{{ asset('assets/img/paymentType/'. $paymentType->image)}}" alt="" width="100px"  class="mb-3"> <br>
                 </div>
                 <div class="custom-form-group">
                   <button class="btn btn-primary" type="submit">Edit</button>

@@ -50,26 +50,30 @@ class BannerController extends Controller
 
         // Validate the request
         $request->validate([
-            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'mobile_image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'desktop_image' => 'required|image|max:2048', // Ensure it's an image with a size limit
             'type' => $isMaster ? 'required' : 'nullable',
             'agent_id' => ($isMaster && $request->type === 'single') ? 'required|exists:users,id' : 'nullable',
         ]);
 
-        $type = $request->type ?? 'single';
-        $filename = $this->handleImageUpload($request->image, 'banners');
+        $type = $request->type ?? "single";
+        $mobile_image = $this->handleImageUpload($request->mobile_image, 'banners');
+        $desktop_image = $this->handleImageUpload($request->desktop_image, 'banners');
 
-        if ($type === 'single') {
+        if ($type === "single") {
             $agentId = $isMaster ? $request->agent_id : $user->id;
             $this->FeaturePermission($agentId);
 
             Banner::create([
-                'image' => $filename,
+                'mobile_image' => $mobile_image,
+                'desktop_image' => $desktop_image,
                 'agent_id' => $agentId,
             ]);
         } elseif ($type === 'all') {
             foreach ($user->agents as $agent) {
                 Banner::create([
-                    'image' => $filename,
+                    'mobile_image' => $mobile_image,
+                    'desktop_image' => $desktop_image,
                     'agent_id' => $agent->id,
                 ]);
             }
@@ -117,11 +121,15 @@ class BannerController extends Controller
         }
         $this->FeaturePermission($banner->agent_id);
         $request->validate([
-            'image' => 'required|image|max:2048', // Ensure it's an image with a size limit
+            'mobile_image' => 'image|max:2048',
+            'desktop_image' => 'image|max:2048',
         ]);
-        $this->handleImageDelete($banner->image, 'banners');
-        $filename = $this->handleImageUpload($request->image, 'banners');
-        $banner->update(['image' => $filename]);
+
+        $this->deleteImagesIfProvided($banner, $request);
+
+        $updateData = $this->prepareUpdateData($request, $banner);
+
+        $banner->update($updateData);
 
         return redirect(route('admin.banners.index'))->with('success', 'Banner Image Updated.');
     }
@@ -136,9 +144,47 @@ class BannerController extends Controller
             return redirect()->back()->with('error', 'Banner Not Found');
         }
         $this->FeaturePermission($banner->agent_id);
-        $this->handleImageDelete($banner->image, 'banners');
+        $this->handleImageDelete($banner->mobile_image, 'banners');
+        $this->handleImageDelete($banner->desktop_image, 'banners');
         $banner->delete();
 
         return redirect()->back()->with('success', 'Banner Deleted.');
     }
+
+    /**
+     * Delete images if new ones are provided in the request.
+     */
+    private function deleteImagesIfProvided(Banner $banner, Request $request): void
+    {
+        if ($request->hasFile('mobile_image')) {
+            $this->handleImageDelete($banner->mobile_image, 'banners');
+        }
+
+        if ($request->hasFile('desktop_image')) {
+            $this->handleImageDelete($banner->desktop_image, 'banners');
+        }
+    }
+
+    /**
+     * Prepare data for updating the banner.
+     */
+    private function prepareUpdateData(Request $request, Banner $banner): array
+    {
+        $updateData = ['description' => $request->input('description')];
+
+        if ($request->hasFile('mobile_image')) {
+            $updateData['mobile_image'] = $this->handleImageUpload($request->file('mobile_image'), 'banners');
+        } else {
+            $updateData['mobile_image'] = $banner->mobile_image;
+        }
+
+        if ($request->hasFile('desktop_image')) {
+            $updateData['desktop_image'] = $this->handleImageUpload($request->file('desktop_image'), 'banners');
+        } else {
+            $updateData['desktop_image'] = $banner->desktop_image;
+        }
+
+        return $updateData;
+    }
+
 }

@@ -7,6 +7,7 @@ use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerRequest;
 use App\Http\Requests\TransferLogRequest;
+use App\Models\Admin\UserLog;
 use App\Models\PaymentType;
 use App\Models\User;
 use App\Services\WalletService;
@@ -27,12 +28,13 @@ class PlayerController extends Controller
      */
     public function index(Request $request)
     {
+        // Check for permission
         abort_if(
             Gate::denies('player_index'),
             Response::HTTP_FORBIDDEN,
-            '403 Forbidden |You cannot  Access this page because you do not have permission'
+            '403 Forbidden | You cannot access this page because you do not have permission'
         );
-        //kzt
+
         $user = Auth::user();
         $agentIds = [$user->id];
 
@@ -40,16 +42,33 @@ class PlayerController extends Controller
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
         }
 
-        $users = User::with('roles')
-            ->whereHas('roles', function ($query) {
-                $query->where('role_id', self::PLAYER_ROLE);
+        $users = User::with(['roles', 'userLog'])
+            ->whereHas('roles', fn($query) => $query->where('role_id', self::PLAYER_ROLE))
+            ->when($request->player_id, fn($query) => $query->where('user_name', $request->player_id))
+            ->when(
+                $request->start_date && $request->end_date,
+                fn($query) => $query->whereBetween('created_at', [
+                    $request->start_date . ' 00:00:00',
+                    $request->end_date . ' 23:59:59',
+                ])
+            )
+            ->when($request->ip_address, function ($query) use ($request) {
+                $query->whereHas('userLog', function ($subQuery) use ($request) {
+                    $subQuery->where('ip_address', $request->ip_address)->latest();
+                });
             })
-            ->orderBy('id', 'desc')
+            ->when($request->register_ip, function ($query) use ($request) {
+                $query->whereHas('userLog', function ($subQuery) use ($request) {
+                    $subQuery->where('register_ip', $request->register_ip);
+                });
+            })
             ->whereIn('agent_id', $agentIds)
+            ->orderByDesc('id')
             ->get();
 
         return view('admin.player.index', compact('users'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -91,6 +110,11 @@ class PlayerController extends Controller
             if (! empty($request->amount)) {
                 $this->transferInitialAmount($agent, $player, $request->amount);
             }
+            UserLog::create([
+                'register_ip' => $request->ip(),
+                'user_id' => $player->id,
+                'user_agent' => $request->userAgent(),
+            ]);
 
             return redirect()->back()
                 ->with('success', 'Player created successfully')
@@ -308,9 +332,11 @@ class PlayerController extends Controller
 
     private function generateRandomString()
     {
-        $randomNumber = mt_rand(10000000, 99999999);
+        $latestPlayer = User::where('type', UserType::Player)->latest('id')->first();
 
-        return 'MKP'.$randomNumber;
+        $nextNumber = $latestPlayer ? intval(substr($latestPlayer->user_name, 3)) + 1 : 1;
+
+        return 'SPM' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
     }
 
     private function getRefrenceId($prefix = 'REF')
