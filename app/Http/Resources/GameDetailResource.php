@@ -14,14 +14,20 @@ class GameDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $imgUrl = $this->gameTypes[0]->pivot->image;
         return [
             'id' => $this->id,
-            'code' => $this->game_code,
-            'name' => $this->game_name,
-            // 'click_count' => $this->click_count,
-            'game_type_id' => $this->game_type_id,
-            'provider_id' => $this->product->id,
-            'image' => $this->image_url,
+            'provider_name' => $this->provider_name,
+            'imgUrl' => asset('assets/img/provider_logo/' . $imgUrl),
+            'hot_lists' => $this->gameLists->map(function ($game) {
+                return [
+                    'code' => $game->game_code,
+                    'name' => $game->game_name,
+                    'game_type_id' => $game->game_type_id,
+                    'provider_id' => $game->product_id,
+                    'image' => $game->image_url,
+                ];
+            }),
         ];
     }
 }
