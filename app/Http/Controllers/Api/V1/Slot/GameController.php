@@ -36,7 +36,6 @@ class GameController extends Controller
             ->first();
 
         return $this->success(GameProviderResource::collection($gameType->products), 'Game Detail Successfully');
-        // return $this->success($gameTypes);
     }
 
     //game_lists
