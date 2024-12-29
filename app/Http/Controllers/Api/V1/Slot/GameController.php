@@ -59,6 +59,7 @@ class GameController extends Controller
             $query->where('hot_status', 1);
         })->with(['gameLists' => function ($query) {
             $query->where('hot_status', 1);
+            $query->where('status', 1);
             $query->with('gameType');
         }])
             ->get();
