@@ -31,6 +31,7 @@ class GameList extends Model
         'game_event',
         'game_provide_code',
         'game_provide_name',
+        'order',
     ];
 
     public function product()

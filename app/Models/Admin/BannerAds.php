@@ -15,6 +15,7 @@ class BannerAds extends Model
         'desktop_image',
         'description',
         'agent_id',
+        'admin_id'
     ];
 
     protected $appends = ['mobile_image_url', 'desktop_image_url'];
