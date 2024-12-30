@@ -14,13 +14,13 @@ class GameDetailResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'code' => $this->game_code,
             'name' => $this->game_name,
-            // 'click_count' => $this->click_count,
             'game_type_id' => $this->game_type_id,
-            'provider_id' => $this->product->id,
+            'provider_id' => $this->product_id,
             'image' => $this->image_url,
         ];
     }

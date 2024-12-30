@@ -10,6 +10,7 @@ use App\Http\Resources\GameListResource;
 use App\Http\Resources\Slot\HotGameListResource;
 use App\Models\Admin\GameList;
 use App\Models\Admin\GameType;
+use App\Models\Admin\Product;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 
@@ -35,7 +36,6 @@ class GameController extends Controller
             ->first();
 
         return $this->success(GameProviderResource::collection($gameType->products), 'Game Detail Successfully');
-        // return $this->success($gameTypes);
     }
 
     //game_lists
@@ -45,7 +45,7 @@ class GameController extends Controller
             ->where('product_id', $product_id)
             ->where('game_type_id', $game_type_id)
             ->where('status', 1)
-            ->where('game_name', 'like', '%'.$request->name.'%')
+            ->where('game_name', 'like', '%' . $request->name . '%')
             ->paginate(9);
 
         return GameDetailResource::collection($gameLists);
@@ -54,7 +54,13 @@ class GameController extends Controller
     //hot_games
     public function HotgameList()
     {
-        $gameLists = GameList::where('hot_status', 1)
+        $gameLists = Product::whereHas('gameLists', function ($query) {
+            $query->where('hot_status', 1);
+        })->with(['gameLists' => function ($query) {
+            $query->where('hot_status', 1);
+            $query->where('status', 1);
+            $query->with('gameType');
+        }])
             ->get();
 
         return $this->success(GameDetailResource::collection($gameLists), 'Hot Game Detail Successfully');
