@@ -47,7 +47,7 @@ Route::post('Result', [BetResultController::class, 'handleResult']);
 Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
-Route::get('/get-game-provider', [GetGameProviderController::class, 'fetchGameProviders']);
+Route::post('/get-game-provider', [GetGameProviderController::class, 'fetchGameProviders']);
 
 
 // for slot
