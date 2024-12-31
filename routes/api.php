@@ -28,6 +28,8 @@ use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\V1\Slot\GetGameProviderController;
+use App\Http\Controllers\Api\V1\Slot\GetGameListByProviderController;
+
 
 
 //auth api
@@ -47,7 +49,9 @@ Route::post('Result', [BetResultController::class, 'handleResult']);
 Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
-Route::post('/get-game-provider', [GetGameProviderController::class, 'fetchGameProviders']);
+Route::post('GetGameProvider', [GetGameProviderController::class, 'fetchGameProviders']);
+
+Route::post('GetGameListByProvider', [GetGameListByProviderController::class, 'fetchGameListByProvider']);
 
 
 // for slot

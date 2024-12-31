@@ -25,7 +25,7 @@ class GameProductSeeder extends Seeder
                 'provider_code' => 'PPLAYLIVE',
                 'provider_name' => 'PragmaticPlay Live',
                 'is_active' => true,
-                'order' => 2,
+                'order' => 5,
                 'status' => 1,
                 'game_list_status' => 1,
             ],
@@ -49,7 +49,7 @@ class GameProductSeeder extends Seeder
                 'provider_code' => 'L22',
                 'provider_name' => 'Live22',
                 'is_active' => true,
-                'order' => 5,
+                'order' => 2,
                 'status' => 1,
                 'game_list_status' => 1,
             ],
@@ -122,7 +122,7 @@ class GameProductSeeder extends Seeder
                 'provider_name' => 'BNG',
                 'is_active' => true,
                 'order' => 14,
-                'status' => 0,
+                'status' => 1,
                 'game_list_status' => 1,
             ],
             [
@@ -130,7 +130,7 @@ class GameProductSeeder extends Seeder
                 'provider_name' => 'YGR',
                 'is_active' => true,
                 'order' => 15,
-                'status' => 0,
+                'status' => 1,
                 'game_list_status' => 1,
             ],
             [
@@ -138,7 +138,7 @@ class GameProductSeeder extends Seeder
                 'provider_name' => 'Hacksaw',
                 'is_active' => true,
                 'order' => 16,
-                'status' => 0,
+                'status' => 1,
                 'game_list_status' => 1,
             ],
             [
@@ -146,7 +146,7 @@ class GameProductSeeder extends Seeder
                 'provider_name' => 'Funta',
                 'is_active' => true,
                 'order' => 17,
-                'status' => 0,
+                'status' => 1,
                 'game_list_status' => 1,
             ],
             [
@@ -154,7 +154,7 @@ class GameProductSeeder extends Seeder
                 'provider_name' => 'SimplePlay',
                 'is_active' => true,
                 'order' => 18,
-                'status' => 0,
+                'status' => 1,
                 'game_list_status' => 1,
             ],
         ];
