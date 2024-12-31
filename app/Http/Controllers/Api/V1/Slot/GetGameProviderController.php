@@ -19,11 +19,13 @@ class GetGameProviderController extends Controller
 
     public function fetchGameProviders(Request $request)
 {
-    Log::info('Incoming Request to GetGameProvider', $request->all());
+    //Log::info('Incoming Request to GetGameProvider', $request->all());
 
     $response = $this->getGameProviderService->getGameProvider();
 
-    Log::info('API Response Structure', ['response' => $response]);
+    //Log::info('API Response Structure', ['response' => $response]);
+    Log::info('GameProviders Data', ['data' => $response['GameProviders'] ?? 'No Data Found']);
+
 
     if (isset($response['status']) && $response['status'] == 200) {
         if (isset($response['GameProviders'])) {
