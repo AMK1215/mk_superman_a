@@ -9,7 +9,7 @@ class GetGameProviderService
     public function getGameProvider()
     {
         // Retrieve values from the config file
-        $config = config('seamless.api');
+        $config = config('game.api');
         $operatorId = $config['operator_code'];
         $secretKey = $config['secret_key'];
         $baseUrl = $config['url'];
