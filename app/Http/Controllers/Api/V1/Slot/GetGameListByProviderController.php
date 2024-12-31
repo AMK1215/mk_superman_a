@@ -69,19 +69,19 @@ class GetGameListByProviderController extends Controller
         $response = $this->getGameListByProviderService->getGameListByProvider($providerCode);
 
         // Log the response structure for debugging
-        Log::info('API Response Structure', ['response' => $response]);
+        //Log::info('API Response Structure', ['response' => $response]);
 
         // Check if the response is successful
-        if (isset($response['status']) && $response['status'] == 200) {
+        //if (isset($response['status']) && $response['status'] == 200) {
             return response()->json([
                 'success' => true,
                 'data' => $response['GameList'] ?? [],
             ]);
-        }
+        //}
 
-        return response()->json([
-            'success' => false,
-            'message' => $response['Description'] ?? 'An error occurred',
-        ], 400);
+        // return response()->json([
+        //     'success' => false,
+        //     'message' => $response['Description'] ?? 'An error occurred',
+        // ], 400);
     }
 }
