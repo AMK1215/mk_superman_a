@@ -16,7 +16,6 @@ class GetGameListByProviderService
         $baseUrl = $config['url'];
         $functionName = 'GetGameListByProvider';
 
-        // Generate RequestDateTime (UTC)
         $requestDateTime = now()->setTimezone('UTC')->format('Y-m-d H:i:s');
 
         // Generate MD5 Signature
