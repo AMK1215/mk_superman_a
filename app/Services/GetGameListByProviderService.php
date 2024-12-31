@@ -41,10 +41,10 @@ class GetGameListByProviderService
         $response = Http::post($url, $payload);
 
         // Log the response for debugging
-        Log::info('Received GetGameListByProvider API Response', [
-            'status' => $response->status(),
-            'response' => $response->json(),
-        ]);
+        // Log::info('Received GetGameListByProvider API Response', [
+        //     'status' => $response->status(),
+        //     'response' => $response->json(),
+        // ]);
 
         // Return the response as an array
         return $response->json();

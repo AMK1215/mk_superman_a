@@ -75,7 +75,7 @@ class GetGameListByProviderController extends Controller
         //if (isset($response['status']) && $response['status'] == 200) {
             return response()->json([
                 'success' => true,
-                'data' => $response['GameList'] ?? [],
+                'data' => $response['Game'] ?? [],
             ]);
         //}
 
