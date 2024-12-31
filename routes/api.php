@@ -27,6 +27,8 @@ use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Slot\GetGameProviderController;
+
 
 //auth api
 Route::post('/login', [AuthController::class, 'login']);
@@ -45,6 +47,8 @@ Route::post('Result', [BetResultController::class, 'handleResult']);
 Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
+Route::get('/get-game-provider', [GetGameProviderController::class, 'fetchGameProviders']);
+
 
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
