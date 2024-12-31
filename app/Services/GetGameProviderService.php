@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class GetGameProviderService
 {
@@ -30,9 +31,19 @@ class GetGameProviderService
 
         // API URL for GetGameProvider
         $url = $baseUrl . $functionName;
+         // Log the request details for debugging
+        Log::info('Sending GetGameProvider API Request', [
+            'url' => $url,
+            'payload' => $payload,
+        ]);
 
         // Send POST request to the API
         $response = Http::post($url, $payload);
+        // Log the response for debugging
+        Log::info('Received GetGameProvider API Response', [
+            'status' => $response->status(),
+            'response' => $response->json(),
+        ]);
 
         // Return the response as an array
         return $response->json();
