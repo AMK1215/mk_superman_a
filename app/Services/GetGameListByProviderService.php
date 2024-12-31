@@ -32,19 +32,19 @@ class GetGameListByProviderService
         // API URL for GetGameListByProvider
         $url = $baseUrl . $functionName;
 
-        Log::info('Sending GetGameListByProvider API Request', [
-            'url' => $url,
-            'payload' => $payload,
-        ]);
+        // Log::info('Sending GetGameListByProvider API Request', [
+        //     'url' => $url,
+        //     'payload' => $payload,
+        // ]);
 
         // Send the POST request to the API
         $response = Http::post($url, $payload);
 
         // Log the response for debugging
-        Log::info('Received GetGameListByProvider API Response', [
-            'status' => $response->status(),
-            'response' => $response->json(),
-        ]);
+        // Log::info('Received GetGameListByProvider API Response', [
+        //     'status' => $response->status(),
+        //     'response' => $response->json(),
+        // ]);
 
         // Return the response as an array
         return $response->json();
