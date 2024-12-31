@@ -32,7 +32,6 @@ class GetGameListByProviderService
         // API URL for GetGameListByProvider
         $url = $baseUrl . $functionName;
 
-        // Log the request for debugging
         Log::info('Sending GetGameListByProvider API Request', [
             'url' => $url,
             'payload' => $payload,
