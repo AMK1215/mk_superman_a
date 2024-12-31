@@ -16,6 +16,8 @@ class PragmaticPlaySlotSeeder extends Seeder
     {
         // Load the JSON file
         $json = File::get(base_path('database/seeders/data/PragmaticPlaySlot.json'));
+        $json = File::get(base_path('database/seeders/data/PP_production.json'));
+
         $data = json_decode($json, true);
 
         // Loop through each game in the JSON data
