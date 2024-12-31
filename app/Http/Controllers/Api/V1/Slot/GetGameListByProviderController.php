@@ -32,7 +32,7 @@ class GetGameListByProviderController extends Controller
         $response = $this->getGameListByProviderService->getGameListByProvider($providerCode);
 
         // Check if the response contains the expected data
-        if (isset($response['status']) && $response['status'] == 200 && isset($response['Game'])) {
+        // if (isset($response['status']) && $response['status'] == 200 && isset($response['Game'])) {
             $games = $response['Game'];
 
             // Save the games data to a JSON file
@@ -45,7 +45,7 @@ class GetGameListByProviderController extends Controller
                 'message' => 'Game list fetched and saved successfully.',
                 'file_path' => Storage::url($fileName),
             ]);
-        }
+        //}
 
         // Handle errors in response
         return response()->json([
