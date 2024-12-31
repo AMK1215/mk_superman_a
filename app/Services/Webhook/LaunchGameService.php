@@ -89,10 +89,10 @@ class LaunchGameService
             'LaunchDemo' => $launchDemo,
         ];
 
-        Log::info('Preparing GameLogin API request', [
-            'apiUrl' => $apiUrl,
-            'requestData' => $data,
-        ]);
+        // Log::info('Preparing GameLogin API request', [
+        //     'apiUrl' => $apiUrl,
+        //     'requestData' => $data,
+        // ]);
 
         try {
             $response = Http::withHeaders([
@@ -100,17 +100,17 @@ class LaunchGameService
                 'Accept' => 'application/json',
             ])->post($apiUrl, $data);
 
-            Log::info('GameLogin API response received', [
-                'status' => $response->status(),
-                'body' => $response->body(),
-            ]);
+            // Log::info('GameLogin API response received', [
+            //     'status' => $response->status(),
+            //     'body' => $response->body(),
+            // ]);
 
             if ($response->successful()) {
                 $apiResponse = $response->json();
 
-                Log::info('GameLogin API request successful', [
-                    'response' => $apiResponse,
-                ]);
+                // Log::info('GameLogin API request successful', [
+                //     'response' => $apiResponse,
+                // ]);
 
                 return [
                     'url' => $apiResponse['Url'],
