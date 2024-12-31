@@ -23,6 +23,9 @@ class GetGameProviderController extends Controller
 
     $response = $this->getGameProviderService->getGameProvider();
 
+    Log::info('API Response Structure', ['response' => $response]);
+
+
     if (isset($response['status']) && $response['status'] == 200) {
         return response()->json([
             'success' => true,

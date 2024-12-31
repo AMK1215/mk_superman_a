@@ -45,6 +45,9 @@ class GetGameProviderService
             'response' => $response->json(),
         ]);
 
+        Log::info('API Response Structure', ['response' => $response]);
+
+
         // Return the response as an array
         return $response->json();
     }
