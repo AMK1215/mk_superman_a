@@ -23,7 +23,7 @@ class Promotion extends Model
 
     public function getImgUrlAttribute()
     {
-        return asset('assets/img/promotions/'.$this->image);
+        return 'https://superman788.online/assets/img/promotions/'.$this->image;
     }
 
     public function scopeAgent($query)
