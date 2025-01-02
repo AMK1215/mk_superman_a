@@ -7,6 +7,7 @@ use App\Http\Resources\Api\V1\GameProviderResource;
 use App\Http\Resources\Api\V1\GameTypeResource;
 use App\Http\Resources\GameDetailResource;
 use App\Http\Resources\GameListResource;
+use App\Http\Resources\HotGameDetailResource;
 use App\Http\Resources\Slot\HotGameListResource;
 use App\Models\Admin\GameList;
 use App\Models\Admin\GameType;
@@ -63,7 +64,7 @@ class GameController extends Controller
         }])
             ->get();
 
-        return $this->success(GameDetailResource::collection($gameLists), 'Hot Game Detail Successfully');
+        return $this->success(HotGameDetailResource::collection($gameLists), 'Hot Game Detail Successfully');
     }
 
     public function allGameProducts()
