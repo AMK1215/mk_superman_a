@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Services;
 
 use Google\Client;
@@ -15,61 +14,56 @@ class GoogleDriveService
     public function __construct()
     {
         $this->client = new Client();
-        $this->client->setAccessToken($this->getAccessToken());
 
-        if ($this->client->isAccessTokenExpired()) {
-            $this->refreshAccessToken();
-        }
+        $this->client->setAccessToken($this->getAccessToken());
 
         $this->service = new Drive($this->client);
     }
 
     /**
-     * Get the access token from the session or database.
-     */
+     * Get the access token from the session or fetch a new one.
+    */
     public function getAccessToken()
     {
         $token = session('google_access_token');
-        if (empty($token)) {
-            $this->client->setAccessToken($this->fetchNewAccessToken());
-            $token = $this->client->getAccessToken();
+
+        if (!is_array($token) || !isset($token['access_token']) || $this->client->isAccessTokenExpired()) {
+            $token = $this->fetchNewAccessToken();
             session(['google_access_token' => $token]);
         }
+
         return $token;
     }
 
     /**
-     * Use the refresh token to get a new access token.
-     */
+     * Fetch a new access token using the refresh token.
+    */
     public function fetchNewAccessToken()
     {
-        $this->client->setAccessToken([
-            'refresh_token' => env('GOOGLE_REFRESH_TOKEN')
-        ]);
-        
-        return $this->client->getAccessToken();
+        $this->client->setClientId(env('GOOGLE_CLIENT_ID'));
+        $this->client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
+        $this->client->setRefreshToken(env('GOOGLE_REFRESH_TOKEN'));
+
+        $newToken = $this->client->fetchAccessTokenWithRefreshToken();
+        if (isset($newToken['error'])) {
+            throw new \Exception('Failed to fetch new access token: ' . $newToken['error_description']);
+        }
+
+        return $newToken;
     }
 
     /**
-     * Refresh the access token if it's expired.
-     */
-    public function refreshAccessToken()
-    {
-        $this->client->fetchAccessTokenWithRefreshToken(env('GOOGLE_REFRESH_TOKEN'));
-        session(['google_access_token' => $this->client->getAccessToken()]);
-    }
-
-    /**
-     * Upload file to Google Drive.
+     * Upload a file to Google Drive.
      */
     public function uploadToDrive(string $filePath, string $fileName)
     {
         try {
             $file = new DriveFile();
             $file->setName($fileName);
-            $file->setMimeType('application/sql'); // Set the MIME type for SQL backups
+            $file->setMimeType('application/sql'); // Adjust MIME type as needed
 
             $fileData = file_get_contents($filePath);
+
             $uploadedFile = $this->service->files->create(
                 $file,
                 [
