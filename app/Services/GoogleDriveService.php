@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use Google\Client;
@@ -22,7 +23,7 @@ class GoogleDriveService
 
     /**
      * Get the access token from the session or fetch a new one.
-    */
+     */
     public function getAccessToken()
     {
         $token = session('google_access_token');
@@ -37,20 +38,23 @@ class GoogleDriveService
 
     /**
      * Fetch a new access token using the refresh token.
-    */
+     */
     public function fetchNewAccessToken()
     {
+        // Set the client credentials
         $this->client->setClientId(env('GOOGLE_CLIENT_ID'));
         $this->client->setClientSecret(env('GOOGLE_CLIENT_SECRET'));
-        $this->client->setRefreshToken(env('GOOGLE_REFRESH_TOKEN'));
 
-        $newToken = $this->client->fetchAccessTokenWithRefreshToken();
-        if (isset($newToken['error'])) {
-            throw new \Exception('Failed to fetch new access token: ' . $newToken['error_description']);
+        $accessToken = $this->client->fetchAccessTokenWithRefreshToken(env('GOOGLE_REFRESH_TOKEN'));
+
+        if (isset($accessToken['error'])) {
+            throw new \Exception('Failed to fetch new access token: ' . $accessToken['error_description']);
         }
 
-        return $newToken;
+        // Return the access token
+        return $accessToken;
     }
+
 
     /**
      * Upload a file to Google Drive.
