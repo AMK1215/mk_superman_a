@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "30b5d4bd078651b78023fe00c617aef7",
+    "content-hash": "a7e2a6b08338928137b36533e70eb010",
     "packages": [
         {
             "name": "amphp/amp",
@@ -8128,6 +8128,67 @@
             "time": "2023-12-08T13:03:43+00:00"
         },
         {
+            "name": "tomshaw/laravel-database-export",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tomshaw/laravel-database-export.git",
+                "reference": "df1964ce09749084cb9d08a540a89b4fdc995375"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tomshaw/laravel-database-export/zipball/df1964ce09749084cb9d08a540a89b4fdc995375",
+                "reference": "df1964ce09749084cb9d08a540a89b4fdc995375",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.13",
+                "nunomaduro/larastan": "^2.6",
+                "orchestra/testbench": "^8.14",
+                "phpstan/phpstan": "^1.10"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TomShaw\\DatabaseExport\\Providers\\DatabaseExportServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TomShaw\\DatabaseExport\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tom Shaw",
+                    "email": "tomshaw@tomshaw.us",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Laravel database export console command.",
+            "keywords": [
+                "artisan",
+                "console",
+                "database",
+                "exporter",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/tomshaw/laravel-database-export/issues",
+                "source": "https://github.com/tomshaw/laravel-database-export/tree/v0.1.0"
+            },
+            "time": "2023-11-11T00:42:21+00:00"
+        },
+        {
             "name": "vlucas/phpdotenv",
             "version": "v5.6.1",
             "source": {
@@ -10945,12 +11006,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

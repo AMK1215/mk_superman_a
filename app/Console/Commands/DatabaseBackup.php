@@ -14,7 +14,7 @@ class DatabaseBackup extends Command
      *
      * @var string
      */
-    protected $signature = 'app:db-backup';
+    protected $signature = ' db:export';
 
     /**
      * The console command description.
@@ -28,33 +28,13 @@ class DatabaseBackup extends Command
      */
     public function handle(GoogleDriveService $googleDriveService)
     {
-        $dbHost = env('DB_HOST');
-        $dbName = env('DB_DATABASE');
-        $dbUser = env('DB_USERNAME');
-        $dbPass = env('DB_PASSWORD');
-        
-        $backupPath = storage_path('app/backups');
-        $backupFile = "{$backupPath}/backup_" . date('Y-m-d_H-i-s') . ".sql";
+        $files = Storage::disk('local')->files('exports');
 
-        if (!file_exists($backupPath)) {
-            mkdir($backupPath, 0755, true);
-        }
-
-        $command = "mysqldump -h$dbHost -u$dbUser --password=$dbPass $dbName > $backupFile";
-        $output = null;
-        $resultCode = null;
-        exec($command, $output, $resultCode);
-
-        if ($resultCode === 0) {
-            $this->info("Database backup successfully created at $backupFile");
-
-            $fileId = $googleDriveService->uploadToDrive($backupFile, basename($backupFile));
-            $this->info("Backup uploaded to Google Drive with file ID: $fileId");
-
-            $this->cleanUpOldBackups($backupPath);
-        } else {
-            $this->error("Failed to back up the database. Error code: $resultCode");
-            $this->error("Command output: " . implode("\n", $output));
+        foreach ($files as $file) {
+            $filePath = storage_path('app/' . $file);
+            $fileName = basename($file);
+            $googleDriveService->uploadToDrive($filePath, $fileName);
+            $this->cleanUpOldBackups($filePath);
         }
     }
 
@@ -69,11 +49,7 @@ class DatabaseBackup extends Command
 
         foreach ($files as $file) {
             $filePath = storage_path("app/$file");
-
-            if (filemtime($filePath) < $currentDate->subDays(30)->timestamp) {
                 unlink($filePath);
-                $this->info("Deleted old backup: $file");
-            }
         }
     }
 }
