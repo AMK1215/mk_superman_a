@@ -72,7 +72,7 @@ class DepositRequestController extends Controller
 
             // Transfer the amount if the status is approved
             if ($request->status == 1) {
-                app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::DebitTransfer, ['agent_id' => Auth::id()]);
+                app(WalletService::class)->transfer($agent, $player, $request->amount, TransactionName::CreditTransfer, ['agent_id' => Auth::id()]);
             }
 
             return redirect()->route('admin.agent.deposit')->with('success', 'Deposit status updated successfully!');

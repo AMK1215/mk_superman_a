@@ -20,13 +20,13 @@
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">StartDate</label>
-                                <input type="date" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+                                <input type="datetime-local" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">EndDate</label>
-                                <input type="date" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+                                <input type="datetime-local" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -64,13 +64,13 @@
                             <td>{{$result->player_name}}</td>
                             <td>{{$result->agent_name}}</td>
                             <td>{{number_format($result->balance/100, 2) }} </td>
-                            <td>{{number_format($result->deposit_amount, 2)}}</td>
-                            <td>{{number_format($result->withdraw_amount, 2)}}</td>
-                            <td>{{$result->bonus_amount}}</td>
+                            <td>{{number_format($result->total_deposit, 2)}}</td>
+                            <td>{{number_format(abs($result->total_withdraw),2)}}</td>
+                            <td>{{$result->total_bonus}}</td>
                             <td>{{ number_format($result->total_bet_amount, 2)}}</td>
                             <td> <span class="{{$result->total_net_win > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($result->total_net_win , 2)}}</span></td>
                             <?php
-                            $profit = $result->total_net_win + $result->bonus_amount;
+                            $profit = $result->total_net_win + $result->total_bonus;
                             ?>
                             <td> <span class="{{$profit > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($profit , 2)}}</span></td>
                             <td><a href="{{route('admin.report.detail', $result->user_id)}}" class="btn btn-primary">Detail</a></td>

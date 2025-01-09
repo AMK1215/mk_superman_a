@@ -25,11 +25,7 @@
                 <div class="d-lg-flex">
                     <div>
                         <h5 class="mb-0">Game List Dashboards
-                            <span>
-                                <p>
-                                    All Total Running Games on Site: {{ count($games) }}
-                                </p>
-                            </span>
+                           
                         </h5>
                     </div>
                     <div class="ms-auto my-auto mt-lg-0 mt-4">
@@ -38,7 +34,6 @@
                 </div>
             </div>
             <div class="table-responsive">
-                @can('admin_access')
                 <table class="table table-flush" id="users-search">
                     <thead>
                         <tr>
@@ -55,7 +50,7 @@
                     <tbody>
                     </tbody>
                 </table>
-                @endcan
+            
             </div>
         </div>
     </div>
@@ -77,8 +72,8 @@ $(document).ready(function() {
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
             {data: 'game_type', name: 'gameType.name'},
-            {data: 'product', name: 'product.name'},
-            {data: 'name', name: 'name'},
+            {data: 'product', name: 'product'},
+            {data: 'game_name', name: 'game_name'},
             {data: 'image_url', name: 'image_url', render: function(data, type, full, meta) {
                 return '<img src="' + data + '" width="100px">';
             }},
@@ -92,7 +87,7 @@ $(document).ready(function() {
                 previous: '<i class="fas fa-angle-left"></i>' // or '←'
             }
         },
-        pageLength: 7, // Adjust this to your preference
+        pageLength: 10, // Adjust this to your preference
     });
 });
 </script>

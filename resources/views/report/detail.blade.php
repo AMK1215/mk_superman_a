@@ -22,7 +22,24 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="col-md-3">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="">Start Date</label>
+                                <input type="datetime-local" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="">EndDate</label>
+                                <input type="datetime-local" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-sm btn-primary" id="search" type="submit">Search</button>
+                            <a href="{{route('admin.report.detail', $playerId)}}" class="btn btn-link text-primary ms-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh">
+                                <i class="material-icons text-lg mt-0">refresh</i>
+                            </a>
+                        </div>
                         <div class="col-md-3">
                             <button class="btn btn-sm btn-primary" id="search" type="submit">Search</button>
                             <a href="{{route('admin.report.detail', $playerId)}}" class="btn btn-link text-primary ms-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh">
