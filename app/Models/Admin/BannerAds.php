@@ -29,12 +29,12 @@ class BannerAds extends Model
 
     public function getMobileImageUrlAttribute()
     {
-        return asset('assets/img/banners_ads/'.$this->mobile_image);
+        return 'https://superman788.online/assets/img/banners_ads/'.$this->mobile_image;
     }
 
     public function getDesktopImageUrlAttribute()
     {
-        return asset('assets/img/banners_ads/'.$this->desktop_image);
+        return 'https://superman788.online/assets/img/banners_ads/' . $this->desktop_image;
     }
 
     public function scopeAgent($query)
