@@ -104,6 +104,6 @@ class ReportController extends Controller
 
     private function getSubquery($table, $condition = '1=1')
     {
-        return DB::raw("(SELECT payable_id, name , amount FROM $table WHERE $condition GROUP BY payable_id) AS $table");
+        return DB::raw("(SELECT user_id, SUM(amount) AS total_amount FROM $table WHERE $condition GROUP BY user_id) AS $table");
     }
 }
