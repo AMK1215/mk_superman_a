@@ -39,7 +39,7 @@
                 </form>
             </div>
             <div class="table-responsive">
-                <table class="table table-flush" id="users-search">
+            <table class="table table-flush" id="users-search">
                     <thead class="thead-light">
                         <th>#</th>
                         <th>PlayerID</th>
@@ -64,13 +64,13 @@
                             <td>{{$result->player_name}}</td>
                             <td>{{$result->agent_name}}</td>
                             <td>{{number_format($result->balance/100, 2) }} </td>
-                            <td>{{number_format($result->total_deposit, 2)}}</td>
-                            <td>{{number_format(abs($result->total_withdraw),2)}}</td>
-                            <td>{{$result->total_bonus}}</td>
+                            <td>{{number_format($result->deposit_amount, 2)}}</td>
+                            <td>{{number_format($result->withdraw_amount, 2)}}</td>
+                            <td>{{$result->bonus_amount}}</td>
                             <td>{{ number_format($result->total_bet_amount, 2)}}</td>
                             <td> <span class="{{$result->total_net_win > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($result->total_net_win , 2)}}</span></td>
                             <?php
-                            $profit = $result->total_net_win + $result->total_bonus;
+                            $profit = $result->total_net_win + $result->bonus_amount;
                             ?>
                             <td> <span class="{{$profit > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($profit , 2)}}</span></td>
                             <td><a href="{{route('admin.report.detail', $result->user_id)}}" class="btn btn-primary">Detail</a></td>
