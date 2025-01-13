@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin\WithDraw;
 
 use App\Enums\TransactionName;
 use App\Http\Controllers\Controller;
+use App\Models\PaymentType;
 use App\Models\User;
 use App\Models\WithDrawRequest;
 use App\Services\WalletService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,16 +19,19 @@ class WithDrawRequestController extends Controller
     {
         $user = Auth::user();
         $agentIds = [$user->id];
-
+        $agents = [];
         if ($user->hasRole('Master')) {
-            $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
+            $agentIds = $this->getAgentIds($request, $user);
+            $agents = $user->children()->get();
         }
+        $startDate = $request->start_date ?? Carbon::today()->format('Y-m-d H:m:i');
+        $endDate = $request->end_date ?? Carbon::today()->format('Y-m-d H:m:i');
 
         $withdraws = WithDrawRequest::with('paymentType')
-            ->when($request->start_date && $request->end_date, function ($query) use ($request) {
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [
-                    $request->start_date . ' 00:00:00',
-                    $request->end_date . ' 23:59:59',
+                    $startDate,
+                    $endDate,
                 ]);
             })
             ->when($request->player_id, function ($query) use ($request) {
@@ -34,14 +39,22 @@ class WithDrawRequestController extends Controller
                     $subQuery->where('user_name', $request->player_id);
                 });
             })
+            ->when($request->agent_id, function ($query) use ($request) {
+               $query->where('agent_id', $request->agent_id);
+            })
+            ->when($request->payment_type_id, function ($query) use ($request) {
+                $query->where('payment_type_id', $request->payment_type_id);
+             })
             ->when($request->status, function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
             ->whereIn('agent_id', $agentIds)
             ->latest()
             ->get();
+        
+        $paymentTypes = PaymentType::all();
 
-        return view('admin.withdraw_request.index', compact('withdraws'));
+        return view('admin.withdraw_request.index', compact('withdraws', 'paymentTypes', 'agents'));
     }
 
     public function statusChangeIndex(Request $request, WithDrawRequest $withdraw)
@@ -94,5 +107,14 @@ class WithDrawRequestController extends Controller
         } catch (Exception $e) {
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    private function getAgentIds($request, $user)
+    {
+        if ($request->agent_id) {
+            return User::where('id', $request->agent_id)->pluck('id')->toArray();
+        }
+
+        return User::where('agent_id', $user->id)->pluck('id')->toArray();
     }
 }

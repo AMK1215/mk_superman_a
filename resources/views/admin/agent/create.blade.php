@@ -105,6 +105,8 @@
          <div class="card-body">
           <form role="form" method="POST" class="text-start" action="{{ route('admin.agent.store') }}">
             @csrf
+            <input type="checkbox" name="sub_agent">
+            <span for="">Just View Report</span>
             <div class="custom-form-group">
               <label for="title">Agent ID <span class="text-danger">*</span></label>
               <input type="text"  name="user_name" class="form-control" value="{{$agent_name}}" readonly>

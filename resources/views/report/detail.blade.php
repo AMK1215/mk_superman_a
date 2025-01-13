@@ -14,10 +14,10 @@
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">Product Type</label>
-                                <select name="product_type_id" id="" class="form-control">
-                                    <option value="" disabled>Select Product type</option>
+                                <select name="product_id" id="" class="form-control">
+                                    <option value="">Select Product type</option>
                                     @foreach($productTypes as $type)
-                                    <option value="{{$type->provider_name}}">{{$type->provider_name}}</option>
+                                    <option value="{{$type->id}}">{{$type->provider_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -65,9 +65,9 @@
                         @foreach($details as $detail)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$detail->user->user_name}}</td>
-                            <td>{{$detail->user->name}}</td>
-                            <td>{{$detail->game_provide_name}}</td>
+                            <td>{{$detail->user_name}}</td>
+                            <td>{{$detail->name}}</td>
+                            <td>{{$detail->provider_name}}</td>
                             <td>{{$detail->game_name}}</td>
                             <td>{{number_format($detail->total_bet_amount, 2)}}</td>
                             <td><span class="{{$detail->net_win > 0 ? 'text-success' : 'text-danger' }}">{{number_format($detail->net_win, 2)}}</span></td>
