@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin\Deposit;
 use App\Enums\TransactionName;
 use App\Http\Controllers\Controller;
 use App\Models\DepositRequest;
+use App\Models\PaymentType;
 use App\Models\User;
 use App\Models\UserPayment;
 use App\Services\WalletService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,15 +20,21 @@ class DepositRequestController extends Controller
     {
         $user = Auth::user();
         $agentIds = [$user->id];
+        $agents = [];
 
         if ($user->hasRole('Master')) {
-            $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
+            $agentIds = $this->getAgentIds($request, $user);
+            $agents = $user->children()->get();
         }
+        
+        $startDate = $request->start_date ?? Carbon::today()->format('Y-m-d H:m:i');
+        $endDate = $request->end_date ?? Carbon::today()->format('Y-m-d H:m:i');
+
         $deposits = DepositRequest::with('bank')
-            ->when($request->start_date && $request->end_date, function ($query) use ($request) {
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [
-                    $request->start_date . ' 00:00:00',
-                    $request->end_date . ' 23:59:59',
+                    $startDate,
+                    $endDate,
                 ]);
             })
             ->when($request->player_id, function ($query) use ($request) {
@@ -34,14 +42,24 @@ class DepositRequestController extends Controller
                     $subQuery->where('user_name', $request->player_id);
                 });
             })
+            ->when($request->agent_id, function ($query) use ($request) {
+                $query->where('agent_id', $request->agent_id);
+             })
+             ->when($request->payment_type_id, function ($query) use ($request) {
+                $query->whereHas('bank', function ($subQuery) use ($request) {
+                    $subQuery->where('payment_type_id', $request->payment_type_id);
+                });              
+            })
             ->when($request->status, function ($query) use ($request) {
                 $query->where('status', $request->status);
             })
             ->whereIn('agent_id', $agentIds)
             ->latest()
             ->get();
+         
+        $paymentTypes = PaymentType::all();
 
-        return view('admin.deposit_request.index', compact('deposits'));
+        return view('admin.deposit_request.index', compact('deposits' , 'agents', 'paymentTypes'));
     }
 
     public function statusChangeIndex(Request $request, DepositRequest $deposit)
@@ -104,13 +122,12 @@ class DepositRequestController extends Controller
         return view('admin.deposit_request.show', compact('deposit'));
     }
 
-    private function isExistingAgent($userId)
+    private function getAgentIds($request, $user)
     {
-        return User::find($userId);
-    }
+        if ($request->agent_id) {
+            return User::where('id', $request->agent_id)->pluck('id')->toArray();
+        }
 
-    private function getAgent()
-    {
-        return $this->isExistingAgent(Auth::id());
+        return User::where('agent_id', $user->id)->pluck('id')->toArray();
     }
 }

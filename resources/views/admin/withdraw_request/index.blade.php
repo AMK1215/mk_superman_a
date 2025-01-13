@@ -212,22 +212,6 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
 <script>
-    if (document.getElementById('users-search')) {
-        const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
-            searchable: false,
-            fixedHeight: false,
-            perPage: 7
-        });
-
-        document.getElementById('export-csv').addEventListener('click', function() {
-            dataTableSearch.export({
-                type: "csv",
-                filename: "withdraw",
-            });
-        });
-    };
-</script>
-<script>
     var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
     var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl)
@@ -261,16 +245,50 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let totalAmount = 0;
-        document.querySelectorAll('.amount').forEach(function(cell) {
-            totalAmount += parseFloat(cell.textContent.replace(/,/g, '')) || 0;
+        if (document.getElementById('users-search')) {
+            const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
+                searchable: false,
+                fixedHeight: false,
+                perPage: 2
+            });
+
+            function updateTotalAmount() {
+                let totalAmount = 0;
+
+                // Get the visible rows in the current page
+                const visibleRows = document.querySelectorAll('#users-search tbody tr');
+                visibleRows.forEach(function(row) {
+                    const amountCell = row.querySelector('.amount');
+                    if (amountCell) {
+                        totalAmount += parseFloat(amountCell.textContent.replace(/,/g, '')) || 0;
+                    }
+                });
+
+                const footerRow = `
+        <th colspan="4" class="text-center text-dark">Total Amount:</th>
+        <th class="text-dark">${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>
+        <th colspan="6"></th>
+      `;
+                document.querySelector('#users-search #tfoot').innerHTML = footerRow;
+            }
+
+            updateTotalAmount();
+
+            dataTableSearch.on('datatable.page', updateTotalAmount);
+            dataTableSearch.on('datatable.perpage', updateTotalAmount);
+
+            document.getElementById('export-csv').addEventListener('click', function() {
+                dataTableSearch.export({
+                    type: "csv",
+                    filename: "withdraw",
+                });
+            });
+        }
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
         });
-        const footerRow = `
-                <th colspan="4" class="text-center text-dark">Total Amount:</th>
-                <th class="text-dark">${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>
-                <th colspan="6"></th>
-        `;
-        document.querySelector('#users-search #tfoot').innerHTML = footerRow;
     });
 </script>
 @endsection
