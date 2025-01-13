@@ -62,6 +62,11 @@
     <div class="card">
       <!-- Card header -->
       <div class="card-header pb-0">
+        <div class="d-lg-flex">
+          <div>
+            <h5 class="mb-0">DepositRequest</h5>
+          </div>
+        </div>
         <form action="{{route('admin.agent.deposit')}}" method="GET">
           <div class="row mt-3">
             <div class="col-md-3">

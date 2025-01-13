@@ -67,5 +67,11 @@ class PermissionRoleTableSeeder extends Seeder
 
         $systemWallet = Permission::where('title', 'system_wallet')->first();
         Role::findOrFail(5)->permissions()->sync($systemWallet);
+
+        $subAgent = Permission::whereIn('title', [
+            'withdraw_requests',
+            'deposit_requests'
+        ])->pluck('id');
+        Role::findOrFail(6)->permissions()->sync($subAgent);
     }
 }
