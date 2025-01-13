@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Services\WalletService;
 
 class ReportController extends Controller
 {
@@ -146,4 +147,7 @@ class ReportController extends Controller
     {
         return DB::raw("(SELECT user_id, SUM(amount) AS total_amount FROM $table WHERE $condition GROUP BY user_id) AS $table");
     }
+
+
+
 }

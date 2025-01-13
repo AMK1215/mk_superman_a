@@ -17,6 +17,8 @@ use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Enums\TransactionName;
+use App\Services\WalletService;
 
 class TransactionController extends Controller
 {
@@ -60,4 +62,11 @@ class TransactionController extends Controller
 
         return $this->success(WithdrawResource::collection($transactions));
     }
+
+    public function transactionDetails(Request $request)
+    {
+        // need to wait provider daily transaction detail api (currently not accept from provider api )
+
+    }
+
 }
