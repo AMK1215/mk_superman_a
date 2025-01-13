@@ -62,6 +62,11 @@
         <div class="card">
             <!-- Card header -->
             <div class="card-header pb-0">
+                <div class="d-lg-flex">
+                    <div>
+                        <h5 class="mb-0">WithDrawRequest</h5>
+                    </div>
+                </div>
                 <form action="{{route('admin.agent.withdraw')}}" method="GET">
                     <div class="row mt-3">
                         <div class="col-md-3">
@@ -70,25 +75,49 @@
                                 <input type="text" class="form-control" name="player_id" value="{{request()->player_id}}">
                             </div>
                         </div>
+                        @can('master_access')
+                        <div class="col-md-3">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="">AgentId</label>
+                                <select name="agent_id" class="form-control">
+                                    <option value="">Select AgentName</option>
+                                    @foreach($agents as $agent)
+                                    <option value="{{$agent->id}}" {{request()->agent_id == $agent->id ? 'selected' : ''}}>{{$agent->user_name}}-{{$agent->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        @endcan
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">Start Date</label>
-                                <input type="date" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+                                <input type="datetime-local" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">EndDate</label>
-                                <input type="date" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+                                <input type="datetime-local" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">Status</label>
                                 <select name="status" id="" class="form-control">
-                                    <option value="disabled">Select Status</option>
+                                    <option value="">Select Status</option>
                                     <option value="1">approved</option>
                                     <option value="2">Reject</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="">PaymentType</label>
+                                <select name="payment_type_id" id="" class="form-control">
+                                    <option value="">Select Status</option>
+                                    @foreach($paymentTypes as $type)
+                                    <option value="{{$type->id}}" {{request()->payment_type_id == $type->id ? 'selected' : ''}}>{{$type->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -108,6 +137,7 @@
                         <th>#</th>
                         <th>PlayerId</th>
                         <th>PlayerName</th>
+                        <th>AgentName</th>
                         <th>Requested Amount</th>
                         <th>Payment Method</th>
                         <th>Bank Account Name</th>
@@ -122,7 +152,8 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{$withdraw->user->user_name}}</td>
                             <td>{{$withdraw->user->name}}</td>
-                            <td>{{ number_format($withdraw->amount) }}</td>
+                            <td><span class="badge text-bg-warning text-white ">{{$withdraw->user->parent->name}}</span></td>
+                            <td class="amount">{{ number_format($withdraw->amount) }}</td>
                             <td>{{$withdraw->paymentType->name}}</td>
                             <td>{{$withdraw->account_name}}</td>
                             <td>{{$withdraw->account_no}}</td>
@@ -162,8 +193,11 @@
                                 </div>
                             </td>
                         </tr>
+
                         @endforeach
                     </tbody>
+                    <tr id="tfoot">
+                    </tr>
                 </table>
             </div>
         </div>
@@ -180,7 +214,7 @@
 <script>
     if (document.getElementById('users-search')) {
         const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
-            searchable: true,
+            searchable: false,
             fixedHeight: false,
             perPage: 7
         });
@@ -188,7 +222,7 @@
         document.getElementById('export-csv').addEventListener('click', function() {
             dataTableSearch.export({
                 type: "csv",
-                filename: "deposit",
+                filename: "withdraw",
             });
         });
     };
@@ -223,6 +257,20 @@
             showConfirmButton: false
         });
         @endif
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let totalAmount = 0;
+        document.querySelectorAll('.amount').forEach(function(cell) {
+            totalAmount += parseFloat(cell.textContent.replace(/,/g, '')) || 0;
+        });
+        const footerRow = `
+                <th colspan="4" class="text-center text-dark">Total Amount:</th>
+                <th class="text-dark">${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>
+                <th colspan="6"></th>
+        `;
+        document.querySelector('#users-search #tfoot').innerHTML = footerRow;
     });
 </script>
 @endsection

@@ -70,12 +70,14 @@
                 </a>
             </li>
         @endcan
+        @canany(['master_access', 'agent_access', 'owner_access'])
         <li class="nav-item">
             <a class="nav-link text-white " href="{{ route('admin.transferLog') }}">
                 <span class="sidenav-mini-icon"> <i class="fas fa-right-left"></i> </span>
                 <span class="sidenav-normal  ms-2  ps-1">Transfer Log</span>
             </a>
         </li>
+        @endcan
         @canany(['master_access', 'agent_access'])
             <li class="nav-item ">
                 <a class="nav-link text-white " href="{{ route('admin.banks.index') }}">
