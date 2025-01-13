@@ -249,7 +249,7 @@
             const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
                 searchable: false,
                 fixedHeight: false,
-                perPage: 2
+                perPage: 7
             });
 
             function updateTotalAmount() {

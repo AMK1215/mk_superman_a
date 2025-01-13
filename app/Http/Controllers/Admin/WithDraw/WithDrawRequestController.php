@@ -24,9 +24,9 @@ class WithDrawRequestController extends Controller
             $agentIds = $this->getAgentIds($request, $user);
             $agents = $user->children()->get();
         }
-        $startDate = $request->start_date ?? Carbon::today()->format('Y-m-d H:m:i');
-        $endDate = $request->end_date ?? Carbon::today()->format('Y-m-d H:m:i');
-
+        $startDate = $request->start_date ?? Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
+        $endDate = $request->end_date ?? Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
+                
         $withdraws = WithDrawRequest::with('paymentType')
             ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [
