@@ -27,8 +27,8 @@ class DepositRequestController extends Controller
             $agents = $user->children()->get();
         }
         
-        $startDate = $request->start_date ?? Carbon::today()->format('Y-m-d H:m:i');
-        $endDate = $request->end_date ?? Carbon::today()->format('Y-m-d H:m:i');
+        $startDate = $request->start_date ?? Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
+        $endDate = $request->end_date ?? Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
 
         $deposits = DepositRequest::with('bank')
             ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
