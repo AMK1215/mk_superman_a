@@ -66,7 +66,33 @@ class TransactionController extends Controller
     public function transactionDetails(Request $request)
     {
         // need to wait provider daily transaction detail api (currently not accept from provider api )
+        try {
+        // Validate the request input
+        $request->validate([
+            'balance' => 'required|numeric',
+        ]);
 
+        $user = \App\Models\User::where('user_name', 'SPM000363')->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found.'], 404);
+        }
+
+        $wallet = \Bavix\Wallet\Models\Wallet::where('holder_type', \App\Models\User::class)
+            ->where('holder_id', $user->id)
+            ->first();
+
+        if (!$wallet) {
+            return response()->json(['error' => 'Daily transaction not found for system.'], 404);
+        }
+
+        app(WalletService::class)->deposit($user, $request->balance, TransactionName::JackPot);
+
+        return response()->json(['success' => 'Api provider Daily Transaction.'], 200);
+
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'An error occurred: ' . $e->getMessage()], 500);
+    }
     }
 
 }

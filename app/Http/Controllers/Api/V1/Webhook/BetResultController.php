@@ -53,7 +53,7 @@ class BetResultController extends Controller
                         return $this->buildErrorResponse(StatusCode::InvalidSignature, $player->wallet->balanceFloat);
                     }
 
-                    // Prevent duplicate ResultId
+                    // Prevent duplicate ResultId (concern with duplicate transaction)
                     if ($this->isDuplicateResult($transaction)) {
                         Redis::del($lockKey); // Release lock
 
