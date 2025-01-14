@@ -163,6 +163,8 @@ class BetResultController extends Controller
     {
         $method = 'Result';
 
+        // signature is correct but not launch game (wait provider respond)
+
         return md5(
             $method.
             $transaction['RoundId'].
