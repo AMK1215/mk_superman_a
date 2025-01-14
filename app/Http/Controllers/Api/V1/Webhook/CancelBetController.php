@@ -77,6 +77,8 @@ class CancelBetController extends Controller
 
                     // Update the existing transaction status to canceled
 
+                    // need to check trad id
+
                     $existingTransaction->status = 'cancelled';
                     $existingTransaction->cancelled_at = now();
                     $existingTransaction->save();
