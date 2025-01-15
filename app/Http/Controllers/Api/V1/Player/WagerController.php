@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class WagerController extends Controller
 {
     use HttpResponses;
-
+    // to do utc time
     public function index(Request $request)
     {
         $type = $request->get('type');
