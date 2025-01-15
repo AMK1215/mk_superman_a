@@ -28,8 +28,8 @@ class WagerController extends Controller
         $combinedSubquery = DB::table('results')
             ->select(
                 'user_id',
-                DB::raw('MIN(created_at) as from_date'),
-                DB::raw('MAX(created_at) as to_date'),
+                DB::raw('MIN(tran_date_time) as from_date'),
+                DB::raw('MAX(tran_date_time) as to_date'),
                 DB::raw('COUNT(results.game_code) as total_count'),
                 DB::raw('SUM(total_bet_amount) as total_bet_amount'),
                 DB::raw('SUM(win_amount) as win_amount'),
@@ -38,14 +38,14 @@ class WagerController extends Controller
             )
             ->join('game_lists', 'game_lists.game_id', '=', 'results.game_code')
             ->join('products', 'products.id', '=', 'game_lists.product_id')
-            ->whereBetween('results.created_at', [$from, $to])
+            ->whereBetween('results.tran_date_time', [$from, $to])
             ->groupBy('products.provider_name', 'user_id')
             ->unionAll(
                 DB::table('bet_n_results')
                     ->select(
                         'user_id',
-                        DB::raw('MIN(created_at) as from_date'),
-                        DB::raw('MAX(created_at) as to_date'),
+                        DB::raw('MIN(tran_date_time) as from_date'),
+                        DB::raw('MAX(tran_date_time) as to_date'),
                         DB::raw('COUNT(bet_n_results.game_code) as total_count'),        
                         DB::raw('SUM(bet_amount) as total_bet_amount'),
                         DB::raw('SUM(win_amount) as win_amount'),
@@ -54,7 +54,7 @@ class WagerController extends Controller
                     )
                     ->join('game_lists', 'game_lists.game_id', '=', 'bet_n_results.game_code')
                     ->join('products', 'products.id', '=', 'game_lists.product_id')
-                    ->whereBetween('bet_n_results.created_at', [$from, $to])
+                    ->whereBetween('bet_n_results.tran_date_time', [$from, $to])
                     ->groupBy('products.provider_name', 'user_id')
             );
 
