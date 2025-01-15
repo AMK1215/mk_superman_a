@@ -24,18 +24,20 @@
     </main>
     @include('admin_layouts.setting')
     <!--   Core JS Files   -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script src="{{ asset('admin_app/assets/js/jquery.min.js') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/flatpickr.js') }}"></script>
+    <script src="{{asset('admin_app/assets/js/sweetalert2.all.min.js ') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/plugins/choices.min.js') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
     <script src="https://kit.fontawesome.com/b829c5162c.js" crossorigin="anonymous"></script>
     <script src="{{ asset('admin_app/assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('admin_app/assets/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset('admin_app/assets/js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('admin_app/assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
-    <!-- Kanban scripts -->
-    <script src="{{ asset('admin_app/assets/js/plugins/dragula/dragula.min.js') }}"></script>
-    <script src="{{ asset('admin_app/assets/js/plugins/jkanban/jkanban.js') }}"></script>
-    <script src="{{ asset('admin_app/assets/js/plugins/chartjs.min.js') }}"></script>
-    <script src="{{ asset('admin_app/assets/js/plugins/world.js') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/plugins/choices.min.js') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
+    <script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
 
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
@@ -46,22 +48,39 @@
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
     </script>
-    <!-- Github buttons -->
-    {{-- <script async defer src="https://buttons.github.io/buttons.js"></script> --}}
     <script src="{{ asset('admin_app/assets/js/material-dashboard.min.js?v=3.0.6') }}"></script>
-
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
     <script>
-        @if (Session::has('success') || Session::has('error'))
-            Swal.fire({
-                title: '{{ Session::has('success') ? 'Success' : 'Error' }}',
-                text: '{{ Session::has('success') ? Session::get('success') : Session::get('error') }}',
-                icon: '{{ Session::has('success') ? 'success' : 'error' }}',
-                confirmButtonText: 'Okay'
+        $(document).ready(function() {
+            $('input[name="start_date"]').flatpickr({
+                enableTime: true,
+                dateFormat: "m/d/Y H:i",
             });
+            $('input[name="end_date"]').flatpickr({
+                enableTime: true,
+                dateFormat: "m/d/Y H:i",
+            });
+        });
+    </script>
+    <script>
+        @if(Session::has('success') || Session::has('error'))
+        Swal.fire({
+            title: '{{ Session::has('
+            success ') ? '
+            Success ' : '
+            Error ' }}',
+            text: '{{ Session::has('
+            success ') ? Session::get('
+            success ') : Session::get('
+            error ') }}',
+            icon: '{{ Session::has('
+            success ') ? '
+            success ' : '
+            error ' }}',
+            confirmButtonText: 'Okay'
+        });
         @endif
     </script>
-    
+
     @yield('scripts')
 
 </body>

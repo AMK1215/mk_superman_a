@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\WithDraw;
 
 use App\Enums\TransactionName;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\WithdrawRequest as ApiWithdrawRequest;
 use App\Models\PaymentType;
 use App\Models\User;
 use App\Models\WithDrawRequest;
@@ -24,37 +25,19 @@ class WithDrawRequestController extends Controller
             $agentIds = $this->getAgentIds($request, $user);
             $agents = $user->children()->get();
         }
-        $startDate = $request->start_date ?? Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
-        $endDate = $request->end_date ?? Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
-                
-        $withdraws = WithDrawRequest::with('paymentType')
-            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
-                $query->whereBetween('created_at', [
-                    $startDate,
-                    $endDate,
-                ]);
-            })
-            ->when($request->player_id, function ($query) use ($request) {
-                $query->whereHas('user', function ($subQuery) use ($request) {
-                    $subQuery->where('user_name', $request->player_id);
-                });
-            })
-            ->when($request->agent_id, function ($query) use ($request) {
-               $query->where('agent_id', $request->agent_id);
-            })
-            ->when($request->payment_type_id, function ($query) use ($request) {
-                $query->where('payment_type_id', $request->payment_type_id);
-             })
-            ->when($request->status, function ($query) use ($request) {
-                $query->where('status', $request->status);
-            })
-            ->whereIn('agent_id', $agentIds)
+
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i:s') : Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s') :  Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
+
+        $withdraws = $this->getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
             ->latest()
             ->get();
-        
         $paymentTypes = PaymentType::all();
 
-        return view('admin.withdraw_request.index', compact('withdraws', 'paymentTypes', 'agents'));
+        $totalAmount = $this->getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
+            ->sum('amount');
+
+        return view('admin.withdraw_request.index', compact('withdraws', 'paymentTypes', 'agents', 'totalAmount'));
     }
 
     public function statusChangeIndex(Request $request, WithDrawRequest $withdraw)
@@ -116,5 +99,31 @@ class WithDrawRequestController extends Controller
         }
 
         return User::where('agent_id', $user->id)->pluck('id')->toArray();
+    }
+
+    private function getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
+    {
+        return WithDrawRequest::with('paymentType')
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [
+                    $startDate,
+                    $endDate,
+                ]);
+            })
+            ->when($request->player_id, function ($query) use ($request) {
+                $query->whereHas('user', function ($subQuery) use ($request) {
+                    $subQuery->where('user_name', $request->player_id);
+                });
+            })
+            ->when($request->agent_id, function ($query) use ($request) {
+                $query->where('agent_id', $request->agent_id);
+            })
+            ->when($request->payment_type_id, function ($query) use ($request) {
+                $query->where('payment_type_id', $request->payment_type_id);
+            })
+            ->when($request->status, function ($query) use ($request) {
+                $query->where('status', $request->status);
+            })
+            ->whereIn('agent_id', $agentIds);
     }
 }

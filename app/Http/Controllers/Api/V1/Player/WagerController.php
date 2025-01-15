@@ -25,27 +25,45 @@ class WagerController extends Controller
         };
 
         $user = auth()->user();
-
-        $transactions = $this->makeJoinTable()->select(
-            'results.game_provide_name as product_name',
-            DB::raw('MIN(results.tran_date_time) as from_date'),
-            DB::raw('MAX(results.tran_date_time) as to_date'),
-            DB::raw('COUNT(results.game_provide_name) as total_count'),
-            DB::raw('SUM(results.total_bet_amount) as total_bet_amount'),
-            DB::raw('SUM(results.net_win) as total_net_win_amount'))
-            ->groupBy('product_name')
-            ->where('results.user_id', $user->id)
+        $combinedSubquery = DB::table('results')
+            ->select(
+                'user_id',
+                DB::raw('MIN(tran_date_time) as from_date'),
+                DB::raw('MAX(tran_date_time) as to_date'),
+                DB::raw('COUNT(results.game_code) as total_count'),
+                DB::raw('SUM(total_bet_amount) as total_bet_amount'),
+                DB::raw('SUM(win_amount) as win_amount'),
+                DB::raw('SUM(net_win) as net_win'),
+                'products.provider_name'
+            )
+            ->join('game_lists', 'game_lists.game_id', '=', 'results.game_code')
+            ->join('products', 'products.id', '=', 'game_lists.product_id')
             ->whereBetween('results.tran_date_time', [$from, $to])
-            ->paginate();
+            ->groupBy('products.provider_name', 'user_id')
+            ->unionAll(
+                DB::table('bet_n_results')
+                    ->select(
+                        'user_id',
+                        DB::raw('MIN(tran_date_time) as from_date'),
+                        DB::raw('MAX(tran_date_time) as to_date'),
+                        DB::raw('COUNT(bet_n_results.game_code) as total_count'),        
+                        DB::raw('SUM(bet_amount) as total_bet_amount'),
+                        DB::raw('SUM(win_amount) as win_amount'),
+                        DB::raw('SUM(net_win) as net_win'),
+                        'products.provider_name'
+                    )
+                    ->join('game_lists', 'game_lists.game_id', '=', 'bet_n_results.game_code')
+                    ->join('products', 'products.id', '=', 'game_lists.product_id')
+                    ->whereBetween('bet_n_results.tran_date_time', [$from, $to])
+                    ->groupBy('products.provider_name', 'user_id')
+            );
 
-        return $this->success(SeamlessTransactionResource::collection($transactions));
-    }
+        $transactions = DB::table('users as players')
+            ->joinSub($combinedSubquery, 'combined', 'combined.user_id', '=', 'players.id')
+            ->where('players.id', $user->id)
+            ->orderBy('players.id', 'desc')
+            ->get();
 
-    private function makeJoinTable()
-    {
-        $query = User::query();
-        $query->join('results', 'results.user_id', '=', 'users.id');
-
-        return $query;
+            return $this->success(SeamlessTransactionResource::collection($transactions));
     }
 }

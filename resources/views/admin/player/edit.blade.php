@@ -119,12 +119,6 @@
 
 @endsection
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-
-<script src="{{ asset('admin_app/assets/js/plugins/choices.min.js') }}"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
-
 <script>
   var errorMessage = @json(session('error'));
   var successMessage = @json(session('success'));

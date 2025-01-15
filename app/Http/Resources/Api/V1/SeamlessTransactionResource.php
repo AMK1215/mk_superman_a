@@ -17,10 +17,10 @@ class SeamlessTransactionResource extends JsonResource
         return [
             'from_date' => $this->from_date,
             'to_date' => $this->to_date,
-            'product' => $this->product_name,
+            'product' => $this->provider_name,
             'total_count' => $this->total_count,
             'total_bet_amount' => number_format($this->total_bet_amount, 2),
-            'total_win_amount' => number_format($this->total_net_win_amount, 2)
+            'total_win_amount' => number_format($this->net_win, 2)
         ];
     }
 }

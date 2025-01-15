@@ -91,13 +91,13 @@
             <div class="col-md-3">
               <div class="input-group input-group-static mb-4">
                 <label for="">Start Date</label>
-                <input type="datetime-local" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+                <input type="datetime" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
               </div>
             </div>
             <div class="col-md-3">
               <div class="input-group input-group-static mb-4">
                 <label for="">EndDate</label>
-                <input type="datetime-local" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+                <input type="datetime" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
               </div>
             </div>
             <div class="col-md-3">
@@ -162,7 +162,7 @@
                 <span class="badge text-bg-danger text-white mb-2">Rejected</span>
                 @endif
               </td>
-              <td>{{ $deposit->created_at->setTimezone('Asia/Yangon')->format('d-m-Y H:i:s') }}</td>
+              <td>{{ $deposit->created_at->timezone('Asia/Yangon')->format('d-m-Y H:i:s') }}</td>
               <td>
                 <div class="d-flex align-items-center">
                   <a href="{{route('admin.agent.depositShow', $deposit->id)}}" class="text-white btn btn-info">Detail</a>
@@ -172,58 +172,28 @@
             @endforeach
           </tbody>
           <tr id="tfoot">
+            <th colspan="4" class="text-center text-dark">Total Amount:</th>
+            <th class="text-dark">{{number_format($totalAmount, 2)}}</th>
+            <th colspan="6"></th>
           </tr>
         </table>
       </div>
     </div>
     @endsection
     @section('scripts')
-    <script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById('users-search')) {
-          const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
-            searchable: false,
-            fixedHeight: false,
-            perPage: 7
+        const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
+          searchable: false,
+          fixedHeight: false,
+          perPage: 7,
+        });
+
+        document.getElementById('export-csv').addEventListener('click', function() {
+          dataTableSearch.export({
+            type: "csv",
+            filename: "withdraw",
           });
-
-          function updateTotalAmount() {
-            let totalAmount = 0;
-
-            // Get the visible rows in the current page
-            const visibleRows = document.querySelectorAll('#users-search tbody tr');
-            visibleRows.forEach(function(row) {
-              const amountCell = row.querySelector('.amount');
-              if (amountCell) {
-                totalAmount += parseFloat(amountCell.textContent.replace(/,/g, '')) || 0;
-              }
-            });
-
-            const footerRow = `
-        <th colspan="4" class="text-center text-dark">Total Amount:</th>
-        <th class="text-dark">${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>
-        <th colspan="6"></th>
-      `;
-            document.querySelector('#users-search #tfoot').innerHTML = footerRow;
-          }
-
-          updateTotalAmount();
-
-          dataTableSearch.on('datatable.page', updateTotalAmount);
-          dataTableSearch.on('datatable.perpage', updateTotalAmount);
-
-          document.getElementById('export-csv').addEventListener('click', function() {
-            dataTableSearch.export({
-              type: "csv",
-              filename: "deposit",
-            });
-          });
-        }
-
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-          return new bootstrap.Tooltip(tooltipTriggerEl);
         });
       });
     </script>

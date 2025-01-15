@@ -91,13 +91,13 @@
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">Start Date</label>
-                                <input type="datetime-local" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+                                <input type="text" class="form-control" id="datetime" name="start_date" value="{{request()->get('start_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">EndDate</label>
-                                <input type="datetime-local" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+                                <input type="text" class="form-control" id="datetime" name="end_date" value="{{request()->get('end_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -166,7 +166,7 @@
                                 <span class="badge text-bg-danger text-white mb-2">Rejected</span>
                                 @endif
                             </td>
-                            <td>{{ $withdraw->created_at->format('d-m-Y H:m:i') }}</td>
+                            <td>{{ $withdraw->created_at->timezone('Asia/Yangon')->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <form action="{{ route('admin.agent.withdrawStatusUpdate', $withdraw->id) }}" method="post">
@@ -197,6 +197,9 @@
                         @endforeach
                     </tbody>
                     <tr id="tfoot">
+                        <th colspan="4" class="text-center text-dark">Total Amount:</th>
+                        <th class="text-dark">{{number_format($totalAmount, 2)}}</th>
+                        <th colspan="6"></th>
                     </tr>
                 </table>
             </div>
@@ -205,44 +208,6 @@
 </div>
 @endsection
 @section('scripts')
-
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
-<script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-</script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var errorMessage = @json(session('error'));
-        var successMessage = @json(session('success'));
-
-        @if(session() -> has('success'))
-        Swal.fire({
-            icon: 'success',
-            title: successMessage,
-            text: '{{ session('
-            SuccessRequest ') }}',
-            timer: 3000,
-            showConfirmButton: false
-        });
-        @elseif(session() -> has('error'))
-        Swal.fire({
-            icon: 'error',
-            title: '',
-            text: errorMessage,
-            timer: 3000,
-            showConfirmButton: false
-        });
-        @endif
-    });
-</script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         if (document.getElementById('users-search')) {
@@ -251,31 +216,6 @@
                 fixedHeight: false,
                 perPage: 7
             });
-
-            function updateTotalAmount() {
-                let totalAmount = 0;
-
-                // Get the visible rows in the current page
-                const visibleRows = document.querySelectorAll('#users-search tbody tr');
-                visibleRows.forEach(function(row) {
-                    const amountCell = row.querySelector('.amount');
-                    if (amountCell) {
-                        totalAmount += parseFloat(amountCell.textContent.replace(/,/g, '')) || 0;
-                    }
-                });
-
-                const footerRow = `
-        <th colspan="4" class="text-center text-dark">Total Amount:</th>
-        <th class="text-dark">${totalAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</th>
-        <th colspan="6"></th>
-      `;
-                document.querySelector('#users-search #tfoot').innerHTML = footerRow;
-            }
-
-            updateTotalAmount();
-
-            dataTableSearch.on('datatable.page', updateTotalAmount);
-            dataTableSearch.on('datatable.perpage', updateTotalAmount);
 
             document.getElementById('export-csv').addEventListener('click', function() {
                 dataTableSearch.export({

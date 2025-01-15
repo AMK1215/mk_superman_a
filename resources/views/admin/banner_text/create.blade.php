@@ -55,8 +55,6 @@
     background-color: #b8328b;
   }
 </style>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@1.13.12/iconfont/material-icons.min.css">
 @endsection
 @section('content')
 <div class="row">
@@ -143,10 +141,6 @@
 
 @endsection
 @section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/choices.min.js') }}"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/quill.min.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
   $(document).ready(function () {
     $("#singleAgent").hide();
