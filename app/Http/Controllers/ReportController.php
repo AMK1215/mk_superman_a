@@ -40,9 +40,10 @@ class ReportController extends Controller
 
     private function buildQuery(Request $request, $adminId)
     {
-        $startDate = $request->start_date ? Carbon::parse($request->start_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') : Carbon::today()->startOfDay()->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s');
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') :  Carbon::today()->subHours(6)->subMinutes(30)->endOfDay()->format('Y-m-d H:i:s');
-        
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') : Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') :  Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
+     
+
         $resultsSubquery = Result::select(
             'results.user_id',
             DB::raw('SUM(results.total_bet_amount) as total_bet_amount'),
