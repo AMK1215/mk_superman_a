@@ -162,7 +162,7 @@
                 <span class="badge text-bg-danger text-white mb-2">Rejected</span>
                 @endif
               </td>
-              <td>{{ $deposit->created_at->timezone('Asia/Yangon')->format('d-m-Y H:i:s') }}</td>
+              <td>{{ $deposit->created_at->format('d-m-Y H:i:s') }}</td>
               <td>
                 <div class="d-flex align-items-center">
                   <a href="{{route('admin.agent.depositShow', $deposit->id)}}" class="text-white btn btn-info">Detail</a>

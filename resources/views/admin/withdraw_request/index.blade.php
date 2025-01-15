@@ -166,7 +166,7 @@
                                 <span class="badge text-bg-danger text-white mb-2">Rejected</span>
                                 @endif
                             </td>
-                            <td>{{ $withdraw->created_at->timezone('Asia/Yangon')->format('d-m-Y H:i:s') }}</td>
+                            <td>{{ $withdraw->created_at->format('d-m-Y H:i:s') }}</td>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <form action="{{ route('admin.agent.withdrawStatusUpdate', $withdraw->id) }}" method="post">
