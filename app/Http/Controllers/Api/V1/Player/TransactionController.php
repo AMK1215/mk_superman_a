@@ -67,6 +67,7 @@ class TransactionController extends Controller
     {
         // need to wait provider daily transaction detail api (currently not accept from provider api )
 
+
     }
 
 }

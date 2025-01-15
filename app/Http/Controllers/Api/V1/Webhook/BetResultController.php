@@ -53,7 +53,7 @@ class BetResultController extends Controller
                         return $this->buildErrorResponse(StatusCode::InvalidSignature, $player->wallet->balanceFloat);
                     }
 
-                    // Prevent duplicate ResultId
+                    // Prevent duplicate ResultId (concern with duplicate transaction)
                     if ($this->isDuplicateResult($transaction)) {
                         Redis::del($lockKey); // Release lock
 
@@ -144,6 +144,7 @@ class BetResultController extends Controller
     private function isValidSignature(array $transaction): bool
     {
         $generatedSignature = $this->generateSignature($transaction);
+        // log remove
         //Log::info('Generated result signature', ['GeneratedSignature' => $generatedSignature]);
 
         if ($generatedSignature !== $transaction['Signature']) {
@@ -161,6 +162,8 @@ class BetResultController extends Controller
     private function generateSignature(array $transaction): string
     {
         $method = 'Result';
+
+        // signature is correct but not launch game (wait provider respond)
 
         return md5(
             $method.
