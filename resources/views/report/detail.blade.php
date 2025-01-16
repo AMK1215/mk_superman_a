@@ -25,13 +25,13 @@
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">Start Date</label>
-                                <input type="datetime-local" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
+                                <input type="text" class="form-control" name="start_date" value="{{request()->get('start_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">
                                 <label for="">EndDate</label>
-                                <input type="datetime-local" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
+                                <input type="text" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -82,14 +82,6 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
 <script>
     if (document.getElementById('users-search')) {
         const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
