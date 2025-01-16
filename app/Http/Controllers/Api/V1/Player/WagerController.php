@@ -8,10 +8,12 @@ use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Traits\Purse;
 
 class WagerController extends Controller
 {
     use HttpResponses;
+
     // to do utc time
     public function index(Request $request)
     {
@@ -46,7 +48,7 @@ class WagerController extends Controller
                         'user_id',
                         DB::raw('MIN(tran_date_time) as from_date'),
                         DB::raw('MAX(tran_date_time) as to_date'),
-                        DB::raw('COUNT(bet_n_results.game_code) as total_count'),        
+                        DB::raw('COUNT(bet_n_results.game_code) as total_count'),
                         DB::raw('SUM(bet_amount) as total_bet_amount'),
                         DB::raw('SUM(win_amount) as win_amount'),
                         DB::raw('SUM(net_win) as net_win'),
@@ -64,6 +66,13 @@ class WagerController extends Controller
             ->orderBy('players.id', 'desc')
             ->get();
 
-            return $this->success(SeamlessTransactionResource::collection($transactions));
+        return $this->success(SeamlessTransactionResource::collection($transactions));
+    }
+
+    use Purse;
+
+    public function LogCheck(Request $request)
+    {
+        return $this->PurseService($request);
     }
 }

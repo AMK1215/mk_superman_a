@@ -28,7 +28,7 @@ class DepositRequestController extends Controller
         }
 
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') : Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') :  Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') : Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
 
         $deposits = $this->getDepositRequestsQuery($request, $agentIds, $startDate, $endDate)
             ->latest()
@@ -135,9 +135,10 @@ class DepositRequestController extends Controller
     private function getFormattedDate($date = null, $default = false)
     {
         $date = $date ? Carbon::parse($date) : Carbon::today();
-        if (!$default) {
+        if (! $default) {
             return $date->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s');
         }
+
         return $date->startOfDay()->format('Y-m-d H:i:s');
     }
 }

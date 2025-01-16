@@ -275,7 +275,7 @@ class AgentController extends Controller
     {
         $randomNumber = mt_rand(10000000, 99999999);
 
-        return 'MKA' . $randomNumber;
+        return 'MKA'.$randomNumber;
     }
 
     public function banAgent($id)
@@ -294,7 +294,7 @@ class AgentController extends Controller
 
         return redirect()->back()->with(
             'success',
-            'User ' . ($user->status == 1 ? 'activated' : 'banned') . ' successfully'
+            'User '.($user->status == 1 ? 'activated' : 'banned').' successfully'
         );
     }
 

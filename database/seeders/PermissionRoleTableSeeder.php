@@ -70,7 +70,7 @@ class PermissionRoleTableSeeder extends Seeder
 
         $subAgent = Permission::whereIn('title', [
             'withdraw_requests',
-            'deposit_requests'
+            'deposit_requests',
         ])->pluck('id');
         Role::findOrFail(6)->permissions()->sync($subAgent);
     }
