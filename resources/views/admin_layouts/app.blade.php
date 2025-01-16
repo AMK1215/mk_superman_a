@@ -51,13 +51,19 @@
     <script src="{{ asset('admin_app/assets/js/material-dashboard.min.js?v=3.0.6') }}"></script>
     <script>
         $(document).ready(function() {
+            var today = new Date();
+            var startDate = new Date(today.setHours(0, 0, 0, 0)); 
+            var endDate = new Date(today.setHours(23, 59, 59, 999));
+
             $('input[name="start_date"]').flatpickr({
                 enableTime: true,
                 dateFormat: "m/d/Y H:i",
+                defaultDate: startDate, 
             });
             $('input[name="end_date"]').flatpickr({
                 enableTime: true,
                 dateFormat: "m/d/Y H:i",
+                defaultDate: endDate, 
             });
         });
     </script>

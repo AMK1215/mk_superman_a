@@ -9,17 +9,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Services\WalletService;
 
 class ReportController extends Controller
 {
-    private $carbon;
-
-    public function __construct(Carbon $carbon)
-    {
-        $this->carbon = $carbon;
-    }
-
     public function index(Request $request)
     {
         $adminId = auth()->id();
@@ -32,7 +24,7 @@ class ReportController extends Controller
     public function detail(Request $request, $playerId)
     {
         $details = $this->getPlayerDetails($playerId, $request);
-
+        
         $productTypes = Product::where('is_active', 1)->get();
 
         return view('report.detail', compact('details', 'productTypes', 'playerId'));
@@ -40,10 +32,9 @@ class ReportController extends Controller
 
     private function buildQuery(Request $request, $adminId)
     {
-        $startDate = $request->start_date ? Carbon::parse($request->start_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') : Carbon::today()->startOfDay()->format('Y-m-d H:i:s');
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->subHours(6)->subMinutes(30)->format('Y-m-d H:i:s') :  Carbon::today()->endOfDay()->format('Y-m-d H:i:s');
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') :  Carbon::today()->endOfDay()->format('Y-m-d H:i');
      
-
         $resultsSubquery = Result::select(
             'results.user_id',
             DB::raw('SUM(results.total_bet_amount) as total_bet_amount'),
@@ -105,9 +96,9 @@ class ReportController extends Controller
 
     private function getPlayerDetails($playerId, $request)
     {
-        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i:s'): $this->carbon->startOfMonth()->toDateTimeString();
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s'):        $this->carbon->endOfMonth()->toDateTimeString();
-        
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') :  Carbon::today()->endOfDay()->format('Y-m-d H:i');
+    
         $combinedSubquery = DB::table('results')
             ->select(
                 'user_id',
@@ -115,7 +106,8 @@ class ReportController extends Controller
                 'win_amount',
                 'net_win',
                 'game_lists.game_name',
-                'products.provider_name'
+                'products.provider_name',
+                'results.created_at as date'
             )
             ->join('game_lists', 'game_lists.game_id', '=', 'results.game_code')
             ->join('products', 'products.id', '=', 'game_lists.product_id')
@@ -129,7 +121,8 @@ class ReportController extends Controller
                         'win_amount',
                         'net_win',
                         'game_lists.game_name',
-                        'products.provider_name'
+                        'products.provider_name',
+                        'bet_n_results.created_at as date'
                     )
                     ->join('game_lists', 'game_lists.game_id', '=', 'bet_n_results.game_code')
                     ->join('products', 'products.id', '=', 'game_lists.product_id')
@@ -140,15 +133,12 @@ class ReportController extends Controller
         $query = DB::table('users as players')
             ->joinSub($combinedSubquery, 'combined', 'combined.user_id', '=', 'players.id')
             ->where('players.id', $playerId);
-
-        return $query->orderBy('players.id', 'desc')->get();
+      
+        return $query->orderBy('date', 'desc')->get();
     }
 
     private function getSubquery($table, $condition = '1=1')
     {
         return DB::raw("(SELECT user_id, SUM(amount) AS total_amount FROM $table WHERE $condition GROUP BY user_id) AS $table");
     }
-
-
-
 }

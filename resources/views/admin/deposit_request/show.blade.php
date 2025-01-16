@@ -100,7 +100,7 @@
                         <div class="custom-form-group">
                             <label class="form-label">DateTime</label>
                             <input type="text" class="form-control" name="amount"
-                                value="{{ $deposit->created_at->setTimezone('Asia/Yangon')->format('d-m-Y H:i:s') }}"
+                                value="{{ $deposit->created_at->format('d-m-Y H:i:s') }}"
                                 readonly>
                         </div>
                         <div class="custom-form-group">

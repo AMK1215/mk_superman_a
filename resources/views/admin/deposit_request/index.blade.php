@@ -105,6 +105,7 @@
                 <label for="">Status</label>
                 <select name="status" id="" class="form-control">
                   <option value="">Select Status</option>
+                  <option value="0" {{request()->status == "0" ? 'selected' : ''}}>pending</option>
                   <option value="1" {{request()->status == 1 ? 'selected' : ''}}>approved</option>
                   <option value="2" {{request()->status == 2 ? 'selected' : ''}}>Reject</option>
                 </select>
@@ -162,7 +163,7 @@
                 <span class="badge text-bg-danger text-white mb-2">Rejected</span>
                 @endif
               </td>
-              <td>{{ $deposit->created_at->timezone('Asia/Yangon')->format('d-m-Y H:i:s') }}</td>
+              <td>{{ $deposit->created_at->format('d-m-Y H:i:s') }}</td>
               <td>
                 <div class="d-flex align-items-center">
                   <a href="{{route('admin.agent.depositShow', $deposit->id)}}" class="text-white btn btn-info">Detail</a>
