@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin\Product;
 use App\Models\Webhook\BetNResult;
 use App\Models\Webhook\Result;
+use App\Services\WalletService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -41,8 +42,8 @@ class ReportController extends Controller
             DB::raw('SUM(results.win_amount) as win_amount'),
             DB::raw('SUM(results.net_win) as net_win')
         )
-        ->groupBy('results.user_id')
-        ->whereBetween('results.created_at', [$startDate, $endDate]);
+            ->groupBy('results.user_id')
+            ->whereBetween('results.created_at', [$startDate, $endDate]);
 
         $betsSubquery = BetNResult::select(
             'bet_n_results.user_id',
@@ -50,8 +51,8 @@ class ReportController extends Controller
             DB::raw('SUM(bet_n_results.win_amount) as bet_total_win_amount'),
             DB::raw('SUM(bet_n_results.net_win) as bet_total_net_amount')
         )
-        ->groupBy('bet_n_results.user_id')
-        ->whereBetween('bet_n_results.created_at', [$startDate, $endDate]);
+            ->groupBy('bet_n_results.user_id')
+            ->whereBetween('bet_n_results.created_at', [$startDate, $endDate]);
 
         $query = DB::table('users as players')
             ->select(
@@ -74,7 +75,7 @@ class ReportController extends Controller
             ->leftJoin($this->getSubquery('bonuses'), 'bonuses.user_id', '=', 'players.id')
             ->leftJoin($this->getSubquery('deposit_requests', 'status = 1'), 'deposit_requests.user_id', '=', 'players.id')
             ->leftJoin($this->getSubquery('with_draw_requests', 'status = 1'), 'with_draw_requests.user_id', '=', 'players.id')
-            ->when($request->player_id, fn($query) => $query->where('players.user_name', $request->player_id))
+            ->when($request->player_id, fn ($query) => $query->where('players.user_name', $request->player_id))
             ->where(function ($query) {
                 $query->whereNotNull('results.user_id')
                     ->orWhereNotNull('bets.user_id');
@@ -96,9 +97,15 @@ class ReportController extends Controller
 
     private function getPlayerDetails($playerId, $request)
     {
+<<<<<<< HEAD
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
         $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') :  Carbon::today()->endOfDay()->format('Y-m-d H:i');
     
+=======
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i:s') : $this->carbon->startOfMonth()->toDateTimeString();
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i:s') : $this->carbon->endOfMonth()->toDateTimeString();
+
+>>>>>>> 46baea83cd4fea8693f2a03bc89fa6fc9988bbc2
         $combinedSubquery = DB::table('results')
             ->select(
                 'user_id',
@@ -112,7 +119,7 @@ class ReportController extends Controller
             ->join('game_lists', 'game_lists.game_id', '=', 'results.game_code')
             ->join('products', 'products.id', '=', 'game_lists.product_id')
             ->whereBetween('results.created_at', [$startDate, $endDate])
-            ->when($request->product_id, fn($query) => $query->where('products.id', $request->product_id))
+            ->when($request->product_id, fn ($query) => $query->where('products.id', $request->product_id))
             ->unionAll(
                 DB::table('bet_n_results')
                     ->select(
@@ -127,7 +134,7 @@ class ReportController extends Controller
                     ->join('game_lists', 'game_lists.game_id', '=', 'bet_n_results.game_code')
                     ->join('products', 'products.id', '=', 'game_lists.product_id')
                     ->whereBetween('bet_n_results.created_at', [$startDate, $endDate])
-                    ->when($request->product_id, fn($query) => $query->where('products.id', $request->product_id))
+                    ->when($request->product_id, fn ($query) => $query->where('products.id', $request->product_id))
             );
 
         $query = DB::table('users as players')

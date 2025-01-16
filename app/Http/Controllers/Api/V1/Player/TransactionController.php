@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Player;
 
+use App\Enums\TransactionName;
 use App\Enums\TransactionStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\DepositResource;
@@ -13,12 +14,11 @@ use App\Models\SeamlessTransaction;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Models\WithDrawRequest;
+use App\Services\WalletService;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Enums\TransactionName;
-use App\Services\WalletService;
 
 class TransactionController extends Controller
 {
@@ -67,7 +67,5 @@ class TransactionController extends Controller
     {
         // need to wait provider daily transaction detail api (currently not accept from provider api )
 
-
     }
-
 }

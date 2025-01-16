@@ -46,7 +46,7 @@ class GameController extends Controller
             ->where('product_id', $product_id)
             ->where('game_type_id', $game_type_id)
             ->where('status', 1)
-            ->where('game_name', 'like', '%' . $request->name . '%')
+            ->where('game_name', 'like', '%'.$request->name.'%')
             ->paginate(9);
 
         return GameDetailResource::collection($gameLists);
