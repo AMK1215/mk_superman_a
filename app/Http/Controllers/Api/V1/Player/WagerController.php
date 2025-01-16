@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api\V1\Player;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\SeamlessTransactionResource;
-use App\Models\User;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Traits\Purse;
 
 class WagerController extends Controller
 {
@@ -68,8 +66,6 @@ class WagerController extends Controller
 
         return $this->success(SeamlessTransactionResource::collection($transactions));
     }
-
-    use Purse;
 
     public function LogCheck(Request $request)
     {
