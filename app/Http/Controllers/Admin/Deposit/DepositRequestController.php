@@ -28,8 +28,8 @@ class DepositRequestController extends Controller
         }
 
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') :  Carbon::today()->endOfDay()->format('Y-m-d H:i');
-     
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : Carbon::today()->endOfDay()->format('Y-m-d H:i');
+
         $deposits = $this->getDepositRequestsQuery($request, $agentIds, $startDate, $endDate)
             ->latest()
             ->get();
@@ -132,5 +132,4 @@ class DepositRequestController extends Controller
             })
             ->whereIn('agent_id', $agentIds);
     }
-
 }

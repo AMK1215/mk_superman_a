@@ -34,7 +34,6 @@ class Reward extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-
     protected static function boot()
     {
         parent::boot();

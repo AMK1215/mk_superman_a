@@ -9,12 +9,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Slot\SlotWebhookRequest;
 use App\Models\User;
 use App\Services\Slot\SlotWebhookService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Traits\Purse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
-use Illuminate\Http\Request;
-
+use Illuminate\Support\Traits\Purse;
 
 class PlaceBetWebhookController extends Controller
 {
