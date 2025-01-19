@@ -39,7 +39,7 @@ class DatabaseSeeder extends Seeder
             MegaH5GameTableSeeder::class,
             EpicWinGameTableSeeder::class,
             YellowBatGameTableSeeder::class,
-            EVOPLAYGameTableSeeder::class,
+            //EVOPLAYGameTableSeeder::class,
             FACHAIGameTableSeeder::class,
             BNGGameTableSeeder::class,
             YGRGameTableSeeder::class,

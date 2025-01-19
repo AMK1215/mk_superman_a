@@ -25,7 +25,7 @@ class ReportController extends Controller
     public function detail(Request $request, $playerId)
     {
         $details = $this->getPlayerDetails($playerId, $request);
-        
+
         $productTypes = Product::where('is_active', 1)->get();
 
         return view('report.detail', compact('details', 'productTypes', 'playerId'));
@@ -34,8 +34,8 @@ class ReportController extends Controller
     private function buildQuery(Request $request, $adminId)
     {
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') :  Carbon::today()->endOfDay()->format('Y-m-d H:i');
-     
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : Carbon::today()->endOfDay()->format('Y-m-d H:i');
+
         $resultsSubquery = Result::select(
             'results.user_id',
             DB::raw('SUM(results.total_bet_amount) as total_bet_amount'),
@@ -98,8 +98,8 @@ class ReportController extends Controller
     private function getPlayerDetails($playerId, $request)
     {
         $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') :  Carbon::today()->endOfDay()->format('Y-m-d H:i');
-    
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : Carbon::today()->endOfDay()->format('Y-m-d H:i');
+
         $combinedSubquery = DB::table('results')
             ->select(
                 'user_id',
@@ -134,7 +134,7 @@ class ReportController extends Controller
         $query = DB::table('users as players')
             ->joinSub($combinedSubquery, 'combined', 'combined.user_id', '=', 'players.id')
             ->where('players.id', $playerId);
-      
+
         return $query->orderBy('date', 'desc')->get();
     }
 

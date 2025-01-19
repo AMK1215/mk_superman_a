@@ -11,3 +11,7 @@ sudo chmod -R 775 /var/www/luckym_thb_confirm_a/storage
 sudo chmod -R 775 /var/www/luckym_thb_confirm_a/bootstrap/cache
 sudo chown -R www-data:www-data /var/www/luckym_thb_confirm_a/storage
 sudo chown -R www-data:www-data /var/www/luckym_thb_confirm_a/bootstrap/cache
+// public function LogCheck(Request $request)
+    // {
+    //     return $this->PurseService($request);
+    // }

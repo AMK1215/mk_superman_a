@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\BannerController;
 use App\Http\Controllers\Api\V1\ContactController;
 //use App\Http\Controllers\Api\V1\Game\LaunchGameController;
 use App\Http\Controllers\Api\V1\GetBalanceController;
+use App\Http\Controllers\Api\V1\NewVersion\PlaceBetWebhookController;
 use App\Http\Controllers\Api\V1\Player\DepositController;
 use App\Http\Controllers\Api\V1\Player\PlayerTransactionLogController;
 use App\Http\Controllers\Api\V1\Player\TransactionController;
@@ -48,9 +49,13 @@ Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
 Route::post('TransactionDetail', [TransactionController::class, 'transactionDetails']);
-Route::post('PullLog', [WagerController::class, 'LogCheck']);
+Route::post('PullLog', [PlaceBetWebhookController::class, 'PurseService']);
+Route::delete('TestBet', [PlaceBetWebhookController::class, 'BetTest']);
+
 Route::post('GetGameProvider', [GetGameProviderController::class, 'fetchGameProviders']);
 Route::post('GetGameListByProvider', [GetGameListByProviderController::class, 'fetchGameListByProvider']);
+Route::delete('/game-lists-delete', [GameController::class, 'deleteGameLists']);
+
 
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
