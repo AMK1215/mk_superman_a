@@ -134,8 +134,5 @@ class PlaceBetWebhookController extends Controller
         );
     }
 
-    // public function LogCheck(Request $request)
-    // {
-    //     return $this->PurseService($request);
-    // }
+    
 }
