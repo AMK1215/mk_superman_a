@@ -54,6 +54,8 @@ Route::delete('TestBet', [PlaceBetWebhookController::class, 'BetTest']);
 
 Route::post('GetGameProvider', [GetGameProviderController::class, 'fetchGameProviders']);
 Route::post('GetGameListByProvider', [GetGameListByProviderController::class, 'fetchGameListByProvider']);
+Route::delete('/game-lists-delete', [GameController::class, 'deleteGameLists']);
+
 
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);

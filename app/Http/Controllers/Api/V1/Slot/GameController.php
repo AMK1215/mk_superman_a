@@ -14,6 +14,7 @@ use App\Models\Admin\GameType;
 use App\Models\Admin\Product;
 use App\Traits\HttpResponses;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class GameController extends Controller
 {
@@ -85,4 +86,32 @@ class GameController extends Controller
 
         return $this->success(GameDetailResource::collection($gameLists), 'Game Detail Successfully');
     }
+
+
+    public function deleteGameLists(Request $request)
+{
+    // Validate the input
+    $validated = $request->validate([
+        'game_type_id' => 'required|integer',
+        'product_id' => 'required|integer',
+        'game_provide_name' => 'required|string|max:100',
+    ]);
+
+    $gameTypeId = $validated['game_type_id'];
+    $productId = $validated['product_id'];
+    $gameProvideName = $validated['game_provide_name'];
+
+    // Perform the deletion
+    $deleted = DB::table('game_lists')
+        ->where('game_type_id', $gameTypeId)
+        ->where('product_id', $productId)
+        ->where('game_provide_name', $gameProvideName)
+        ->delete();
+
+    if ($deleted) {
+        return response()->json(['message' => 'Game lists deleted successfully.'], 200);
+    }
+
+    return response()->json(['message' => 'No records found for the provided criteria.'], 404);
+}
 }
