@@ -17,7 +17,7 @@
                                 <select name="product_id" id="" class="form-control">
                                     <option value="">Select Product type</option>
                                     @foreach($productTypes as $type)
-                                    <option value="{{$type->id}}">{{$type->provider_name}}</option>
+                                    <option value="{{$type->id}}" {{ $type->id == request()->product_id ? 'selected' : ''}}>{{$type->provider_name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -71,7 +71,7 @@
                             <td>{{$detail->game_name}}</td>
                             <td>{{number_format($detail->total_bet_amount, 2)}}</td>
                             <td><span class="{{$detail->net_win > 0 ? 'text-success' : 'text-danger' }}">{{number_format($detail->net_win, 2)}}</span></td>
-                            <td>{{$detail->created_at}}</td>
+                            <td>{{$detail->date}}</td>
                         </tr>
                         @endforeach
                     </tbody>
