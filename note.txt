@@ -15,3 +15,6 @@ sudo chown -R www-data:www-data /var/www/luckym_thb_confirm_a/bootstrap/cache
     // {
     //     return $this->PurseService($request);
     // }
+
+
+php artisan db:seed --class=EVOPLAYGameTableSeeder
