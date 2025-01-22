@@ -115,14 +115,15 @@
                     <div class="card-body">
                         <form role="form" method="POST" class="text-start" action="{{ route('admin.player.store') }}">
                             @csrf
-                            @if(auth()->user()->hasRole('Master'))
-                            <div class="custom-form-group">
-                                <label for="title">Agent ReferralCode <span class="text-danger">*</span></label>
-                                <input type="text" name="referral_code" class="form-control" value="{{old('referral_code')}}">
-                                @error('referral_code')
-                                    <span class="text-danger d-block">{{ $message }}</span>
-                                @enderror
-                            </div>
+                            @if (auth()->user()->hasRole('Master'))
+                                <div class="custom-form-group">
+                                    <label for="title">Agent ReferralCode <span class="text-danger">*</span></label>
+                                    <input type="text" name="referral_code" class="form-control"
+                                        value="{{ old('referral_code') }}">
+                                    @error('referral_code')
+                                        <span class="text-danger d-block">{{ $message }}</span>
+                                    @enderror
+                                </div>
                             @endif
                             <div class="custom-form-group">
                                 <label for="title">Player ID <span class="text-danger">*</span></label>
@@ -189,7 +190,7 @@
     <script>
         var errorMessage = @json(session('error'));
         var successMessage = @json(session('success'));
-        var url = 'https://moneyking7.com/login';
+        var url = 'https://superman788.com/login';
         var user_name = @json(session('user_name'));
         var pw = @json(session('password'));
 

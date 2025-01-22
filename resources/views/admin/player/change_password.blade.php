@@ -109,7 +109,7 @@
     <script>
         var errorMessage = @json(session('error'));
         var successMessage = @json(session('success'));
-        var url = 'https://moneyking7.com/login';
+        var url = 'https://superman788.com/login';
         var name = @json(session('username'));
         var pw = @json(session('password'));
 
