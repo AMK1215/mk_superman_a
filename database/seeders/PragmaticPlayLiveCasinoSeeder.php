@@ -23,7 +23,7 @@ class PragmaticPlayLiveCasinoSeeder extends Seeder
             GameList::create([
                 'game_id' => $game['GameId'],
                 'game_type_id' => 6,  // Fixed value for game_type_id
-                'product_id' => 1,  // Fixed value for product_id
+                'product_id' => 2,  // Fixed value for product_id
                 'status' => 1,  // Default value for status
                 'hot_status' => 0,  // Default value for hot_status
                 'game_code' => $game['GameCode'],

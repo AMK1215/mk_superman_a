@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             GameProductSeeder::class,
             GameTypeProductTableSeeder::class,
             PragmaticPlaySlotSeeder::class,
-            PragmaticPlayLiveCasinoSeeder::class,
+            //PragmaticPlayLiveCasinoSeeder::class,
             PGSoftGameListSeeder::class,
             JILIGameTableSeeder::class,
             Live22GameTableSeeder::class,
