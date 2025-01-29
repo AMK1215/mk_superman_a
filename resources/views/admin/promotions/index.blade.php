@@ -51,12 +51,8 @@
               </td>
               <td>{{ $promotion->agent->name }}</td>
               <td class="text-sm font-weight-normal">{{ $promotion->created_at->format('F j, Y') }}</td>
-              {{-- <td class="text-sm font-weight-normal">{{ $promotion->updated_at->format('F j, Y') }}</td> --}}
               <td>
                 <a href="{{ route('admin.promotions.edit', $promotion->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Edit Banner"><i class="material-icons-round text-secondary position-relative text-lg">mode_edit</i></a>
-                <a href="{{ route('admin.promotions.show', $promotion->id) }}" data-bs-toggle="tooltip" data-bs-original-title="Preview Banner Detail">
-                  <i class="material-icons text-secondary position-relative text-lg">visibility</i>
-                </a>
                 <form class="d-inline" action="{{ route('admin.promotions.destroy', $promotion->id) }}" method="POST">
                   @csrf
                   @method('DELETE')
