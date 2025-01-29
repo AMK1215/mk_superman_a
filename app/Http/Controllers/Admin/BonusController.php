@@ -18,7 +18,8 @@ class BonusController extends Controller
     {
         $user = Auth::user();
         $agentIds = [$user->id];
-
+        $agents = [];
+        
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
             $agents = $user->children()->get();
