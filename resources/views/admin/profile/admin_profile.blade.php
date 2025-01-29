@@ -36,32 +36,4 @@
         </div>
     </div>
     @endsection
-    @section('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var errorMessage = @json(session('error'));
-            var successMessage = @json(session('success'));
-            console.log(successMessage);
-            @if(session() -> has('success'))
-            Swal.fire({
-                icon: 'success',
-                title: successMessage,
-                text: '{{ session('
-                SuccessRequest ') }}',
-                timer: 3000,
-                showConfirmButton: false
-            });
-            @elseif(session() -> has('error'))
-            Swal.fire({
-                icon: 'error',
-                title: '',
-                text: errorMessage,
-                timer: 3000,
-                showConfirmButton: false
-            });
-            @endif
-        });
-    </script>
-    @endsection
+    
