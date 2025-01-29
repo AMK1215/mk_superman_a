@@ -1,18 +1,4 @@
 @extends('admin_layouts.app')
-@section('styles')
-<style>
-  .transparent-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    outline: none;
-    cursor: pointer;
-    box-shadow: none;
-    appearance: none;
-    /* For some browsers */
-  }
-</style>
-@endsection
 @section('content')
 <div class="row mt-4">
   <div class="col-12">
