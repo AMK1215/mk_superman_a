@@ -185,7 +185,7 @@
                             <div class="custom-form-group">
                                 <button class="btn btn-info" type="button" id="resetFormButton">Cancel</button>
 
-                                <button type="submit" class="btn btn-primary" type="button">Submit</button>
+                                <button type="submit" class="btn btn-primary" type="button" id="submit">Submit</button>
                             </div>
                         </form>
                     </div>

@@ -94,7 +94,7 @@
                         </div>
                         <div class="custom-form-group">
                             <label class="form-label">Amount</label>
-                            <input type="text" class="form-control" name="amount" value="{{ $deposit->amount }}"
+                            <input type="text" class="form-control" name="amount" value="{{ number_format($deposit->amount, 2) }}"
                                 readonly>
                         </div>
                         <div class="custom-form-group">
@@ -119,7 +119,7 @@
                         </div>
                         <div class="d-lg-flex">
                             <form action="{{ route('admin.agent.depositStatusreject', $deposit->id) }}"
-                                method="post">
+                                method="post" id="form">
                                 @csrf
                                 <input type="hidden" name="status" value="2">
                                 @if($deposit->status == 0)
@@ -135,7 +135,7 @@
                                 <input type="hidden" name="status" value="1">
                                 <input type="hidden" name="player" value="{{ $deposit->user_id }}">
                                 @if($deposit->status == 0)
-                                <button class="btn btn-success" type="submit" style="margin-left: 5px">
+                                <button class="btn btn-success" type="submit" style="margin-left: 5px" id="submit">
                                     Approve
                                 </button>
                                 @endif
@@ -155,29 +155,14 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var errorMessage = @json(session('error'));
-        var successMessage = @json(session('success'));
-        console.log(successMessage);
-        @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: successMessage,
-            background: 'hsl(230, 40%, 10%)',
-            timer: 3000,
-            showConfirmButton: false
+    $(document).ready(function() {
+        $('form').submit(function(e) {
+            if ($(this).hasClass('submitted')) {
+                e.preventDefault();
+            } else {
+                $(this).addClass('submitted');
+            }
         });
-        @elseif(session('error'))
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: errorMessage,
-            background: 'hsl(230, 40%, 10%)',
-            timer: 3000,
-            showConfirmButton: false
-        });
-        @endif
     });
 </script>
 @endsection
