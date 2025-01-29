@@ -70,6 +70,7 @@
                         </div>
                         <div class="col-md-3">
                             <button class="btn btn-sm btn-primary mt-3" id="search" type="submit">Search</button>
+                            <button class="btn btn-outline-primary btn-sm  mb-0 mt-sm-0" data-type="csv" type="button" name="button" id="export-csv">Export</button>
                             <a href="{{route('admin.bonus.index')}}" class="btn btn-link text-primary ms-auto border-0" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Refresh">
                                 <i class="material-icons text-lg mt-0">refresh</i>
                             </a>
@@ -128,7 +129,14 @@
         const dataTableSearch = new simpleDatatables.DataTable("#banners-search", {
             searchable: true,
             fixedHeight: false,
-            perPage: 10
+            perPage: 15
+        });
+
+        document.getElementById('export-csv').addEventListener('click', function() {
+          dataTableSearch.export({
+            type: "csv",
+            filename: "bonus",
+          });
         });
     };
 </script>
