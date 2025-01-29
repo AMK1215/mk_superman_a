@@ -20462,7 +20462,7 @@ fieldset:disabled .btn {
 
 .btn.btn-sm i,
 .btn-group-sm>.btn i {
-  font-size: 0.5rem;
+  font-size: 1rem;
 }
 
 .btn.btn-lg.btn-icon-only,
