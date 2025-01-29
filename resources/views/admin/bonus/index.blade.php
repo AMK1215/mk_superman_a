@@ -116,7 +116,7 @@
         const dataTableSearch = new simpleDatatables.DataTable("#banners-search", {
             searchable: true,
             fixedHeight: false,
-            perPage: 15
+            perPage: 10
         });
 
         document.getElementById('export-csv').addEventListener('click', function() {
