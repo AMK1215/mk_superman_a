@@ -68,9 +68,9 @@
                             <td>{{number_format($result->withdraw_amount, 2)}}</td>
                             <td>{{$result->bonus_amount}}</td>
                             <td>{{ number_format($result->total_bet_amount, 2)}}</td>
-                            <td> <span class="{{$result->total_net_win > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($result->total_win_amount, 2)}}</span></td>
+                            <td> <span class="{{$result->total_win_amount > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($result->total_win_amount, 2)}}</span></td>
                             <?php
-                            $profit = $result->total_net_win + $result->bonus_amount;
+                            $profit = $result->total_win_amount + $result->bonus_amount;
                             ?>
                             <td> <span class="{{$profit > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($profit , 2)}}</span></td>
                             <td><a href="{{route('admin.report.detail', $result->user_id)}}" class="btn btn-primary">Detail</a></td>
