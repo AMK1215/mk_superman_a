@@ -37,9 +37,10 @@ class PlayerController extends Controller
 
         $user = Auth::user();
         $agentIds = [$user->id];
-
+        
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
+            $agents = $user->children()->get();
         }
 
         $users = User::with(['roles', 'userLog'])
@@ -52,21 +53,17 @@ class PlayerController extends Controller
                     $request->end_date.' 23:59:59',
                 ])
             )
-            ->when($request->ip_address, function ($query) use ($request) {
-                $query->whereHas('userLog', function ($subQuery) use ($request) {
-                    $subQuery->where('ip_address', $request->ip_address)->latest();
-                });
+            ->when($request->agent_id, function ($query) use ($request) {
+                $query->where('agent_id', $request->agent_id);
             })
-            ->when($request->register_ip, function ($query) use ($request) {
-                $query->whereHas('userLog', function ($subQuery) use ($request) {
-                    $subQuery->where('register_ip', $request->register_ip);
-                });
+            ->when($request->phone, function ($query) use ($request) {
+                $query->where('phone', $request->phone);
             })
             ->whereIn('agent_id', $agentIds)
             ->orderByDesc('id')
             ->get();
 
-        return view('admin.player.index', compact('users'));
+        return view('admin.player.index', compact('users', 'agents'));
     }
 
     /**
@@ -113,6 +110,7 @@ class PlayerController extends Controller
                 'register_ip' => $request->ip(),
                 'user_id' => $player->id,
                 'user_agent' => $request->userAgent(),
+                'ip_address' => $request->ip()
             ]);
 
             return redirect()->back()

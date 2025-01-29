@@ -8,23 +8,31 @@ use App\Models\Bonus;
 use App\Models\BonusType;
 use App\Models\User;
 use App\Services\WalletService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class BonusController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
         $agentIds = [$user->id];
 
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
+            $agents = $user->children()->get();
         }
 
-        $bonuses = Bonus::whereIn('agent_id', $agentIds)->get();
+        $bonuses = $this->getRequestsQuery($request, $agentIds)
+            ->latest()
+            ->get();
+        
+        $totalAmount =  $this->getRequestsQuery($request, $agentIds)->sum('amount');
 
-        return view('admin.bonus.index', compact('bonuses'));
+        $bonusTypes = BonusType::all();
+
+        return view('admin.bonus.index', compact('bonuses', 'agents', 'bonusTypes', 'totalAmount'));
     }
 
     public function create(Request $request)
@@ -65,7 +73,7 @@ class BonusController extends Controller
             'after_amount' => $player->balanceFloat,
         ]);
 
-        return redirect()->back()->with('success', 'Bonus Added!');
+        return redirect()->route('admin.bonus.index')->with('success', 'Bonus Added!');
     }
 
     public function show($id) {}
@@ -116,5 +124,22 @@ class BonusController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    private function getRequestsQuery($request, $agentIds)
+    {
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : '';
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : '';
+
+        return Bonus::when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        })
+            ->when($request->agent_id, function ($query) use ($request) {
+                $query->where('agent_id', $request->agent_id);
+            })
+            ->when($request->type, function ($query) use ($request) {
+                $query->where('type_id', $request->type);
+            })
+            ->whereIn('agent_id', $agentIds);
     }
 }

@@ -58,12 +58,10 @@
             $('input[name="start_date"]').flatpickr({
                 enableTime: true,
                 dateFormat: "m/d/Y H:i",
-                defaultDate: startDate, 
             });
             $('input[name="end_date"]').flatpickr({
                 enableTime: true,
                 dateFormat: "m/d/Y H:i",
-                defaultDate: endDate, 
             });
         });
     </script>
