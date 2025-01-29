@@ -128,24 +128,7 @@
         const dataTableSearch = new simpleDatatables.DataTable("#banners-search", {
             searchable: true,
             fixedHeight: false,
-            perPage: 15
-        });
-
-        document.querySelectorAll(".export").forEach(function(el) {
-            el.addEventListener("click", function(e) {
-                var type = el.dataset.type;
-
-                var data = {
-                    type: type,
-                    filename: "material-" + type,
-                };
-
-                if (type === "csv") {
-                    data.columnDelimiter = "|";
-                }
-
-                dataTableSearch.export(data);
-            });
+            perPage: 10
         });
     };
 </script>
