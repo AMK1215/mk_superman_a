@@ -84,6 +84,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th>#</th>
+                            <th>AgentName</th>
                             <th>PlayerId</th>
                             <th>Name</th>
                             <th>BonusType</th>
@@ -99,6 +100,7 @@
                         @foreach($bonuses as $bonus)
                         <tr>
                             <td>{{$loop->iteration}}</td>
+                            <td>{{$bonus->user->parent->name}}</td>
                             <td>{{$bonus->user->user_name}}</td>
                             <td>{{$bonus->user->name}}</td>
                             <td>{{$bonus->type->name}}</td>
