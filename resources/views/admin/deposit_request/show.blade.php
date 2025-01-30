@@ -60,7 +60,7 @@
                         </div>
                         <div class="d-lg-flex">
                             <form action="{{ route('admin.agent.depositStatusreject', $deposit->id) }}"
-                                method="post" id="form">
+                                method="post">
                                 @csrf
                                 <input type="hidden" name="status" value="2">
                                 @if($deposit->status == 0)
@@ -91,19 +91,4 @@
 </div>
 </div>
 
-@endsection
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $('form').submit(function(e) {
-            if ($(this).hasClass('submitted')) {
-                e.preventDefault();
-            } else {
-                $(this).addClass('submitted');
-            }
-        });
-    });
-</script>
 @endsection
