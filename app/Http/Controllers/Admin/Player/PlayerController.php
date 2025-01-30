@@ -38,7 +38,7 @@ class PlayerController extends Controller
         $user = Auth::user();
         $agentIds = [$user->id];
         $agents = [];
-        
+
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
             $agents = $user->children()->get();
@@ -111,7 +111,7 @@ class PlayerController extends Controller
                 'register_ip' => $request->ip(),
                 'user_id' => $player->id,
                 'user_agent' => $request->userAgent(),
-                'ip_address' => $request->ip()
+                'ip_address' => $request->ip(),
             ]);
 
             return redirect()->back()

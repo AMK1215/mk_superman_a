@@ -132,6 +132,4 @@ class PlaceBetWebhookController extends Controller
             $before_balance
         );
     }
-
-
 }

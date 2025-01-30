@@ -19,7 +19,7 @@ class BonusController extends Controller
         $user = Auth::user();
         $agentIds = [$user->id];
         $agents = [];
-        
+
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
             $agents = $user->children()->get();
@@ -28,8 +28,8 @@ class BonusController extends Controller
         $bonuses = $this->getRequestsQuery($request, $agentIds)
             ->latest()
             ->get();
-        
-        $totalAmount =  $this->getRequestsQuery($request, $agentIds)->sum('amount');
+
+        $totalAmount = $this->getRequestsQuery($request, $agentIds)->sum('amount');
 
         $bonusTypes = BonusType::all();
 
