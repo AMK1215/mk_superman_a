@@ -1,18 +1,4 @@
 @extends('admin_layouts.app')
-@section('styles')
-<style>
-.transparent-btn {
- background: none;
- border: none;
- padding: 0;
- outline: none;
- cursor: pointer;
- box-shadow: none;
- appearance: none;
- /* For some browsers */
-}
-</style>
-@endsection
 @section('content')
 <div class="row mt-4">
  <div class="col-12">
@@ -112,13 +98,6 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
-{{-- <script>
-    const dataTableSearch = new simpleDatatables.DataTable("#datatable-search", {
-      searchable: true,
-      fixedHeight: true
-    });
-  </script> --}}
 <script>
 if (document.getElementById('users-search')) {
  const dataTableSearch = new simpleDatatables.DataTable("#users-search", {

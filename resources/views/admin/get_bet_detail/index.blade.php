@@ -1,29 +1,4 @@
 @extends('admin_layouts.app')
-@section('styles')
-<style>
-  .transparent-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    outline: none;
-    cursor: pointer;
-    box-shadow: none;
-    appearance: none;
-    /* For some browsers */
-  }
-
-  .active-button {
-    background-color: #4CAF50;
-    /* or any color you prefer */
-    color: white;
-    /* optional: change text color if needed */
-  }
-
-  #search {
-    margin-top: 40px;
-  }
-</style>
-@endsection
 @section('content')
 <div class="row mt-4">
   <div class="col-12">

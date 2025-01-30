@@ -22,6 +22,13 @@ class DepositController extends Controller
             $inputs = $request->validated();
 
             $player = Auth::user();
+
+            $pendingDeposit = DepositRequest::where('user_id', $player->id)->where('status', 0)->first();
+            
+            if($pendingDeposit)
+            {
+                return $this->error('', 'ငွေသွင်းအတည်ပြုရန် ခေတ္တစောင့်ပါ', 401);
+            }
             // image
             $image = $request->file('image');
             $ext = $image->getClientOriginalExtension();
@@ -37,37 +44,6 @@ class DepositController extends Controller
                 ]
             ));
 
-            // $secretKey = Config::get('scanner.secretKey');
-            // $token = Config::get('scanner.token');
-
-            // $param = [
-            //     'agentId' => "TEST",
-            //     'playerId' =>"TESt",
-            //     'orderId' => '345433432',
-            //     'bankAccount' => '34324324',
-            //     'amount' => "100",
-            //     'trxId' => "34534",
-            //     'paymentType' => 'KBZ',
-            // ];
-
-            // $requestString = implode('|', $param);
-            // $encryptedData = $this->encrypt($requestString, $secretKey);
-
-            // $client = new Client();
-
-            // $response = $client->request('POST', 'https://mm-paydash.store/api/order', [
-            //     'headers' => [
-            //         'token' => $token,
-            //     ],
-            //     'form_params' => $param,
-            // ]);
-            // $responseBody = json_decode($response->getBody(), true);
-            // if($response->getStatusCode() == 200 && $responseBody['result']['data']['isPassed'] == true){
-            //     $deposit->update([
-            //         'status' => 1,
-            //         'type' => 'scanner'
-            //     ]);
-            // }
             return $this->success(new DepositResource($deposit), 'Deposit Request Success');
         } catch (Exception $e) {
 

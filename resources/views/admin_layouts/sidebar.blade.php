@@ -89,7 +89,7 @@
         @canany(['master_access', 'agent_access'])
             <li class="nav-item ">
                 <a class="nav-link text-white " href="{{ route('admin.contact.index') }}">
-                    <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>
+                    <span class="sidenav-mini-icon"><i class="fas fa-address-book"></i></span>
                     <span class="sidenav-normal  ms-2  ps-1"> Contact </span>
                 </a>
             </li>
@@ -97,7 +97,7 @@
         @canany(['master_access', 'agent_access'])
             <li class="nav-item ">
                 <a class="nav-link text-white " href="{{ route('admin.bonus.index') }}">
-                    <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>
+                    <span class="sidenav-mini-icon"> <i class="fas fa-gift"></i></span>
                     <span class="sidenav-normal  ms-2  ps-1"> Bonus </span>
                 </a>
             </li>
@@ -122,7 +122,7 @@
 
                         <li class="nav-item ">
                             <a class="nav-link text-white " href="{{ route('admin.adsbanners.index') }}">
-                                <span class="sidenav-mini-icon"> <i class="fa-solid fa-panorama"></i> </span>
+                                <span class="sidenav-mini-icon"> <i class="fa-solid fa-rectangle-ad"></i></span>
                                 <span class="sidenav-normal  ms-2  ps-1"> Ads Banner </span>
                             </a>
                         </li>
@@ -134,7 +134,7 @@
                         </li>
                         <li class="nav-item ">
                             <a class="nav-link text-white " href="{{ route('admin.promotions.index') }}">
-                                <span class="sidenav-mini-icon"> <i class="fas fa-gift"></i> </span>
+                                <span class="sidenav-mini-icon"><i class="fas fa-bullhorn"></i></span>
                                 <span class="sidenav-normal  ms-2  ps-1"> Promotions </span>
                             </a>
                         </li>

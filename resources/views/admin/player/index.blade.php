@@ -1,62 +1,4 @@
-@extends('admin_layouts.app')
-@section('styles')
-<style>
-  .transparent-btn {
-    background: none;
-    border: none;
-    padding: 0;
-    outline: none;
-    cursor: pointer;
-    box-shadow: none;
-    appearance: none;
-    /* For some browsers */
-  }
-
-
-  .custom-form-group {
-    margin-bottom: 20px;
-  }
-
-  .custom-form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #555;
-  }
-
-  .custom-form-group input,
-  .custom-form-group select {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #e1e1e1;
-    border-radius: 5px;
-    font-size: 16px;
-    color: #333;
-  }
-
-  .custom-form-group input:focus,
-  .custom-form-group select:focus {
-    border-color: #d33a9e;
-    box-shadow: 0 0 5px rgba(211, 58, 158, 0.5);
-  }
-
-  .submit-btn {
-    background-color: #d33a9e;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-  }
-
-  .submit-btn:hover {
-    background-color: #b8328b;
-  }
-</style>
-@endsection
-@section('content')
+@extends('admin_layouts.app')@section('content')
 <div class="row mt-4">
   <div class="col-12">
     <div class="card">
@@ -70,10 +12,29 @@
         </div>
         <form action="" method="GET">
           <div class="row mt-3">
+          @can('master_access')
+            <div class="col-md-3">
+              <div class="input-group input-group-static mb-4">
+                <label for="">AgentId</label>
+                <select name="agent_id" class="form-control">
+                  <option value="">Select AgentName</option>
+                  @foreach($agents as $agent)
+                  <option value="{{$agent->id}}" {{request()->agent_id == $agent->id ? 'selected' : ''}}>{{$agent->user_name}}-{{$agent->name}}</option>
+                  @endforeach
+                </select>
+              </div>
+            </div>
+            @endcan
             <div class="col-md-3">
               <div class="input-group input-group-static mb-4">
                 <label for="">PlayerId</label>
                 <input type="text" class="form-control" name="player_id" value="{{request()->player_id}}">
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="input-group input-group-static mb-4">
+                <label for="">Phone</label>
+                <input type="text" class="form-control" name="phone" value="{{request()->phone}}">
               </div>
             </div>
             <div class="col-md-3">
@@ -86,18 +47,6 @@
               <div class="input-group input-group-static mb-4">
                 <label for="">EndDate</label>
                 <input type="date" class="form-control" name="end_date" value="{{request()->get('end_date')}}">
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="input-group input-group-static mb-4">
-                <label for="">RegisterIP</label>
-                <input type="text" class="form-control" name="register_ip" value="{{request()->get('register_ip')}}">
-              </div>
-            </div>
-            <div class="col-md-3">
-              <div class="input-group input-group-static mb-4">
-                <label for="">Lastlogin IP</label>
-                <input type="text" class="form-control" name="ip_address" value="{{request()->get('ip_address')}}">
               </div>
             </div>
             <div class="col-md-3">
@@ -122,11 +71,14 @@
             <th>Phone</th>
             <th>Status</th>
             <th>Balance</th>
+            <th>RegisterIp</th>
+            <th>RegisterTime</th>
+            <th>LastLoginIp</th>
+            <th>LastLoginTime</th>
             <th>Action</th>
             <th>Transaction</th>
           </thead>
           <tbody>
-            {{-- kzt --}}
             @if(isset($users))
             @if(count($users)>0)
             @foreach ($users as $user)
@@ -144,6 +96,10 @@
                 <small class="badge bg-gradient-{{ $user->status == 1 ? 'success' : 'danger' }}">{{ $user->status == 1 ? "active" : "inactive" }}</small>
               </td>
               <td>{{number_format($user->balanceFloat,2) }} </td>
+              <td>{{ $user->userLog->first()->register_ip ?? '' }}</td>
+              <td>{{ $user->created_at }}</td>
+              <td>{{ $user->userLog->last()->ip_address ?? '' }}</td>
+              <td>{{ $user->userLog->last()->created_at ?? '' }}</td>
               <td>
                 @if ($user->status == 1)
                 <a onclick="event.preventDefault(); document.getElementById('banUser-{{ $user->id }}').submit();" class="me-2" href="#" data-bs-toggle="tooltip" data-bs-original-title="Active Player">
@@ -199,9 +155,6 @@
 </div>
 @endsection
 @section('scripts')
-<script src="{{ asset('admin_app/assets/js/plugins/datatables.js') }}"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
   if (document.getElementById('users-search')) {
     const dataTableSearch = new simpleDatatables.DataTable("#users-search", {
@@ -210,14 +163,13 @@
       perPage: 7
     });
 
-    document.getElementById('export-csv').addEventListener('click', function () {
-    dataTableSearch.export({
-      type: "csv",
-      filename: "player_list",
+    document.getElementById('export-csv').addEventListener('click', function() {
+      dataTableSearch.export({
+        type: "csv",
+        filename: "player_list",
+      });
     });
-  });
   };
-
 </script>
 <script>
   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))

@@ -16,6 +16,7 @@ use App\Models\SeamlessTransaction;
 use App\Models\Webhook\Bet;
 use Bavix\Wallet\Interfaces\Wallet;
 use Bavix\Wallet\Traits\HasWalletFloat;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -273,5 +274,19 @@ class User extends Authenticatable implements Wallet
     public function userLog()
     {
         return $this->hasMany(UserLog::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_at = Carbon::now('Asia/Yangon');
+            $model->updated_at = Carbon::now('Asia/Yangon');
+        });
+
+        static::updating(function ($model) {
+            $model->updated_at = Carbon::now('Asia/Yangon');
+        });
     }
 }

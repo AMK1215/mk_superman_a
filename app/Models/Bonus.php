@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,5 +25,19 @@ class Bonus extends Model
     public function agent()
     {
         return $this->belongsTo(User::class, 'created_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            $model->created_at = Carbon::now('Asia/Yangon');
+            $model->updated_at = Carbon::now('Asia/Yangon');
+        });
+
+        static::updating(function ($model) {
+            $model->updated_at = Carbon::now('Asia/Yangon');
+        });
     }
 }

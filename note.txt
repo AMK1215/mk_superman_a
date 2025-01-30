@@ -2,14 +2,18 @@
 php artisan migrate --path=/database/migrations/2024_10_14_042230_add_version_to_wallets_table.php
 
 // to remove laravel log
-php -r "file_put_contents('/var/www/mk_superman_a/storage/logs/laravel.log', '');"
+php -r "file_put_contents('/var/www/html/mk_superman_a/storage/logs/laravel.log', '');"
 // created dev branch for kzt
+Route::post('PullLog', [PlaceBetWebhookController::class, 'PurseService']);
+Route::delete('TestBet', [PlaceBetWebhookController::class, 'BetTest']);
 
 dead lock = show variables like '%dead%'; /  set global innodb_print_all_deadlocks=ON;
 
 sudo chmod -R 775 /var/www/luckym_thb_confirm_a/storage
 sudo chmod -R 775 /var/www/luckym_thb_confirm_a/bootstrap/cache
 sudo chown -R www-data:www-data /var/www/luckym_thb_confirm_a/storage
+use Illuminate\Support\Traits\Purse;
+
 sudo chown -R www-data:www-data /var/www/luckym_thb_confirm_a/bootstrap/cache
 // public function LogCheck(Request $request)
     // {
