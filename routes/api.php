@@ -49,13 +49,10 @@ Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
 Route::post('TransactionDetail', [TransactionController::class, 'transactionDetails']);
-Route::post('PullLog', [PlaceBetWebhookController::class, 'PurseService']);
-Route::delete('TestBet', [PlaceBetWebhookController::class, 'BetTest']);
 
 Route::post('GetGameProvider', [GetGameProviderController::class, 'fetchGameProviders']);
 Route::post('GetGameListByProvider', [GetGameListByProviderController::class, 'fetchGameListByProvider']);
 Route::delete('/game-lists-delete', [GameController::class, 'deleteGameLists']);
-
 
 // for slot
 Route::post('/transaction-details/{tranId}', [GetDaySummaryController::class, 'getTransactionDetails']);
