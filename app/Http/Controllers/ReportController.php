@@ -72,9 +72,9 @@ class ReportController extends Controller
             ->leftJoin('wallets', 'wallets.holder_id', '=', 'players.id')
             ->leftJoinSub($resultsSubquery, 'results', 'results.user_id', '=', 'players.id') // Fixed alias
             ->leftJoinSub($betsSubquery, 'bets', 'bets.user_id', '=', 'players.id') // Fixed alias
-            ->leftJoin($this->getSubquery('bonuses'), 'bonuses.user_id', '=', 'players.id')
-            ->leftJoin($this->getSubquery('deposit_requests', 'status = 1'), 'deposit_requests.user_id', '=', 'players.id')
-            ->leftJoin($this->getSubquery('with_draw_requests', 'status = 1'), 'with_draw_requests.user_id', '=', 'players.id')
+            ->leftJoin($this->getSubquery('bonuses', $startDate, $endDate, 'status = 1'), 'bonuses.user_id', '=', 'players.id')
+            ->leftJoin($this->getSubquery('deposit_requests', $startDate, $endDate, 'status = 1'), 'deposit_requests.user_id', '=', 'players.id')
+            ->leftJoin($this->getSubquery('with_draw_requests', $startDate, $endDate, 'status = 1'), 'with_draw_requests.user_id', '=', 'players.id')
             ->when($request->player_id, fn ($query) => $query->where('players.user_name', $request->player_id))
             ->where(function ($query) {
                 $query->whereNotNull('results.user_id')
@@ -138,8 +138,8 @@ class ReportController extends Controller
         return $query->orderBy('date', 'desc')->get();
     }
 
-    private function getSubquery($table, $condition = '1=1')
+    private function getSubquery($table, $startDate, $endDate, $condition )
     {
-        return DB::raw("(SELECT user_id, SUM(amount) AS total_amount FROM $table WHERE $condition GROUP BY user_id) AS $table");
+        return DB::raw("(SELECT user_id, SUM(amount) AS total_amount FROM $table WHERE $condition  and created_at between '$startDate' and '$endDate' GROUP BY user_id) AS $table");
     }
 }
