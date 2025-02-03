@@ -30,6 +30,7 @@ use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\Webhook\CancelBetNewVersionController;
 
 //auth api
 Route::post('/login', [AuthController::class, 'login']);
@@ -45,7 +46,9 @@ Route::post('BetNResult', [BetNResultController::class, 'handleBetNResult']);
 Route::post('CancelBetNResult', [CancelBetNResultController::class, 'handleCancelBetNResult']);
 Route::post('Bet', [BetController::class, 'handleBet']);
 Route::post('Result', [BetResultController::class, 'handleResult']);
-Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
+//Route::post('CancelBet', [CancelBetController::class, 'handleCancelBet']);
+Route::post('CancelBet', [CancelBetNewVersionController::class, 'handleCancelBet']);
+
 Route::post('Adjustment', [AdjustmentController::class, 'handleAdjustment']);
 Route::post('Reward', [RewardController::class, 'handleReward']);
 Route::post('TransactionDetail', [TransactionController::class, 'transactionDetails']);

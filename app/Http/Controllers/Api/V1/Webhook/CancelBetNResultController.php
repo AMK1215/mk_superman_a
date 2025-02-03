@@ -125,7 +125,7 @@ class CancelBetNResultController extends Controller
 
     private function generateSignature(array $transaction): string
     {
-        $method = 'Result';
+        $method = 'CancelBetNResult';
 
         return md5(
             $method.
