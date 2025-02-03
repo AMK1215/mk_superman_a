@@ -11,7 +11,7 @@ class DepositRequest extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'agent_id', 'bank_id', 'amount', 'refrence_no', 'status', 'note', 'type', 'image'];
+    protected $fillable = ['user_id', 'agent_id', 'bank_id', 'amount', 'refrence_no', 'status', 'note', 'type', 'image', 'before_amount', 'after_amount'];
 
     public function user()
     {

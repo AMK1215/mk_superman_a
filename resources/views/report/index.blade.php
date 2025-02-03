@@ -50,6 +50,7 @@
                         <th>Withdraw</th>
                         <th>Bonus Amt</th>
                         <th>Valid Bet</th>
+                        <th>Total Win Amount</th>
                         <th>Win/Lose Amt</th>
                         <th>Profit & loss Amt</th>
                         <th>Detail</th>
@@ -68,6 +69,7 @@
                             <td>{{number_format($result->withdraw_amount, 2)}}</td>
                             <td>{{$result->bonus_amount}}</td>
                             <td>{{ number_format($result->total_bet_amount, 2)}}</td>
+                            <td>{{ number_format($result->total_win_amount, 2)}}</td>
                             <td> <span class="{{$result->total_net_win > 1 ? 'text-success' : 'text-danger'}}">{{ number_format($result->total_net_win, 2)}}</span></td>
                             <?php
                             $profit = $result->total_net_win + $result->bonus_amount;

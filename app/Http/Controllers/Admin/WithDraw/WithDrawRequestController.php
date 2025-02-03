@@ -32,6 +32,7 @@ class WithDrawRequestController extends Controller
         $withdraws = $this->getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
             ->latest()
             ->get();
+        
         $paymentTypes = PaymentType::all();
 
         $totalAmount = $this->getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
@@ -63,11 +64,16 @@ class WithDrawRequestController extends Controller
 
             $withdraw->update([
                 'status' => $request->status,
+                'before_amount' => $player->balanceFloat,
             ]);
 
             if ($request->status == 1) {
                 app(WalletService::class)->transfer($player, $agent, $request->amount, TransactionName::DebitTransfer, ['agent_id' => Auth::id()]);
             }
+
+            $withdraw->update([
+                'after_amount' => $player->balanceFloat,
+            ]);
 
             return redirect()->back()->with('success', 'Withdraw status updated successfully!');
         } catch (Exception $e) {

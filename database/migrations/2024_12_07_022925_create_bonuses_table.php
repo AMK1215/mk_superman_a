@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('agent_id');
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('amount');
+            $table->integer('status')->default(1);
             $table->unsignedBigInteger('before_amount');
             $table->unsignedBigInteger('after_amount')->nullable();
             $table->unsignedBigInteger('created_id');

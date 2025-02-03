@@ -83,6 +83,8 @@
             <th>PlayerName</th>
             <th>AgentName</th>
             <th>Requested Amount</th>
+            <th>Before Amount</th>
+            <th>After Amount</th>
             <th>Payment Method</th>
             <th>Status</th>
             <th>DateTime</th>
@@ -96,6 +98,8 @@
               <td>{{ $deposit->user->name }}</td>
               <td><span class="badge text-bg-warning text-white ">{{$deposit->user->parent->name}}</span></td>
               <td class="amount">{{ number_format($deposit->amount) }}</td>
+              <td class="amount">{{ number_format($deposit->before_amount) }}</td>
+              <td class="amount">{{ number_format($deposit->after_amount) }}</td>
               <td>{{ $deposit->bank->paymentType->name }}</td>
               <td>
                 @if ($deposit->status == 0)
@@ -136,7 +140,7 @@
         document.getElementById('export-csv').addEventListener('click', function() {
           dataTableSearch.export({
             type: "csv",
-            filename: "withdraw",
+            filename: "deposit",
           });
         });
       });

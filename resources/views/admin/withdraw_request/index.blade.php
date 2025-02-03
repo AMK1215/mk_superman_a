@@ -83,6 +83,8 @@
                         <th>PlayerName</th>
                         <th>AgentName</th>
                         <th>Requested Amount</th>
+                        <th>Before Amount</th>
+                        <th>After Amount</th>
                         <th>Payment Method</th>
                         <th>Bank Account Name</th>
                         <th>Bank Account Number</th>
@@ -98,6 +100,8 @@
                             <td>{{$withdraw->user->name}}</td>
                             <td><span class="badge text-bg-warning text-white ">{{$withdraw->user->parent->name}}</span></td>
                             <td class="amount">{{ number_format($withdraw->amount) }}</td>
+                            <td class="amount">{{ number_format($withdraw->before_amount) }}</td>
+                            <td class="amount">{{ number_format($withdraw->after_amount) }}</td>
                             <td>{{$withdraw->paymentType->name}}</td>
                             <td>{{$withdraw->account_name}}</td>
                             <td>{{$withdraw->account_no}}</td>
