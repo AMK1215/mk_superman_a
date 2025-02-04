@@ -18,6 +18,8 @@ use App\Traits\ImageUpload;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+
 
 class AuthController extends Controller
 {
@@ -25,6 +27,7 @@ class AuthController extends Controller
     use ImageUpload;
 
     private const PLAYER_ROLE = 4;
+
 
     public function login(LoginRequest $request)
     {
@@ -36,11 +39,11 @@ class AuthController extends Controller
             return $this->error('', [
                 'user_name' => 'Credentials do not match!',
             ], 422);
-            // return $this->error('', 'Credentials do not match!', 401);
         }
+
         if (Auth::user()->status == 0) {
             return $this->error('', [
-                'user_name' => 'Your account has benn banned. Please contact your agent.',
+                'user_name' => 'Your account has been banned. Please contact your agent.',
             ], 422);
         }
 
@@ -51,6 +54,20 @@ class AuthController extends Controller
             ], 422);
         }
 
+        // Check if the user is already logged in from another device
+        if ($user->session_id) {
+            // Invalidate the previous session
+            $previousSession = Session::find($user->session_id);
+            if ($previousSession) {
+                $previousSession->delete(); // Delete the previous session
+            }
+        }
+
+        // Store the new session ID
+        $user->session_id = session()->getId();
+        $user->save();
+
+        // Log the user's login activity
         UserLog::create([
             'ip_address' => $request->ip(),
             'user_id' => $user->id,
@@ -60,14 +77,72 @@ class AuthController extends Controller
         return $this->success(new UserResource($user), 'User login successfully.');
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::user()->currentAccessToken()->delete();
+        $user = Auth::user();
 
-        return $this->success([
-            'message' => 'Logged out successfully.',
-        ]);
+        if (! $user) {
+            return $this->error('', 'User not authenticated.', 401);
+        }
+
+        // Clear session ID from the users table
+        $user->session_id = null;
+        $user->save();
+
+        // Invalidate all tokens (for API authentication using Laravel Sanctum)
+        if ($request->user()->currentAccessToken()) {
+            $request->user()->currentAccessToken()->delete();
+        }
+
+        // Log the user out from the session (for web authentication)
+        Auth::logout();
+
+        return $this->success([], 'User logged out successfully.');
     }
+
+
+    // public function login(LoginRequest $request)
+    // {
+    //     $credentials = $request->only('user_name', 'password');
+
+    //     $user = User::where('user_name', $request->user_name)->first();
+
+    //     if (! Auth::attempt($credentials)) {
+    //         return $this->error('', [
+    //             'user_name' => 'Credentials do not match!',
+    //         ], 422);
+    //         // return $this->error('', 'Credentials do not match!', 401);
+    //     }
+    //     if (Auth::user()->status == 0) {
+    //         return $this->error('', [
+    //             'user_name' => 'Your account has benn banned. Please contact your agent.',
+    //         ], 422);
+    //     }
+
+    //     $user = User::where('user_name', $request->user_name)->first();
+    //     if (! $user->hasRole('Player')) {
+    //         return $this->error('', [
+    //             'user_name' => 'You are not a player. Please contact your agent.',
+    //         ], 422);
+    //     }
+
+    //     UserLog::create([
+    //         'ip_address' => $request->ip(),
+    //         'user_id' => $user->id,
+    //         'user_agent' => $request->userAgent(),
+    //     ]);
+
+    //     return $this->success(new UserResource($user), 'User login successfully.');
+    // }
+
+    // public function logout()
+    // {
+    //     Auth::user()->currentAccessToken()->delete();
+
+    //     return $this->success([
+    //         'message' => 'Logged out successfully.',
+    //     ]);
+    // }
 
     public function getUser()
     {

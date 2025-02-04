@@ -48,6 +48,7 @@ class User extends Authenticatable implements Wallet
         'max_score',
         'agent_id',
         'status',
+        'session_id',
         'type',
         'referral_code',
         'commission',
