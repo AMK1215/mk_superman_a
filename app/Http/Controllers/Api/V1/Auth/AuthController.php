@@ -58,7 +58,8 @@ class AuthController extends Controller
          $user->tokens()->delete();
 
 
-        // // Check if the user is already logged in from another device
+        // don't use users table session_id column in confirm version
+         // // Check if the user is already logged in from another device
         // if ($user->session_id) {
         //     // Invalidate the previous session
         //     $previousSession = Session::find($user->session_id);
