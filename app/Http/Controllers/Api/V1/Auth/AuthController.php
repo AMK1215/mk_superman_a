@@ -54,18 +54,22 @@ class AuthController extends Controller
             ], 422);
         }
 
-        // Check if the user is already logged in from another device
-        if ($user->session_id) {
-            // Invalidate the previous session
-            $previousSession = Session::find($user->session_id);
-            if ($previousSession) {
-                $previousSession->delete(); // Delete the previous session
-            }
-        }
+        // Revoke all previous tokens for the user
+         $user->tokens()->delete();
 
-        // Store the new session ID
-        $user->session_id = session()->getId();
-        $user->save();
+
+        // // Check if the user is already logged in from another device
+        // if ($user->session_id) {
+        //     // Invalidate the previous session
+        //     $previousSession = Session::find($user->session_id);
+        //     if ($previousSession) {
+        //         $previousSession->delete(); // Delete the previous session
+        //     }
+        // }
+
+        // // Store the new session ID
+        // $user->session_id = session()->getId();
+        // $user->save();
 
         // Log the user's login activity
         UserLog::create([
@@ -77,28 +81,28 @@ class AuthController extends Controller
         return $this->success(new UserResource($user), 'User login successfully.');
     }
 
-    public function logout(Request $request)
-    {
-        $user = Auth::user();
+    // public function logout(Request $request)
+    // {
+    //     $user = Auth::user();
 
-        if (! $user) {
-            return $this->error('', 'User not authenticated.', 401);
-        }
+    //     if (! $user) {
+    //         return $this->error('', 'User not authenticated.', 401);
+    //     }
 
-        // Clear session ID from the users table
-        $user->session_id = null;
-        $user->save();
+    //     // Clear session ID from the users table
+    //     $user->session_id = null;
+    //     $user->save();
 
-        // Invalidate all tokens (for API authentication using Laravel Sanctum)
-        if ($request->user()->currentAccessToken()) {
-            $request->user()->currentAccessToken()->delete();
-        }
+    //     // Invalidate all tokens (for API authentication using Laravel Sanctum)
+    //     if ($request->user()->currentAccessToken()) {
+    //         $request->user()->currentAccessToken()->delete();
+    //     }
 
-        // Log the user out from the session (for web authentication)
-        Auth::logout();
+    //     // Log the user out from the session (for web authentication)
+    //     Auth::logout();
 
-        return $this->success([], 'User logged out successfully.');
-    }
+    //     return $this->success([], 'User logged out successfully.');
+    // }
 
 
     // public function login(LoginRequest $request)
@@ -135,14 +139,14 @@ class AuthController extends Controller
     //     return $this->success(new UserResource($user), 'User login successfully.');
     // }
 
-    // public function logout()
-    // {
-    //     Auth::user()->currentAccessToken()->delete();
+    public function logout()
+    {
+        Auth::user()->currentAccessToken()->delete();
 
-    //     return $this->success([
-    //         'message' => 'Logged out successfully.',
-    //     ]);
-    // }
+        return $this->success([
+            'message' => 'Logged out successfully.',
+        ]);
+    }
 
     public function getUser()
     {

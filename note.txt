@@ -1,6 +1,9 @@
 
 php artisan migrate --path=/database/migrations/2024_10_14_042230_add_version_to_wallets_table.php
 
+php artisan migrate --path=/database/migrations/2025_02_04_040800_add_session_id_to_users_table.php
+
+
 // to remove laravel log
 php -r "file_put_contents('/var/www/html/mk_superman_a/storage/logs/laravel.log', '');"
 // created dev branch for kzt
