@@ -40,6 +40,7 @@ Route::get('v1/validate', [AuthController::class, 'callback']);
 Route::get('gameTypeProducts/{id}', [GameController::class, 'gameTypeProducts']);
 Route::get('allGameProducts', [GameController::class, 'allGameProducts']);
 Route::post('Seamless/PullReport', [LaunchGameController::class, 'pullReport']);
+Route::post('test', [CancelBetNewVersionController::class, 'PurseService']);
 
 // sameless route
 Route::post('GetBalance', [GetBalanceController::class, 'getBalance']);
