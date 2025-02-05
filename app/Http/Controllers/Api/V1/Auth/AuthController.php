@@ -50,7 +50,7 @@ class AuthController extends Controller
         $user = User::where('user_name', $request->user_name)->first();
         if (! $user->hasRole('Player')) {
             return $this->error('', [
-                'user_name' => 'You are not a player. Please contact your agent.',
+                'user_name' => 'You are not a player. Please contact your agent or owner.',
             ], 422);
         }
 
