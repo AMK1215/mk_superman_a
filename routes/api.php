@@ -25,13 +25,12 @@ use App\Http\Controllers\Api\V1\Webhook\BetController;
 use App\Http\Controllers\Api\V1\Webhook\BetNResultController;
 use App\Http\Controllers\Api\V1\Webhook\BetResultController;
 use App\Http\Controllers\Api\V1\Webhook\CancelBetController;
+use App\Http\Controllers\Api\V1\Webhook\CancelBetNewVersionController;
 use App\Http\Controllers\Api\V1\Webhook\CancelBetNResultController;
 use App\Http\Controllers\Api\V1\Webhook\RewardController;
 use App\Http\Controllers\TestController;
 use App\Models\Admin\Role;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\V1\Webhook\CancelBetNewVersionController;
-
 
 //auth api
 Route::post('/login', [AuthController::class, 'login']);

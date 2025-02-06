@@ -20,14 +20,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-
 class AuthController extends Controller
 {
     use HttpResponses;
     use ImageUpload;
 
     private const PLAYER_ROLE = 4;
-
 
     public function login(LoginRequest $request)
     {
@@ -55,11 +53,10 @@ class AuthController extends Controller
         }
 
         // Revoke all previous tokens for the user
-         $user->tokens()->delete();
-
+        $user->tokens()->delete();
 
         // don't use users table session_id column in confirm version
-         // // Check if the user is already logged in from another device
+        // // Check if the user is already logged in from another device
         // if ($user->session_id) {
         //     // Invalidate the previous session
         //     $previousSession = Session::find($user->session_id);
@@ -104,7 +101,6 @@ class AuthController extends Controller
 
     //     return $this->success([], 'User logged out successfully.');
     // }
-
 
     // public function login(LoginRequest $request)
     // {

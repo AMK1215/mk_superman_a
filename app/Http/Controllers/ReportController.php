@@ -138,7 +138,7 @@ class ReportController extends Controller
         return $query->orderBy('date', 'desc')->get();
     }
 
-    private function getSubquery($table, $startDate, $endDate, $condition )
+    private function getSubquery($table, $startDate, $endDate, $condition)
     {
         return DB::raw("(SELECT user_id, SUM(amount) AS total_amount FROM $table WHERE $condition  and created_at between '$startDate' and '$endDate' GROUP BY user_id) AS $table");
     }

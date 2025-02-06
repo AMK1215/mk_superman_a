@@ -15,16 +15,12 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-
 class CancelBetNewVersionController extends Controller
 {
     use UseWebhook;
 
     /**
      * Handle the cancellation of bet transactions.
-     *
-     * @param CancelBetRequest $request
-     * @return JsonResponse
      */
     public function handleCancelBet(CancelBetRequest $request): JsonResponse
     {
@@ -35,7 +31,7 @@ class CancelBetNewVersionController extends Controller
             foreach ($transactions as $transaction) {
                 // Get the player
                 $player = User::where('user_name', $transaction['PlayerId'])->first();
-                if (!$player) {
+                if (! $player) {
                     Log::warning('Invalid player detected', [
                         'PlayerId' => $transaction['PlayerId'],
                     ]);
@@ -132,9 +128,6 @@ class CancelBetNewVersionController extends Controller
 
     /**
      * Build a success response.
-     *
-     * @param float $newBalance
-     * @return JsonResponse
      */
     private function buildSuccessResponse(float $newBalance): JsonResponse
     {
@@ -148,10 +141,6 @@ class CancelBetNewVersionController extends Controller
 
     /**
      * Build an error response.
-     *
-     * @param StatusCode $statusCode
-     * @param float $balance
-     * @return JsonResponse
      */
     private function buildErrorResponse(StatusCode $statusCode, float $balance = 0): JsonResponse
     {
@@ -164,9 +153,6 @@ class CancelBetNewVersionController extends Controller
 
     /**
      * Generate a signature for the transaction.
-     *
-     * @param array $transaction
-     * @return string
      */
     private function generateSignature(array $transaction): string
     {
@@ -178,6 +164,6 @@ class CancelBetNewVersionController extends Controller
         $secretKey = config('game.api.secret_key');
         $playerId = $transaction['PlayerId'];
 
-        return md5($method . $roundId . $betId . $requestTime . $operatorCode . $secretKey . $playerId);
+        return md5($method.$roundId.$betId.$requestTime.$operatorCode.$secretKey.$playerId);
     }
 }

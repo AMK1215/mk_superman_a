@@ -32,7 +32,7 @@ class WithDrawRequestController extends Controller
         $withdraws = $this->getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
             ->latest()
             ->get();
-        
+
         $paymentTypes = PaymentType::all();
 
         $totalAmount = $this->getWithdrawRequestsQuery($request, $agentIds, $startDate, $endDate)
