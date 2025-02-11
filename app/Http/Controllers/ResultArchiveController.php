@@ -18,7 +18,7 @@ class ResultArchiveController extends Controller
         $results = ResultBackup::orderBy('created_at', 'asc')->paginate(10);
 
         // Pass the results to the view
-        return view('reports.backup.result_index', compact('results'));
+        return view('report.backup.result_index', compact('results'));
     }
 
     public function archiveResults(Request $request)
@@ -97,7 +97,7 @@ class ResultArchiveController extends Controller
         $results = BetresultBackup::orderBy('created_at', 'asc')->paginate(10);
 
         // Pass the results to the view
-        return view('reports.backup.bet_n_result_index', compact('results'));
+        return view('report.backup.bet_n_result_index', compact('results'));
     }
 
 
