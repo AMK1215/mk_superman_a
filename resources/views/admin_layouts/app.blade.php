@@ -55,6 +55,10 @@
                 enableTime: true,
                 dateFormat: "m/d/Y H:i",
             });
+            $('input[name="last_login_time"]').flatpickr({
+                enableTime: true,
+                dateFormat: "m/d/Y H:i",
+            });
         });
     </script>
     <script>

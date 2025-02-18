@@ -11,6 +11,7 @@ use App\Models\Admin\UserLog;
 use App\Models\PaymentType;
 use App\Models\User;
 use App\Services\WalletService;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,31 +40,28 @@ class PlayerController extends Controller
         $agentIds = [$user->id];
         $agents = [];
 
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : '';
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : '';
+        $lastLoginTime = $request->last_login_time ? Carbon::parse($request->last_login_time)->format('Y-m-d H:i') : '';
+
         if ($user->hasRole('Master')) {
             $agentIds = User::where('agent_id', $user->id)->pluck('id')->toArray();
             $agents = $user->children()->get();
         }
-
+       
         $users = User::with(['roles', 'userLog'])
-            ->whereHas('roles', fn ($query) => $query->where('role_id', self::PLAYER_ROLE))
-            ->when($request->player_id, fn ($query) => $query->where('user_name', $request->player_id))
-            ->when(
-                $request->start_date && $request->end_date,
-                fn ($query) => $query->whereBetween('created_at', [
-                    $request->start_date.' 00:00:00',
-                    $request->end_date.' 23:59:59',
-                ])
-            )
-            ->when($request->agent_id, function ($query) use ($request) {
-                $query->where('agent_id', $request->agent_id);
-            })
-            ->when($request->phone, function ($query) use ($request) {
-                $query->where('phone', $request->phone);
+            ->whereHas('roles', fn($query) => $query->where('role_id', self::PLAYER_ROLE))
+            ->when($request->player_id, fn($query) => $query->where('user_name', $request->player_id))
+            ->when($startDate && $endDate, fn($query) => $query->whereBetween('created_at', [$startDate, $endDate]))
+            ->when($request->agent_id, fn($query) => $query->where('agent_id', $request->agent_id))
+            ->when($request->phone, fn($query) => $query->where('phone', $request->phone))
+            ->when($request->last_login_ip, function ($query) use ($request) {
+                $query->whereHas('userLog', fn($logQuery) => $logQuery->where('ip_address', $request->last_login_ip));
             })
             ->whereIn('agent_id', $agentIds)
             ->orderByDesc('id')
             ->get();
-
+     
         return view('admin.player.index', compact('users', 'agents'));
     }
 
@@ -120,7 +118,7 @@ class PlayerController extends Controller
                 ->with('password', $request->password)
                 ->with('user_name', $player->user_name);
         } catch (Exception $e) {
-            Log::error('Error creating player: '.$e->getMessage());
+            Log::error('Error creating player: ' . $e->getMessage());
 
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -198,7 +196,7 @@ class PlayerController extends Controller
 
         return redirect()->back()->with(
             'success',
-            'User '.($user->status == 1 ? 'activate' : 'inactive').' successfully'
+            'User ' . ($user->status == 1 ? 'activate' : 'inactive') . ' successfully'
         );
     }
 
@@ -334,7 +332,7 @@ class PlayerController extends Controller
 
         $nextNumber = $latestPlayer ? intval(substr($latestPlayer->user_name, 3)) + 1 : 1;
 
-        return 'SPM'.str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
+        return 'SPM' . str_pad($nextNumber, 6, '0', STR_PAD_LEFT);
     }
 
     private function getRefrenceId($prefix = 'REF')

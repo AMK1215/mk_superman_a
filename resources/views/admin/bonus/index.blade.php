@@ -28,6 +28,12 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="input-group input-group-static mb-4">
+                                <label for="">PlayerId</label>
+                                <input type="text" name="player_id" class="form-control" value="{{request()->get('player_id')}}">
+                            </div>
+                        </div>
                         @can('master_access')
                         <div class="col-md-3">
                             <div class="input-group input-group-static mb-4">

@@ -129,17 +129,23 @@ class BonusController extends Controller
 
     private function getRequestsQuery($request, $agentIds)
     {
-        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : '';
-        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : '';
+        $startDate = $request->start_date ? Carbon::parse($request->start_date)->format('Y-m-d H:i') : Carbon::today()->startOfDay()->format('Y-m-d H:i');
+        $endDate = $request->end_date ? Carbon::parse($request->end_date)->format('Y-m-d H:i') : Carbon::today()->endOfDay()->format('Y-m-d H:i');
 
-        return Bonus::when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
+        return Bonus::with('user')
+            ->when($startDate && $endDate, function ($query) use ($startDate, $endDate) {
             $query->whereBetween('created_at', [$startDate, $endDate]);
-        })
+            })
             ->when($request->agent_id, function ($query) use ($request) {
                 $query->where('agent_id', $request->agent_id);
             })
             ->when($request->type, function ($query) use ($request) {
                 $query->where('type_id', $request->type);
+            })
+            ->when($request->player_id, function ($query) use ($request) {
+                $query->whereHas('user', function ($userQuery) use ($request) {
+                    $userQuery->where('user_name', $request->player_id);
+                });
             })
             ->whereIn('agent_id', $agentIds);
     }
